@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe表示</title>
+</head>
+<body>
+<pre id="output"></pre>
+
+<script>
+class Material {
+    constructor(name, count) {
+        this.name = name;
+        this.count = count;
+    }
+}
+
+class Recipe {
+    constructor(name, damage, attribute, ...items) {
+        this.name = name;
+        this.damage = damage;
+        this.attribute = attribute;
+        this.items = items;
+    }
+
+    show() {
+        let text = "";
+        text += this.name + "のステータスは ダメージ:"
+            + this.damage + " 属性:" + this.attribute + "\n";
+
+        if (this.items.length > 0) {
+            text += "必要素材:\n";
+            for (let m of this.items) {
+                text += " - " + m.name + " ×" + m.count + "\n";
+            }
+        }
+        return text;
+    }
+}
+
+// メイン処理
+const recipe1 = new Recipe(
+    "無名改", 3, 4,
+    new Material("境壊ノ二刀無名", 1),
+    new Material("焔獄魔の逆鱗", 30),
+    new Material("焔獄魔の巌翼", 20),
+    new Material("冰刃魔の逆鱗", 30),
+    new Material("冰刃魔の巌翼", 20),
+    new Material("雷霆魔の逆鱗", 30),
+    new Material("雷霆魔の巌翼", 20),
+    new Material("百足の卵", 50),
+    new Material("百足の毒", 20),
+    new Material("朱の盤の角", 50),
+    new Material("乾いた舌", 20),
+    new Material("斬鋭石", 50),
+    new Material("剛毅石", 50),
+    new Material("霊妙石", 1),
+    new Material("穢珠", 30)
+);
+
+// 表示
+document.getElementById("output").textContent = recipe1.show();
+</script>
+
+</body>
+</html>
