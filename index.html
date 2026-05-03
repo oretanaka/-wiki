@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -5,9 +6,8 @@ public class Main {
 
         List<Recipe> recipes = new ArrayList<>();
 
-        // レシピ追加
         recipes.add(new Recipe("無名"));
-        
+
         recipes.add(new Recipe(
             "無名改", 3, 4,
             new Material("境壊ノ二刀無名", 1),
@@ -31,45 +31,36 @@ public class Main {
         recipes.add(new Recipe("修羅"));
         recipes.add(new Recipe("以蔵武器"));
 
-        Scanner scanner = new Scanner(System.in);
+        try (PrintWriter pw = new PrintWriter("index.html", "UTF-8")) {
 
-        // ===============================
-        // 🔹 レシピ名入力
-        System.out.print("レシピ名を入力してください: ");
-        String input = scanner.nextLine();
+            pw.println("<!DOCTYPE html>");
+            pw.println("<html lang='ja'>");
+            pw.println("<head><meta charset='UTF-8'><title>Wiki</title></head>");
+            pw.println("<body>");
+            pw.println("<h1>レシピ一覧</h1>");
 
-        Recipe target = null;
+            for (Recipe r : recipes) {
+                pw.println("<h2>" + r.name + "</h2>");
+                pw.println("<p>ダメージ:" + r.damage + " 属性:" + r.attribute + "</p>");
 
-        for (Recipe r : recipes) {
-            if (r.name.equals(input)) {
-                target = r;
-                break;
+                if (r.items.length == 0) {
+                    pw.println("<p>素材なし</p>");
+                } else {
+                    pw.println("<ul>");
+                    for (Material m : r.items) {
+                        pw.println("<li>" + m.name + " ×" + m.count + "</li>");
+                    }
+                    pw.println("</ul>");
+                }
             }
+
+            pw.println("</body></html>");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        if (target == null) {
-            System.out.println("そのレシピは存在しません");
-            return;
-        }
-
-        // ===============================
-        // 🔹 本数入力
-        System.out.print("何本作りますか？: ");
-        int count = scanner.nextInt();
-
-        // ===============================
-        // 🔹 結果表示
-        System.out.println("\n【必要素材（" + count + "本分）】");
-
-        if (target.items.length == 0) {
-            System.out.println("素材なし");
-            return;
-        }
-
-        for (Material m : target.items) {
-            int total = m.count * count;
-            System.out.println(" - " + m.name + " ×" + total);
-        }
+        System.out.println("index.html を生成しました");
     }
 }
 
