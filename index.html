@@ -1,107 +1,70 @@
-import java.util.*;
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>武器製作Wiki</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .recipe-card { border: 1px solid #ccc; padding: 15px; margin-top: 20px; border-radius: 8px; }
+        .material-list { color: #555; }
+    </style>
+</head>
+<body>
+    <h1>武器製作レシピ検索</h1>
+    <input type="text" id="searchInput" placeholder="レシピ名を入力（例：無名改）">
+    <button onclick="searchRecipe()">検索</button>
 
-public class Main {
-    public static void main(String[] args) {
+    <div id="result"></div>
 
-        List<Recipe> recipes = new ArrayList<>();
+    <script>
+        // JavaのRecipeリストに相当するデータ
+        const recipes = [
+            {
+                name: "無名改",
+                damage: 3,
+                attribute: 4,
+                materials: [
+                    { name: "境壊ノ二刀無名", count: 1 },
+                    { name: "焔獄魔の逆鱗", count: 30 },
+                    { name: "焔獄魔の巌翼", count: 20 },
+                    // ...以下、素材を追加
+                    { name: "穢珠", count: 30 }
+                ]
+            },
+            { name: "真打", damage: 10, attribute: 5, materials: [] },
+            { name: "修羅", damage: 15, attribute: 0, materials: [] }
+        ];
 
-        // レシピ追加
-        recipes.add(new Recipe("無名"));
-        
-        recipes.add(new Recipe(
-            "無名改", 3, 4,
-            new Material("境壊ノ二刀無名", 1),
-            new Material("焔獄魔の逆鱗", 30),
-            new Material("焔獄魔の巌翼", 20),
-            new Material("冰刃魔の逆鱗", 30),
-            new Material("冰刃魔の巌翼", 20),
-            new Material("雷霆魔の逆鱗", 30),
-            new Material("雷霆魔の巌翼", 20),
-            new Material("百足の卵", 50),
-            new Material("百足の毒", 20),
-            new Material("朱の盤の角", 50),
-            new Material("乾いた舌", 20),
-            new Material("斬鋭石", 50),
-            new Material("剛毅石", 50),
-            new Material("霊妙石", 1),
-            new Material("穢珠", 30)
-        ));
+        function searchRecipe() {
+            const input = document.getElementById('searchInput').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ""; // 前の結果をクリア
 
-        recipes.add(new Recipe("真打"));
-        recipes.add(new Recipe("修羅"));
-        recipes.add(new Recipe("以蔵武器"));
+            const found = recipes.find(r => r.name === input);
 
-        // ===============================
-        // 🔹 入力
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("レシピ名を入力してください: ");
-        String input = scanner.nextLine();
+            if (found) {
+                let html = `
+                    <div class="recipe-card">
+                        <h2>${found.name}</h2>
+                        <p>ステータス: ダメージ ${found.damage} / 属性 ${found.attribute}</p>
+                        <h3>必要素材:</h3>
+                        <ul class="material-list">
+                `;
+                
+                if (found.materials.length === 0) {
+                    html += "<li>なし</li>";
+                } else {
+                    found.materials.forEach(m => {
+                        html += `<li>${m.name} × ${m.count}</li>`;
+                    });
+                }
 
-        // ===============================
-        // 🔹 検索
-        boolean found = false;
-
-        for (Recipe r : recipes) {
-            if (r.name.equals(input)) {
-                System.out.println("\n【検索結果】");
-                r.show();
-                found = true;
-                break;
+                html += `</ul></div>`;
+                resultDiv.innerHTML = html;
+            } else {
+                resultDiv.innerHTML = "<p>そのレシピは存在しません</p>";
             }
         }
-
-        // 見つからなかった場合
-        if (!found) {
-            System.out.println("そのレシピは存在しません");
-        }
-    }
-}
-
-// ===============================
-class Recipe {
-    String name;
-    int damage;
-    int attribute;
-    Material[] items;
-
-    public Recipe(String name, int damage, int attribute, Material... items) {
-        this.name = name;
-        this.damage = damage;
-        this.attribute = attribute;
-        this.items = items;
-    }
-
-    // 🔹 名前だけ用
-    public Recipe(String name) {
-        this.name = name;
-        this.damage = 0;
-        this.attribute = 0;
-        this.items = new Material[0];
-    }
-
-    public void show() {
-        System.out.println(name + "のステータスは ダメージ:"
-            + damage + " 属性:" + attribute);
-
-        if (items.length == 0) {
-            System.out.println("必要素材: なし");
-            return;
-        }
-
-        System.out.println("必要素材:");
-        for (Material m : items) {
-            System.out.println(" - " + m.name + " ×" + m.count);
-        }
-    }
-}
-
-// ===============================
-class Material {
-    String name;
-    int count;
-
-    public Material(String name, int count) {
-        this.name = name;
-        this.count = count;
-    }
-}
+    </script>
+</body>
+</html>
