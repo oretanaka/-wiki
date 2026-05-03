@@ -76,8 +76,8 @@
                     { name: "雷霆魔の心臓", count: 2 },
                     { name: "雷霆魔の浸蝕髄", count: 1 }
                 ]
-            },
-          
+            } // ここでレシピのリストを閉じます
+        ]; // ここで recipes 配列全体を閉じます
 
         function calculateMaterials() {
             const recipeInput = document.getElementById('recipeInput');
@@ -102,7 +102,6 @@
             } else {
                 target.items.forEach(m => {
                     const total = m.count * makeCount;
-                    // countがない場合や数値でない場合は個数表示を変える
                     if (isNaN(total)) {
                         result += ` - ${m.name}\n`;
                     } else {
