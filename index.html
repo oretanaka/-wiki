@@ -2,22 +2,30 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>武器製作Wiki</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        .recipe-card { border: 1px solid #ccc; padding: 15px; margin-top: 20px; border-radius: 8px; }
-        .material-list { color: #555; }
+        body { font-family: "Helvetica Neue", Arial, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px; max-width: 800px; margin: 0 auto; }
+        h1 { border-bottom: 2px solid #2c3e50; padding-bottom: 10px; color: #2c3e50; }
+        .search-box { margin-bottom: 20px; width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .recipe-card { background: white; border: 1px solid #ddd; padding: 20px; margin-bottom: 15px; border-radius: 8px; shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .recipe-name { font-size: 1.5rem; font-weight: bold; color: #e67e22; margin-top: 0; }
+        .status { background: #ecf0f1; padding: 10px; border-radius: 5px; font-weight: bold; }
+        .material-list { margin-top: 10px; padding-left: 20px; }
+        .material-item { list-style: square; color: #555; }
+        .no-result { color: #888; font-style: italic; }
     </style>
 </head>
 <body>
-    <h1>武器製作レシピ検索</h1>
-    <input type="text" id="searchInput" placeholder="レシピ名を入力（例：無名改）">
-    <button onclick="searchRecipe()">検索</button>
 
-    <div id="result"></div>
+    <h1>⚔️ 武器製作レシピWiki</h1>
+    
+    <input type="text" id="searchInput" class="search-box" placeholder="レシピ名で検索..." oninput="displayRecipes()">
+
+    <div id="recipeContainer"></div>
 
     <script>
-        // JavaのRecipeリストに相当するデータ
+        // 🔹 データベース部分（ここを書き換えてレシピを増やせます）
         const recipes = [
             {
                 name: "無名改",
@@ -27,44 +35,61 @@
                     { name: "境壊ノ二刀無名", count: 1 },
                     { name: "焔獄魔の逆鱗", count: 30 },
                     { name: "焔獄魔の巌翼", count: 20 },
-                    // ...以下、素材を追加
+                    { name: "冰刃魔の逆鱗", count: 30 },
+                    { name: "冰刃魔の巌翼", count: 20 },
+                    { name: "雷霆魔の逆鱗", count: 30 },
+                    { name: "雷霆魔の巌翼", count: 20 },
+                    { name: "百足の卵", count: 50 },
+                    { name: "百足の毒", count: 20 },
+                    { name: "朱の盤の角", count: 50 },
+                    { name: "乾いた舌", count: 20 },
+                    { name: "斬鋭石", count: 50 },
+                    { name: "剛毅石", count: 50 },
+                    { name: "霊妙石", count: 1 },
                     { name: "穢珠", count: 30 }
                 ]
             },
             { name: "真打", damage: 10, attribute: 5, materials: [] },
-            { name: "修羅", damage: 15, attribute: 0, materials: [] }
+            { name: "修羅", damage: 15, attribute: 0, materials: [] },
+            { name: "以蔵武器", damage: 8, attribute: 2, materials: [{ name: "鉄屑", count: 10 }] }
         ];
 
-        function searchRecipe() {
-            const input = document.getElementById('searchInput').value;
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = ""; // 前の結果をクリア
+        // 🔹 レシピを表示する関数
+        function displayRecipes() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const container = document.getElementById('recipeContainer');
+            container.innerHTML = ""; // 一旦クリア
 
-            const found = recipes.find(r => r.name === input);
+            const filtered = recipes.filter(r => r.name.toLowerCase().includes(query));
 
-            if (found) {
-                let html = `
-                    <div class="recipe-card">
-                        <h2>${found.name}</h2>
-                        <p>ステータス: ダメージ ${found.damage} / 属性 ${found.attribute}</p>
-                        <h3>必要素材:</h3>
-                        <ul class="material-list">
-                `;
-                
-                if (found.materials.length === 0) {
-                    html += "<li>なし</li>";
+            if (filtered.length === 0) {
+                container.innerHTML = '<p class="no-result">該当するレシピが見つかりません。</p>';
+                return;
+            }
+
+            filtered.forEach(r => {
+                let materialHTML = "";
+                if (r.materials.length === 0) {
+                    materialHTML = '<li class="material-item">必要素材なし</li>';
                 } else {
-                    found.materials.forEach(m => {
-                        html += `<li>${m.name} × ${m.count}</li>`;
+                    r.materials.forEach(m => {
+                        materialHTML += `<li class="material-item">${m.name} × ${m.count}</li>`;
                     });
                 }
 
-                html += `</ul></div>`;
-                resultDiv.innerHTML = html;
-            } else {
-                resultDiv.innerHTML = "<p>そのレシピは存在しません</p>";
-            }
+                const card = `
+                    <div class="recipe-card">
+                        <p class="recipe-name">${r.name}</p>
+                        <div class="status">ダメージ: ${r.damage} / 属性: ${r.attribute}</div>
+                        <ul class="material-list">${materialHTML}</ul>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', card);
+            });
         }
+
+        // 最初に全件表示しておく
+        displayRecipes();
     </script>
 </body>
 </html>
