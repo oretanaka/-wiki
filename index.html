@@ -31,12 +31,9 @@
     </div>
 
     <script>
-        // --- JavaのRecipe/Materialデータ構造を再現 ---
         const recipes = [
             {
                 name: "無名改",
-                damage: 3,
-                attribute: 4,
                 items: [
                     { name: "境壊ノ二刀無名", count: 1 },
                     { name: "焔獄魔の逆鱗", count: 30 },
@@ -59,26 +56,27 @@
             { name: "真打", items: [] },
             { name: "修羅", items: [] },
             { name: "以蔵武器", items: [] },
-              { name: "雷ガーゴイル仁", items: [] },  
-items: [
-            
+            { 
+                name: "雷ガーゴイル仁", 
+                items: [
                     { name: "雷魔の電鱗", count: 2 },
                     { name: "雷霆魔の黄甲殻", count: 2 }
-             ]
-             },
-              { name: "雷ガーゴイル皇", items: [] },
-items: [
+                ]
+            },
+            { 
+                name: "雷ガーゴイル皇", 
+                items: [
                     { name: "雷魔の逆鱗", count: 2 },
                     { name: "雷霆魔の厳翼", count: 2 }
-             ]
-             },
-        
-              { name: "雷ガーゴイル神", items: [] }
-        items: [
+                ]
+            },
+            { 
+                name: "雷ガーゴイル神", 
+                items: [
                     { name: "雷霆魔の心臓", count: 2 },
                     { name: "雷霆魔の浸蝕髄", count: 1 }
-             ]
-            
+                ]
+            }
         ];
 
         function calculateMaterials() {
@@ -86,7 +84,6 @@ items: [
             const makeCount = parseInt(document.getElementById('countInput').value);
             const outputDiv = document.getElementById('output');
 
-            // 1. レシピ検索 (Javaのfor文部分)
             const target = recipes.find(r => r.name === recipeName);
 
             if (!target) {
@@ -96,8 +93,6 @@ items: [
             }
 
             outputDiv.style.color = "#ffffff";
-            
-            // 2. 結果の組み立て (JavaのSystem.out.println部分)
             let result = `\n【必要素材（${makeCount}本分）】\n`;
 
             if (!target.items || target.items.length === 0) {
