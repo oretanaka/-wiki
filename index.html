@@ -35,11 +35,22 @@ public class Main {
 
             pw.println("<!DOCTYPE html>");
             pw.println("<html lang='ja'>");
-            pw.println("<head><meta charset='UTF-8'><title>Wiki</title></head>");
+            pw.println("<head>");
+            pw.println("<meta charset='UTF-8'>");
+            pw.println("<title>レシピWiki</title>");
+            pw.println("<style>");
+            pw.println("body{font-family:sans-serif;} input{padding:5px;} .box{margin:10px 0;}");
+            pw.println("</style>");
+            pw.println("</head>");
             pw.println("<body>");
-            pw.println("<h1>レシピ一覧</h1>");
+
+            pw.println("<h1>レシピ検索</h1>");
+            pw.println("<input id='search' placeholder='検索'>");
+
+            pw.println("<div id='list'>");
 
             for (Recipe r : recipes) {
+                pw.println("<div class='box'>");
                 pw.println("<h2>" + r.name + "</h2>");
                 pw.println("<p>ダメージ:" + r.damage + " 属性:" + r.attribute + "</p>");
 
@@ -52,7 +63,22 @@ public class Main {
                     }
                     pw.println("</ul>");
                 }
+
+                pw.println("</div>");
             }
+
+            pw.println("</div>");
+
+            // 🔍 検索スクリプト
+            pw.println("<script>");
+            pw.println("const input=document.getElementById('search');");
+            pw.println("input.addEventListener('input',()=>{");
+            pw.println("const keyword=input.value;");
+            pw.println("document.querySelectorAll('.box').forEach(b=>{");
+            pw.println("b.style.display=b.textContent.includes(keyword)?'block':'none';");
+            pw.println("});");
+            pw.println("});");
+            pw.println("</script>");
 
             pw.println("</body></html>");
 
@@ -60,7 +86,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println("index.html を生成しました");
+        System.out.println("検索付きindex.htmlを生成しました");
     }
 }
 
