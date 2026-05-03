@@ -2,36 +2,42 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>武器製作Wiki</title>
+    <title>武器製作Wiki - 必要素材計算</title>
     <style>
-        body { font-family: "Helvetica Neue", Arial, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px; max-width: 800px; margin: 0 auto; }
-        h1 { border-bottom: 2px solid #2c3e50; padding-bottom: 10px; color: #2c3e50; }
-        .search-box { margin-bottom: 20px; width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .recipe-card { background: white; border: 1px solid #ddd; padding: 20px; margin-bottom: 15px; border-radius: 8px; shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .recipe-name { font-size: 1.5rem; font-weight: bold; color: #e67e22; margin-top: 0; }
-        .status { background: #ecf0f1; padding: 10px; border-radius: 5px; font-weight: bold; }
-        .material-list { margin-top: 10px; padding-left: 20px; }
-        .material-item { list-style: square; color: #555; }
-        .no-result { color: #888; font-style: italic; }
+        body { font-family: monospace; padding: 20px; background-color: #1e1e1e; color: #d4d4d4; line-height: 1.6; }
+        .console-area { background: #000; border: 1px solid #444; padding: 20px; border-radius: 5px; max-width: 600px; margin: 0 auto; }
+        .input-line { margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        input { background: #000; color: #00ff00; border: 1px solid #555; padding: 5px; font-family: monospace; width: 150px; }
+        button { cursor: pointer; background: #444; color: white; border: none; padding: 5px 15px; transition: 0.2s; }
+        button:hover { background: #666; }
+        #output { margin-top: 20px; white-space: pre-wrap; color: #ffffff; }
+        .label { color: #aaa; }
     </style>
 </head>
 <body>
 
-    <h1>⚔️ 武器製作レシピWiki</h1>
-    
-    <input type="text" id="searchInput" class="search-box" placeholder="レシピ名で検索..." oninput="displayRecipes()">
+    <div class="console-area">
+        <div class="input-line">
+            <span class="label">レシピ名を入力してください: </span>
+            <input type="text" id="recipeInput" placeholder="例: 無名改">
+        </div>
+        <div class="input-line">
+            <span class="label">何本作りますか？: </span>
+            <input type="number" id="countInput" value="1" min="1">
+        </div>
+        <button onclick="calculateMaterials()">計算実行</button>
 
-    <div id="recipeContainer"></div>
+        <div id="output"></div>
+    </div>
 
     <script>
-        // 🔹 データベース部分（ここを書き換えてレシピを増やせます）
+        // --- JavaのRecipe/Materialデータ構造を再現 ---
         const recipes = [
             {
                 name: "無名改",
                 damage: 3,
                 attribute: 4,
-                materials: [
+                items: [
                     { name: "境壊ノ二刀無名", count: 1 },
                     { name: "焔獄魔の逆鱗", count: 30 },
                     { name: "焔獄魔の巌翼", count: 20 },
@@ -49,47 +55,42 @@
                     { name: "穢珠", count: 30 }
                 ]
             },
-            { name: "真打", damage: 10, attribute: 5, materials: [] },
-            { name: "修羅", damage: 15, attribute: 0, materials: [] },
-            { name: "以蔵武器", damage: 8, attribute: 2, materials: [{ name: "鉄屑", count: 10 }] }
+            { name: "無名", items: [] },
+            { name: "真打", items: [] },
+            { name: "修羅", items: [] },
+            { name: "以蔵武器", items: [] }
         ];
 
-        // 🔹 レシピを表示する関数
-        function displayRecipes() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const container = document.getElementById('recipeContainer');
-            container.innerHTML = ""; // 一旦クリア
+        function calculateMaterials() {
+            const recipeName = document.getElementById('recipeInput').value;
+            const makeCount = parseInt(document.getElementById('countInput').value);
+            const outputDiv = document.getElementById('output');
 
-            const filtered = recipes.filter(r => r.name.toLowerCase().includes(query));
+            // 1. レシピ検索 (Javaのfor文部分)
+            const target = recipes.find(r => r.name === recipeName);
 
-            if (filtered.length === 0) {
-                container.innerHTML = '<p class="no-result">該当するレシピが見つかりません。</p>';
+            if (!target) {
+                outputDiv.innerText = "そのレシピは存在しません";
+                outputDiv.style.color = "#ff6b6b";
                 return;
             }
 
-            filtered.forEach(r => {
-                let materialHTML = "";
-                if (r.materials.length === 0) {
-                    materialHTML = '<li class="material-item">必要素材なし</li>';
-                } else {
-                    r.materials.forEach(m => {
-                        materialHTML += `<li class="material-item">${m.name} × ${m.count}</li>`;
-                    });
-                }
+            outputDiv.style.color = "#ffffff";
+            
+            // 2. 結果の組み立て (JavaのSystem.out.println部分)
+            let result = `\n【必要素材（${makeCount}本分）】\n`;
 
-                const card = `
-                    <div class="recipe-card">
-                        <p class="recipe-name">${r.name}</p>
-                        <div class="status">ダメージ: ${r.damage} / 属性: ${r.attribute}</div>
-                        <ul class="material-list">${materialHTML}</ul>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', card);
-            });
+            if (!target.items || target.items.length === 0) {
+                result += "素材なし\n";
+            } else {
+                target.items.forEach(m => {
+                    const total = m.count * makeCount;
+                    result += ` - ${m.name} ×${total.toLocaleString()}\n`;
+                });
+            }
+
+            outputDiv.innerText = result;
         }
-
-        // 最初に全件表示しておく
-        displayRecipes();
     </script>
 </body>
 </html>
