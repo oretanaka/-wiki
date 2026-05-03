@@ -8,9 +8,9 @@
         .console-area { background: #000; border: 1px solid #444; padding: 20px; border-radius: 5px; max-width: 600px; margin: 0 auto; }
         .input-line { margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         input { background: #000; color: #00ff00; border: 1px solid #555; padding: 5px; font-family: monospace; width: 150px; }
-        button { cursor: pointer; background: #444; color: white; border: none; padding: 5px 15px; transition: 0.2s; }
+        button { cursor: pointer; background: #444; color: white; border: none; padding: 10px 20px; transition: 0.2s; border-radius: 4px; }
         button:hover { background: #666; }
-        #output { margin-top: 20px; white-space: pre-wrap; color: #ffffff; }
+        #output { margin-top: 20px; white-space: pre-wrap; color: #ffffff; min-height: 50px; }
         .label { color: #aaa; }
     </style>
 </head>
@@ -27,10 +27,11 @@
         </div>
         <button onclick="calculateMaterials()">計算実行</button>
 
-        <div id="output"></div>
+        <div id="output">ここに出力されます</div>
     </div>
 
     <script>
+        // データのミスを防ぐために整理しました
         const recipes = [
             {
                 name: "無名改",
@@ -76,31 +77,36 @@
                     { name: "雷霆魔の心臓", count: 2 },
                     { name: "雷霆魔の浸蝕髄", count: 1 }
                 ]
-            }
+            } // ←最後のレシピの閉じカッコ
         ];
 
         function calculateMaterials() {
-            const recipeName = document.getElementById('recipeInput').value;
-            const makeCount = parseInt(document.getElementById('countInput').value);
+            const recipeInput = document.getElementById('recipeInput');
             const outputDiv = document.getElementById('output');
+            
+            // 前後の空白を取り除く（ミス防止）
+            const recipeName = recipeInput.value.trim();
+            const makeCount = parseInt(document.getElementById('countInput').value) || 1;
 
+            // 検索
             const target = recipes.find(r => r.name === recipeName);
 
             if (!target) {
-                outputDiv.innerText = "そのレシピは存在しません";
+                outputDiv.innerText = "【エラー】\nそのレシピ（" + recipeName + "）は存在しません。";
                 outputDiv.style.color = "#ff6b6b";
                 return;
             }
 
+            // 計算と表示
             outputDiv.style.color = "#ffffff";
             let result = `\n【必要素材（${makeCount}本分）】\n`;
 
             if (!target.items || target.items.length === 0) {
-                result += "素材なし\n";
+                result += "素材情報が登録されていません。";
             } else {
                 target.items.forEach(m => {
                     const total = m.count * makeCount;
-                    result += ` - ${m.name} ×${total.toLocaleString()}\n`;
+                    result += ` - ${m.name} × ${total.toLocaleString()}\n`;
                 });
             }
 
