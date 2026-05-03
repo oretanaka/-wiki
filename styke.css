@@ -1,13 +1,1 @@
-.console-area {
-    background: #000;
-    border: 1px solid #444;
-    padding: 20px;
-    border-radius: 5px;
-    
-    /* 🔴 ここを変更します */
-    max-width: 90%;    /* 画面の横幅90%まで広げる場合 */
-    /* または */
-    max-width: 1000px; /* 特定のピクセル数で指定する場合（現在は600px） */
-    
-    margin: 0 auto;
-}
+
