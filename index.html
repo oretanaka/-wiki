@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -6,8 +5,9 @@ public class Main {
 
         List<Recipe> recipes = new ArrayList<>();
 
+        // レシピ追加
         recipes.add(new Recipe("無名"));
-
+        
         recipes.add(new Recipe(
             "無名改", 3, 4,
             new Material("境壊ノ二刀無名", 1),
@@ -31,64 +31,33 @@ public class Main {
         recipes.add(new Recipe("修羅"));
         recipes.add(new Recipe("以蔵武器"));
 
-        try (PrintWriter pw = new PrintWriter("index.html", "UTF-8")) {
+        // ===============================
+        // 🔹 入力
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("レシピ名を入力してください: ");
+        String input = scanner.nextLine();
 
-            pw.println("<!DOCTYPE html>");
-            pw.println("<html lang='ja'>");
-            pw.println("<head>");
-            pw.println("<meta charset='UTF-8'>");
-            pw.println("<title>レシピWiki</title>");
-            pw.println("<style>");
-            pw.println("body{font-family:sans-serif;} input{padding:5px;} .box{margin:10px 0;}");
-            pw.println("</style>");
-            pw.println("</head>");
-            pw.println("<body>");
+        // ===============================
+        // 🔹 検索
+        boolean found = false;
 
-            pw.println("<h1>レシピ検索</h1>");
-            pw.println("<input id='search' placeholder='検索'>");
-
-            pw.println("<div id='list'>");
-
-            for (Recipe r : recipes) {
-                pw.println("<div class='box'>");
-                pw.println("<h2>" + r.name + "</h2>");
-                pw.println("<p>ダメージ:" + r.damage + " 属性:" + r.attribute + "</p>");
-
-                if (r.items.length == 0) {
-                    pw.println("<p>素材なし</p>");
-                } else {
-                    pw.println("<ul>");
-                    for (Material m : r.items) {
-                        pw.println("<li>" + m.name + " ×" + m.count + "</li>");
-                    }
-                    pw.println("</ul>");
-                }
-
-                pw.println("</div>");
+        for (Recipe r : recipes) {
+            if (r.name.equals(input)) {
+                System.out.println("\n【検索結果】");
+                r.show();
+                found = true;
+                break;
             }
-
-            pw.println("</div>");
-
-            pw.println("<script>");
-            pw.println("const input=document.getElementById('search');");
-            pw.println("input.addEventListener('input',()=>{");
-            pw.println("const keyword=input.value;");
-            pw.println("document.querySelectorAll('.box').forEach(b=>{");
-            pw.println("b.style.display=b.textContent.includes(keyword)?'block':'none';");
-            pw.println("});");
-            pw.println("});");
-            pw.println("</script>");
-
-            pw.println("</body></html>");
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        System.out.println("検索付きindex.htmlを生成しました");
+        // 見つからなかった場合
+        if (!found) {
+            System.out.println("そのレシピは存在しません");
+        }
     }
 }
 
+// ===============================
 class Recipe {
     String name;
     int damage;
@@ -102,14 +71,31 @@ class Recipe {
         this.items = items;
     }
 
+    // 🔹 名前だけ用
     public Recipe(String name) {
         this.name = name;
         this.damage = 0;
         this.attribute = 0;
         this.items = new Material[0];
     }
+
+    public void show() {
+        System.out.println(name + "のステータスは ダメージ:"
+            + damage + " 属性:" + attribute);
+
+        if (items.length == 0) {
+            System.out.println("必要素材: なし");
+            return;
+        }
+
+        System.out.println("必要素材:");
+        for (Material m : items) {
+            System.out.println(" - " + m.name + " ×" + m.count);
+        }
+    }
 }
 
+// ===============================
 class Material {
     String name;
     int count;
