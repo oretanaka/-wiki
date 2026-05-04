@@ -3,22 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>武器製作Wiki - 必要素材計算</title>
+
     <style>
-        body { font-family: monospace; padding: 20px; background-color: #1e1e1e; color: #d4d4d4; line-height: 1.6; }
-        .console-area { background: #000; border: 1px solid #444; padding: 20px; border-radius: 5px; max-width: 600px; margin: 0 auto; }
-        .input-line { margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        input { background: #000; color: #00ff00; border: 1px solid #555; padding: 5px; font-family: monospace; width: 150px; }
-        button { cursor: pointer; background: #444; color: white; border: none; padding: 10px 20px; transition: 0.2s; border-radius: 4px; }
-        button:hover { background: #666; }
-        #output { margin-top: 20px; white-space: pre-wrap; color: #ffffff; min-height: 50px; }
-        .label { color: #aaa; }
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            line-height: 1.6;
+        }
+
+        .console-area {
+            background: #000;
+            border: 1px solid #444;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-line {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        input {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #555;
+            padding: 5px;
+            font-family: monospace;
+            width: 150px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            transition: 0.2s;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #666;
+        }
+
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            color: #ffffff;
+            min-height: 50px;
+        }
+
+        .label {
+            color: #aaa;
+        }
     </style>
 </head>
+
 <body>
 
 <div class="console-area">
 
-    <!-- 素材計算 -->
     <div class="input-line">
         <span class="label">レシピ名を入力してください: </span>
         <input type="text" id="recipeInput" placeholder="例: 無銘改">
@@ -38,7 +87,7 @@
     <!-- アイテム検索 -->
     <h2>アイテム検索</h2>
 
-    <input id="itemSearchBox" placeholder="IDや名前で検索">
+    <input id="itemSearchBox" placeholder="アイテムID入力">
     <button onclick="searchItem()">検索</button>
 
     <p id="itemResult"></p>
@@ -46,9 +95,6 @@
 </div>
 
 <script>
-/* ===============================
-   レシピデータ
-================================ */
 const recipes = [
     {
         name: "無銘改",
@@ -71,63 +117,66 @@ const recipes = [
         ]
     },
     { name: "無銘", items: [] },
-    { name: "真打", items: [] }
+    { name: "真打", items: [] },
+    { name: "修羅", items: [] },
+    { name: "以蔵武器", items: [] },
+    {
+        name: "雷爪",
+        items: [
+            { name: "雷魔の電鱗", count: 2 },
+            { name: "雷霆魔の黄甲殻", count: 2 }
+        ]
+    },
+    {
+        name: "雷爪耀",
+        items: [
+            { name: "雷魔の逆鱗", count: 2 },
+            { name: "雷霆魔の厳翼", count: 2 }
+        ]
+    },
+    {
+        name: "雷爪霹靂",
+        items: [
+            { name: "雷霆魔の心臓", count: 2 },
+            { name: "雷霆魔の浸蝕髄", count: 1 }
+        ]
+    }
 ];
 
-/* ===============================
-   アイテムIDデータ
-================================ */
-const itemData = {
-    "item_001": "白",
-    "item_002": "黒",
-    "item_003": "赤"
-};
-
-/* ===============================
-   素材計算
-================================ */
 function calculateMaterials() {
-    const recipeName = document.getElementById('recipeInput').value.trim();
-    const makeCount = parseInt(document.getElementById('countInput').value) || 1;
+    const recipeInput = document.getElementById('recipeInput');
     const outputDiv = document.getElementById('output');
+
+    const recipeName = recipeInput.value.trim();
+    const makeCount = parseInt(document.getElementById('countInput').value) || 1;
 
     const target = recipes.find(r => r.name === recipeName);
 
     if (!target) {
-        outputDiv.innerText = "【エラー】\nそのレシピは存在しません";
+        outputDiv.innerText = "【エラー】\nそのレシピ（" + recipeName + "）は存在しません。";
         outputDiv.style.color = "#ff6b6b";
         return;
     }
 
     outputDiv.style.color = "#ffffff";
+
     let result = `\n【必要素材（${makeCount}本分）】\n`;
 
-    if (!target.items.length) {
-        result += "素材情報なし";
+    if (!target.items || target.items.length === 0) {
+        result += "素材情報が登録されていません。";
     } else {
         target.items.forEach(m => {
-            result += ` - ${m.name} × ${m.count * makeCount}\n`;
+            const total = m.count * makeCount;
+
+            if (isNaN(total)) {
+                result += ` - ${m.name}\n`;
+            } else {
+                result += ` - ${m.name} × ${total.toLocaleString()}\n`;
+            }
         });
     }
 
     outputDiv.innerText = result;
-}
-
-/* ===============================
-   アイテム検索（部分一致対応）
-================================ */
-function searchItem() {
-    const keyword = document.getElementById("itemSearchBox").value;
-    let results = [];
-
-    for (let key in itemData) {
-        if (key.includes(keyword) || itemData[key].includes(keyword)) {
-            results.push(key + " → " + itemData[key]);
-        }
-    }
-
-    document.getElementById("itemResult").innerText =
-        results.length ? results.join("\n") : "見つかりません";
 }
 </script>
 
