@@ -154,19 +154,25 @@ function searchItem() {
 }
 window.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("itemSearchBox");
+    const resultDiv = document.getElementById("itemResult");
 
-    if (!input) return; // 安全対策（地味に重要）
+    if (!input || !resultDiv) return;
 
-    // Enterキーで検索
+    const runSearch = () => {
+        searchItem();
+    };
+
+    // Enterキー
     input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
-            searchItem();
+            runSearch();
         }
     });
 
-    // 入力するたびにリアルタイム検索
+    // リアルタイム（軽く制御）
+    let timer;
     input.addEventListener("input", () => {
-        searchItem();
+        clearTimeout(timer);
+        timer = setTimeout(runSearch, 100);
     });
 });
-
