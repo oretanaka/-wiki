@@ -95,10 +95,29 @@ const itemData = {
 };
 
 // ===============================
-// アイテム検索
+// アイテム検索（改良版）
 // ===============================
 function searchItem() {
-    const id = document.getElementById("itemSearchBox").value.trim();
-    const result = itemData[id] || "見つかりません";
-    document.getElementById("itemResult").innerText = result;
+    const keyword = document.getElementById("itemSearchBox").value.trim();
+    const resultDiv = document.getElementById("itemResult");
+
+    if (!keyword) {
+        resultDiv.innerText = "入力してください";
+        return;
+    }
+
+    let results = [];
+
+    // 部分一致検索
+    for (let key in itemData) {
+        if (key.includes(keyword)) {
+            results.push(`${key} → ${itemData[key]}`);
+        }
+    }
+
+    if (results.length === 0) {
+        resultDiv.innerText = "見つかりません";
+    } else {
+        resultDiv.innerText = results.join("\n");
+    }
 }
