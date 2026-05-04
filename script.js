@@ -155,6 +155,8 @@ function searchItem() {
 window.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("itemSearchBox");
 
+    if (!input) return; // 安全対策（地味に重要）
+
     // Enterキーで検索
     input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
