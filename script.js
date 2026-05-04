@@ -152,3 +152,9 @@ function searchItem() {
         resultDiv.innerText = results.join("\n");
     }
 }
+document.getElementById("itemSearchBox")
+.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        searchItem();
+    }
+});
