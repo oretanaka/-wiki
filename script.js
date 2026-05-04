@@ -1,3 +1,5 @@
+const input = document.getElementById("itemSearchBox");
+const resultDiv = document.getElementById("itemResult");
 // ===============================
 // レシピデータ
 // ===============================
@@ -129,8 +131,7 @@ const itemData = {
 // アイテム検索（改良版）
 // ===============================
 function searchItem() {
-    const keyword = document.getElementById("itemSearchBox").value.trim();
-    const resultDiv = document.getElementById("itemResult");
+    const keyword = input.value.trim();
 
     if (!keyword) {
         resultDiv.innerText = "入力してください";
@@ -139,18 +140,17 @@ function searchItem() {
 
     let results = [];
 
-    // 部分一致検索
     for (let key in itemData) {
         if (key.includes(keyword)) {
             results.push(`${key} → ${itemData[key]}`);
         }
     }
 
-    if (results.length === 0) {
-        resultDiv.innerText = "見つかりません";
-    } else {
-        resultDiv.innerText = results.join("\n");
-    }
+    resultDiv.innerText =
+        results.length === 0
+            ? "見つかりません"
+            : results.join("\n");
+}
 }
 window.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("itemSearchBox");
