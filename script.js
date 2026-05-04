@@ -95,50 +95,54 @@ const itemData = {
 };
 
 // ===============================
-// あいまい検索スコア（Wiki用）
+// 検索（ここが修正ポイント）
 // ===============================
-function scoreMatch(text, keyword) {
-    if (!keyword) return 0;
-    if (text === keyword) return 100;
-    if (text.includes(keyword)) return 70;
-    if (keyword.includes(text)) return 50;
-    return 0;
-}
+function searchItem() {
+    const input = document.getElementById("itemSearchBox");
+    const resultDiv = document.getElementById("itemResult");
 
-// ===============================
-// レシピ検索（Wiki強化）
-// ===============================
-function findRecipe(keyword) {
-    keyword = keyword.trim();
-    if (!keyword) return null;
+    const keyword = input.value.trim();
 
-    let best = null;
-    let bestScore = 0;
+    // ★修正①：空なら完全停止（暴発防止）
+    if (keyword === "") {
+        resultDiv.innerText = "";
+        return;
+    }
 
-    for (const r of recipes) {
-        const w = r.weapon;
+    const results = [];
 
-        const candidates = [
-            r.name,
-            w?.name,
-            w?.jpName,
-            w?.class
-        ].filter(Boolean);
+    for (const key in itemData) {
+        const value = itemData[key];
 
-        for (const c of candidates) {
-            const score = scoreMatch(c, keyword);
-            if (score > bestScore) {
-                best = r;
-                bestScore = score;
-            }
+        if (key.includes(keyword) || value.includes(keyword)) {
+            results.push(`[素材] ${key} → ${value}`);
         }
     }
 
-    return best;
+    resultDiv.innerText =
+        results.length ? results.join("\n") : "見つかりません";
 }
 
 // ===============================
-// 素材計算
+// レシピ検索（暴発防止済み）
+// ===============================
+function findRecipe(keyword) {
+    keyword = keyword.trim();
+
+    if (!keyword) return null; // ★修正②：空検索防止
+
+    return recipes.find(r =>
+        r.name.includes(keyword) ||
+        keyword.includes(r.name) ||
+        (r.weapon && (
+            r.weapon.name.includes(keyword) ||
+            r.weapon.jpName.includes(keyword)
+        ))
+    );
+}
+
+// ===============================
+// 計算
 // ===============================
 function calculateMaterials() {
     const recipeName = document.getElementById("recipeInput").value.trim();
@@ -176,59 +180,20 @@ function calculateMaterials() {
 }
 
 // ===============================
-// アイテム検索（カテゴリ＋ハイライト）
-// ===============================
-function searchItem() {
-    const input = document.getElementById("itemSearchBox");
-    const resultDiv = document.getElementById("itemResult");
-
-    const keyword = input.value.trim();
-
-    if (!keyword) {
-        resultDiv.innerText = "";
-        return;
-    }
-
-    const results = [];
-
-    for (const key in itemData) {
-        const value = itemData[key];
-
-        if (key.includes(keyword) || value.includes(keyword)) {
-            results.push(`[素材] ${highlight(key, keyword)} → ${value}`);
-        }
-    }
-
-    resultDiv.innerHTML =
-        results.length ? results.join("<br>") : "見つかりません";
-}
-
-// ===============================
-// ハイライト
-// ===============================
-function highlight(text, keyword) {
-    return text.replace(
-        new RegExp(keyword, "g"),
-        `<span style="color:#00ff99">${keyword}</span>`
-    );
-}
-
-// ===============================
-// イベント（完全安定版）
+// イベント（ここが重要修正）
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
     const recipeInput = document.getElementById("recipeInput");
     const itemInput = document.getElementById("itemSearchBox");
 
-    // レシピEnter
+    // ★修正③：Enterのみで実行（暴発完全防止）
     recipeInput.addEventListener("keydown", e => {
         if (e.key === "Enter") calculateMaterials();
     });
 
-    // アイテムEnter
     itemInput.addEventListener("keydown", e => {
         if (e.key === "Enter") searchItem();
     });
 
-    // ❌リアルタイム検索は廃止（暴発防止）
+    // ❌ inputリアルタイム完全禁止（これが暴発原因）
 });
