@@ -16,117 +16,120 @@
 </head>
 <body>
 
-    <div class="console-area">
-        <div class="input-line">
-            <span class="label">レシピ名を入力してください: </span>
-            <input type="text" id="recipeInput" placeholder="例: 無銘改">
-        </div>
-        <div class="input-line">
-            <span class="label">何本作りますか？: </span>
-            <input type="number" id="countInput" value="1" min="1">
-        </div>
-        <button onclick="calculateMaterials()">計算実行</button>
+<div class="console-area">
 
-        <div id="output">ここに出力されます</div>
-
-        <hr>
-
-<h2>アイテム検索</h2>
-
-<input id="itemSearchBox" placeholder="アイテムID入力">
-<button onclick="searchItem()">検索</button>
-
-<p id="itemResult"></p>
-
-        
+    <!-- 素材計算 -->
+    <div class="input-line">
+        <span class="label">レシピ名を入力してください: </span>
+        <input type="text" id="recipeInput" placeholder="例: 無銘改">
     </div>
 
-    <script>
-        const recipes = [
-            {
-                name: "無銘改",
-                items: [
-                    { name: "境壊ノ二刀無銘", count: 1 },
-                    { name: "焔獄魔の逆鱗", count: 30 },
-                    { name: "焔獄魔の巌翼", count: 20 },
-                    { name: "冰刃魔の逆鱗", count: 30 },
-                    { name: "冰刃魔の巌翼", count: 20 },
-                    { name: "雷霆魔の逆鱗", count: 30 },
-                    { name: "雷霆魔の巌翼", count: 20 },
-                    { name: "百足の卵", count: 50 },
-                    { name: "百足の毒", count: 20 },
-                    { name: "朱の盤の角", count: 50 },
-                    { name: "乾いた舌", count: 20 },
-                    { name: "斬鋭石", count: 50 },
-                    { name: "剛毅石", count: 50 },
-                    { name: "霊妙石", count: 50 },
-                    { name: "穢珠", count: 30 }
-                ]
-            },
-            { name: "無銘", items: [] },
-            { name: "真打", items: [] },
-            { name: "修羅", items: [] },
-            { name: "以蔵武器", items: [] },
-            { 
-                name: "雷爪", 
-                items: [
-                    { name: "雷魔の電鱗", count: 2 },
-                    { name: "雷霆魔の黄甲殻", count: 2 }
-                ]
-            },
-            { 
-                name: "雷爪耀", 
-                items: [
-                    { name: "雷魔の逆鱗", count: 2 },
-                    { name: "雷霆魔の厳翼", count: 2 }
-                ]
-            },
-            { 
-                name: "雷爪霹靂", 
-                items: [
-                    { name: "雷霆魔の心臓", count: 2 },
-                    { name: "雷霆魔の浸蝕髄", count: 1 }
-                ]
-            } // ここでレシピのリストを閉じます
-        ]; // ここで recipes 配列全体を閉じます
+    <div class="input-line">
+        <span class="label">何本作りますか？: </span>
+        <input type="number" id="countInput" value="1" min="1">
+    </div>
 
-        function calculateMaterials() {
-            const recipeInput = document.getElementById('recipeInput');
-            const outputDiv = document.getElementById('output');
-            
-            const recipeName = recipeInput.value.trim();
-            const makeCount = parseInt(document.getElementById('countInput').value) || 1;
+    <button onclick="calculateMaterials()">計算実行</button>
 
-            const target = recipes.find(r => r.name === recipeName);
+    <div id="output">ここに出力されます</div>
 
-            if (!target) {
-                outputDiv.innerText = "【エラー】\nそのレシピ（" + recipeName + "）は存在しません。";
-                outputDiv.style.color = "#ff6b6b";
-                return;
-            }
+    <hr>
 
-            outputDiv.style.color = "#ffffff";
-            let result = `\n【必要素材（${makeCount}本分）】\n`;
+    <!-- アイテム検索 -->
+    <h2>アイテム検索</h2>
 
-            if (!target.items || target.items.length === 0) {
-                result += "素材情報が登録されていません。";
-            } else {
-                target.items.forEach(m => {
-                    const total = m.count * makeCount;
-                    if (isNaN(total)) {
-                        result += ` - ${m.name}\n`;
-                    } else {
-                        result += ` - ${m.name} × ${total.toLocaleString()}\n`;
-                    }
-                });
-            }
+    <input id="itemSearchBox" placeholder="IDや名前で検索">
+    <button onclick="searchItem()">検索</button>
 
-            outputDiv.innerText = result;
+    <p id="itemResult"></p>
+
+</div>
+
+<script>
+/* ===============================
+   レシピデータ
+================================ */
+const recipes = [
+    {
+        name: "無銘改",
+        items: [
+            { name: "境壊ノ二刀無銘", count: 1 },
+            { name: "焔獄魔の逆鱗", count: 30 },
+            { name: "焔獄魔の巌翼", count: 20 },
+            { name: "冰刃魔の逆鱗", count: 30 },
+            { name: "冰刃魔の巌翼", count: 20 },
+            { name: "雷霆魔の逆鱗", count: 30 },
+            { name: "雷霆魔の巌翼", count: 20 },
+            { name: "百足の卵", count: 50 },
+            { name: "百足の毒", count: 20 },
+            { name: "朱の盤の角", count: 50 },
+            { name: "乾いた舌", count: 20 },
+            { name: "斬鋭石", count: 50 },
+            { name: "剛毅石", count: 50 },
+            { name: "霊妙石", count: 50 },
+            { name: "穢珠", count: 30 }
+        ]
+    },
+    { name: "無銘", items: [] },
+    { name: "真打", items: [] }
+];
+
+/* ===============================
+   アイテムIDデータ
+================================ */
+const itemData = {
+    "item_001": "白",
+    "item_002": "黒",
+    "item_003": "赤"
+};
+
+/* ===============================
+   素材計算
+================================ */
+function calculateMaterials() {
+    const recipeName = document.getElementById('recipeInput').value.trim();
+    const makeCount = parseInt(document.getElementById('countInput').value) || 1;
+    const outputDiv = document.getElementById('output');
+
+    const target = recipes.find(r => r.name === recipeName);
+
+    if (!target) {
+        outputDiv.innerText = "【エラー】\nそのレシピは存在しません";
+        outputDiv.style.color = "#ff6b6b";
+        return;
+    }
+
+    outputDiv.style.color = "#ffffff";
+    let result = `\n【必要素材（${makeCount}本分）】\n`;
+
+    if (!target.items.length) {
+        result += "素材情報なし";
+    } else {
+        target.items.forEach(m => {
+            result += ` - ${m.name} × ${m.count * makeCount}\n`;
+        });
+    }
+
+    outputDiv.innerText = result;
+}
+
+/* ===============================
+   アイテム検索（部分一致対応）
+================================ */
+function searchItem() {
+    const keyword = document.getElementById("itemSearchBox").value;
+    let results = [];
+
+    for (let key in itemData) {
+        if (key.includes(keyword) || itemData[key].includes(keyword)) {
+            results.push(key + " → " + itemData[key]);
         }
-    </script>
+    }
+
+    document.getElementById("itemResult").innerText =
+        results.length ? results.join("\n") : "見つかりません";
+}
+</script>
+
 </body>
 </html>
-
-
-
-
