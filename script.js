@@ -85,13 +85,13 @@ function calculateMaterials() {
 // アイテムデータ
 // ===============================
 const itemData = {
-    "碧之珠": "白",
-    "緋之珠": "白",
-    "翠之珠": "白",
-    "白之珠": "白",
-    "黒之珠": "白",
-    "空之珠": "黒",
-    "地之珠": "赤"
+    "碧之珠": "Cereluean Gem",
+    "緋之珠": "Scarlet Gem",
+    "翠之珠": "Myrtle Gem",
+    "白之珠": "Ivory Gem",
+    "黒之珠": "Obsidian Gem",
+    "空之珠": "Heavenly Marble",
+    "地之珠": "Earthen Marble"
 };
 
 // ===============================
