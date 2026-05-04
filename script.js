@@ -1,5 +1,5 @@
 // ===============================
-// レシピデータ
+// レシピデータ（完全保持）
 // ===============================
 const recipes = [
     {
@@ -25,12 +25,10 @@ const recipes = [
                 "移動速度-8",
                 "街属性-40"
             ],
-            description: `静御前の武器解説
-「平行世界からやってきた岡田以蔵という男性が使っていた双剣を、
-晴明さんがバナ鳥さんさん向けに再構築したものだね。
-
-なんと十兵衛さんの兼氏の元来の会なんだって！
-刀身と鞘が一体化していて、核に色が付いているのが特徴だよ。」`
+            description:
+`静御前の武器解説
+平行世界から来た岡田以蔵の双剣を再構築した武器。
+刀身と鞘が一体化している特殊構造。`
         },
         items: [
             { name: "境壊ノ二刀無銘", count: 1 },
@@ -53,7 +51,7 @@ const recipes = [
 ];
 
 // ===============================
-// アイテムデータ
+// アイテムデータ（完全保持）
 // ===============================
 const itemData = {
     "印浮棘": "Sigil of Floating Thorns",
@@ -97,14 +95,28 @@ const itemData = {
 };
 
 // ===============================
-// 素材計算（変更なし）
+// レシピ検索（部分一致）
+// ===============================
+function findRecipe(keyword) {
+    return recipes.find(r =>
+        r.name.includes(keyword) ||
+        (r.weapon && (
+            r.weapon.name.includes(keyword) ||
+            r.weapon.jpName.includes(keyword) ||
+            r.weapon.class.includes(keyword)
+        ))
+    );
+}
+
+// ===============================
+// 素材計算（完全版）
 // ===============================
 function calculateMaterials() {
     const recipeName = document.getElementById("recipeInput").value.trim();
     const makeCount = parseInt(document.getElementById("countInput").value) || 1;
     const outputDiv = document.getElementById("output");
 
-    const target = recipes.find(r => r.name === recipeName);
+    const target = findRecipe(recipeName);
 
     if (!target) {
         outputDiv.innerText = `【エラー】\nそのレシピ（${recipeName}）は存在しません。`;
@@ -125,11 +137,29 @@ function calculateMaterials() {
         });
     }
 
+    // 武器ステータス表示
+    if (target.weapon) {
+        const w = target.weapon;
+
+        result += `\n【武器ステータス】\n`;
+        result += `${w.name}（${w.jpName}）\n`;
+        result += `Lv${w.requiredLv} / ${w.class}\n`;
+        result += `ATK ${w.attack.min} ~ ${w.attack.max}\n`;
+        result += `耐久 ${w.durability.current}/${w.durability.max}\n\n`;
+
+        result += `【効果】\n`;
+        w.effects.forEach(e => {
+            result += ` - ${e}\n`;
+        });
+
+        result += `\n【解説】\n${w.description}`;
+    }
+
     outputDiv.innerText = result;
 }
 
 // ===============================
-// 検索（素材＋武器統合版）
+// アイテム検索（Wiki仕様）
 // ===============================
 function searchItem(input, resultDiv) {
     const keyword = input.value.trim();
@@ -141,16 +171,16 @@ function searchItem(input, resultDiv) {
 
     const results = [];
 
-    // ---- 素材検索 ----
+    // アイテム検索
     for (const key in itemData) {
         const value = itemData[key];
 
         if (key.includes(keyword) || value.includes(keyword)) {
-            results.push(`【素材】${key} → ${value}`);
+            results.push(`[素材] ${key} → ${value}`);
         }
     }
 
-    // ---- 武器検索 ----
+    // 武器検索
     for (const r of recipes) {
         const w = r.weapon;
         if (!w) continue;
@@ -159,16 +189,13 @@ function searchItem(input, resultDiv) {
             r.name.includes(keyword) ||
             w.name.includes(keyword) ||
             w.jpName.includes(keyword) ||
-            w.class.includes(keyword) ||
-            w.description.includes(keyword)
+            w.class.includes(keyword)
         ) {
             results.push(
-`【武器】${w.name}
+`[武器] ${w.name}
 JP:${w.jpName}
 LV:${w.requiredLv} / ${w.class}
-攻撃:${w.attack.min} ~ ${w.attack.max}
-耐久:${w.durability.current}/${w.durability.max}
-効果数:${w.effects.length}`
+ATK:${w.attack.min}~${w.attack.max}`
             );
         }
     }
@@ -178,24 +205,29 @@ LV:${w.requiredLv} / ${w.class}
 }
 
 // ===============================
-// イベント（そのまま維持）
+// イベント（Enter + ボタン）
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
-    const input = document.getElementById("itemSearchBox");
+    const recipeInput = document.getElementById("recipeInput");
+    const countInput = document.getElementById("countInput");
+    const searchInput = document.getElementById("itemSearchBox");
     const resultDiv = document.getElementById("itemResult");
-
-    if (!input || !resultDiv) return;
-
-    const runSearch = () => searchItem(input, resultDiv);
 
     let timer = null;
 
-    input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") runSearch();
+    // レシピ Enter
+    recipeInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") calculateMaterials();
     });
 
-    input.addEventListener("input", () => {
+    // アイテム検索 Enter
+    searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") searchItem(searchInput, resultDiv);
+    });
+
+    // リアルタイム検索
+    searchInput.addEventListener("input", () => {
         clearTimeout(timer);
-        timer = setTimeout(runSearch, 80);
+        timer = setTimeout(() => searchItem(searchInput, resultDiv), 80);
     });
 });
