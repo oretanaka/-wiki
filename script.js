@@ -95,21 +95,23 @@ const itemData = {
 };
 
 // ===============================
-// レシピ検索（部分一致）
+// レシピ検索（あなたの差し替え版）
 // ===============================
 function findRecipe(keyword) {
+    keyword = keyword.trim();
+
     return recipes.find(r =>
         r.name.includes(keyword) ||
+        keyword.includes(r.name) ||
         (r.weapon && (
             r.weapon.name.includes(keyword) ||
-            r.weapon.jpName.includes(keyword) ||
-            r.weapon.class.includes(keyword)
+            r.weapon.jpName.includes(keyword)
         ))
     );
 }
 
 // ===============================
-// 素材計算（完全版）
+// 素材計算（ステータス付き）
 // ===============================
 function calculateMaterials() {
     const recipeName = document.getElementById("recipeInput").value.trim();
@@ -132,12 +134,13 @@ function calculateMaterials() {
         result += "素材情報が登録されていません。";
     } else {
         target.items.forEach(m => {
-            const total = m.count * makeCount;
-            result += ` - ${m.name} × ${total.toLocaleString()}\n`;
+            result += ` - ${m.name} × ${(m.count * makeCount).toLocaleString()}\n`;
         });
     }
 
+    // ===============================
     // 武器ステータス表示
+    // ===============================
     if (target.weapon) {
         const w = target.weapon;
 
@@ -152,16 +155,19 @@ function calculateMaterials() {
             result += ` - ${e}\n`;
         });
 
-        result += `\n【解説】\n${w.description}`;
+        result += `\n【説明】\n${w.description}`;
     }
 
     outputDiv.innerText = result;
 }
 
 // ===============================
-// アイテム検索（Wiki仕様）
+// アイテム検索（完全版）
 // ===============================
-function searchItem(input, resultDiv) {
+function searchItem() {
+    const input = document.getElementById("itemSearchBox");
+    const resultDiv = document.getElementById("itemResult");
+
     const keyword = input.value.trim();
 
     if (!keyword) {
@@ -171,63 +177,41 @@ function searchItem(input, resultDiv) {
 
     const results = [];
 
-    // アイテム検索
     for (const key in itemData) {
-        const value = itemData[key];
-
-        if (key.includes(keyword) || value.includes(keyword)) {
-            results.push(`[素材] ${key} → ${value}`);
-        }
-    }
-
-    // 武器検索
-    for (const r of recipes) {
-        const w = r.weapon;
-        if (!w) continue;
-
         if (
-            r.name.includes(keyword) ||
-            w.name.includes(keyword) ||
-            w.jpName.includes(keyword) ||
-            w.class.includes(keyword)
+            key.includes(keyword) ||
+            itemData[key].includes(keyword)
         ) {
-            results.push(
-`[武器] ${w.name}
-JP:${w.jpName}
-LV:${w.requiredLv} / ${w.class}
-ATK:${w.attack.min}~${w.attack.max}`
-            );
+            results.push(`${key} → ${itemData[key]}`);
         }
     }
 
     resultDiv.innerText =
-        results.length ? results.join("\n\n") : "見つかりません";
+        results.length ? results.join("\n") : "見つかりません";
 }
 
 // ===============================
-// イベント（Enter + ボタン）
+// イベント（Enter対応 + ボタン両対応）
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
     const recipeInput = document.getElementById("recipeInput");
-    const countInput = document.getElementById("countInput");
-    const searchInput = document.getElementById("itemSearchBox");
-    const resultDiv = document.getElementById("itemResult");
+    const itemInput = document.getElementById("itemSearchBox");
 
-    let timer = null;
+    let timer;
 
     // レシピ Enter
     recipeInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") calculateMaterials();
     });
 
-    // アイテム検索 Enter
-    searchInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") searchItem(searchInput, resultDiv);
+    // アイテム Enter
+    itemInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") searchItem();
     });
 
     // リアルタイム検索
-    searchInput.addEventListener("input", () => {
+    itemInput.addEventListener("input", () => {
         clearTimeout(timer);
-        timer = setTimeout(() => searchItem(searchInput, resultDiv), 80);
+        timer = setTimeout(searchItem, 80);
     });
 });
