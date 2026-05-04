@@ -1,4 +1,3 @@
-<button onclick="calculateMaterials()">計算実行</button>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -69,6 +68,7 @@
 
 <div class="console-area">
 
+    <!-- レシピ -->
     <div class="input-line">
         <span class="label">レシピ名を入力してください: </span>
         <input type="text" id="recipeInput" placeholder="例: 無銘改">
@@ -88,14 +88,14 @@
     <!-- アイテム検索 -->
     <h2>アイテム検索</h2>
 
-    <input id="itemSearchBox" placeholder="アイテムID入力（例: item_001）">
+    <input id="itemSearchBox" placeholder="アイテム名 or 英語">
     <button onclick="searchItem()">検索</button>
 
     <p id="itemResult"></p>
 
 </div>
 
-<!-- ★これが重要 -->
+<!-- JS -->
 <script src="script.js"></script>
 
 </body>
