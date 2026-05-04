@@ -27,14 +27,7 @@ const recipes = [
             ],
             description:
 `静御前の武器解説
-「平行世界からやってきた岡田以蔵という男性が使っていた双剣
-を、晴明さんがバナ鳥さんさん向けに再構築したものだね。なん
-と、十兵衛さんが持っている「兼氏」の元来の会なんだって!十
-兵衛さんの兼氏は刀身と鞘が分かれて鞘が自立稼働するけど、こ
-っちは刀身と鞘が一体になってるみたい。形を見るに、兼氏の本
-体は元々鞘の方なのかも。核となる部分に色が付いて、芯が通っ
-た感じがするね!」
-`
+平行世界から来た岡田以蔵の双剣を再構築した武器。`
         },
         items: [
             { name: "境壊ノ二刀無銘", count: 1 },
@@ -101,7 +94,7 @@ const itemData = {
 };
 
 // ===============================
-// 素材計算
+// 素材計算（そのまま維持）
 // ===============================
 function calculateMaterials() {
     const recipeName = document.getElementById("recipeInput").value.trim();
@@ -133,7 +126,7 @@ function calculateMaterials() {
 }
 
 // ===============================
-// 検索
+// 検索（拡張のみ・破壊なし）
 // ===============================
 function searchItem(input, resultDiv) {
     const keyword = input.value.trim();
@@ -145,19 +138,44 @@ function searchItem(input, resultDiv) {
 
     const results = [];
 
+    // ===== アイテム検索 =====
     for (const key in itemData) {
         const value = itemData[key];
 
         if (key.includes(keyword) || value.includes(keyword)) {
-            results.push(`${key} → ${value}`);
+            results.push(`[素材] ${key} → ${value}`);
         }
     }
 
-    resultDiv.innerText = results.length ? results.join("\n") : "見つかりません";
+    // ===== 武器検索（追加・既存非破壊）=====
+    for (const r of recipes) {
+        if (!r.weapon) continue;
+
+        const w = r.weapon;
+
+        if (
+            r.name.includes(keyword) ||
+            w.name.includes(keyword) ||
+            w.jpName.includes(keyword) ||
+            w.class.includes(keyword)
+        ) {
+            results.push(
+`[武器] ${w.name}
+JP:${w.jpName}
+LV:${w.requiredLv} / ${w.class}
+ATK:${w.attack.min}~${w.attack.max}
+耐久:${w.durability.current}/${w.durability.max}
+効果:${w.effects.slice(0, 3).join(" / ")}...`
+            );
+        }
+    }
+
+    resultDiv.innerText =
+        results.length ? results.join("\n\n") : "見つかりません";
 }
 
 // ===============================
-// イベント
+// イベント（そのまま維持）
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("itemSearchBox");
