@@ -153,34 +153,18 @@ function searchItem() {
     }
 }
 window.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("itemSearchBox")
-    .addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            searchItem();
-        }
-    });
-});
-window.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("itemSearchBox");
 
-    input.addEventListener("input", () => {
-        searchItem();
-    });
-});
-
-
-window.addEventListener("DOMContentLoaded", () => {
-    const input = document.getElementById("itemSearchBox");
-
-    // Enterキー検索
+    // Enterキーで検索
     input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             searchItem();
         }
     });
 
-    // リアルタイム検索
+    // 入力するたびにリアルタイム検索
     input.addEventListener("input", () => {
         searchItem();
     });
 });
+
