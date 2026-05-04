@@ -95,10 +95,12 @@ const itemData = {
 };
 
 // ===============================
-// レシピ検索（あなたの差し替え版そのまま）
+// ★修正①：空入力を弾く（重要）
 // ===============================
 function findRecipe(keyword) {
     keyword = keyword.trim();
+
+    if (!keyword) return null; // ←これ追加（超重要）
 
     return recipes.find(r =>
         r.name.includes(keyword) ||
@@ -111,7 +113,7 @@ function findRecipe(keyword) {
 }
 
 // ===============================
-// 素材計算（変更なし）
+// 素材計算
 // ===============================
 function calculateMaterials() {
     const recipeName = document.getElementById("recipeInput").value.trim();
@@ -157,7 +159,7 @@ function calculateMaterials() {
 }
 
 // ===============================
-// アイテム検索（★ここだけ修正）
+// ★修正②：入力前は検索しない
 // ===============================
 function searchItem() {
     const input = document.getElementById("itemSearchBox");
@@ -165,19 +167,15 @@ function searchItem() {
 
     const keyword = input.value.trim();
 
-    // ★★★ 修正ポイント（これだけ）★★★
-    if (keyword === "") {
-        resultDiv.innerText = "";
+    if (!keyword) {
+        resultDiv.innerText = "入力してください";
         return;
     }
 
     const results = [];
 
     for (const key in itemData) {
-        if (
-            key.includes(keyword) ||
-            itemData[key].includes(keyword)
-        ) {
+        if (key.includes(keyword) || itemData[key].includes(keyword)) {
             results.push(`${key} → ${itemData[key]}`);
         }
     }
@@ -187,7 +185,7 @@ function searchItem() {
 }
 
 // ===============================
-// イベント（変更なし）
+// イベント（そのまま＋暴発防止）
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
     const recipeInput = document.getElementById("recipeInput");
@@ -205,6 +203,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
     itemInput.addEventListener("input", () => {
         clearTimeout(timer);
+
+        const val = itemInput.value.trim();
+
+        // ★修正③：空のときは検索しない
+        if (!val) {
+            document.getElementById("itemResult").innerText = "";
+            return;
+        }
+
         timer = setTimeout(searchItem, 80);
     });
 });
