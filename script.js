@@ -62,54 +62,58 @@ const itemData = {
     "緋散鱗": "Crimson Scale",
     "冰刃魔の巌翼": "Sleetsword Wing",
     "冰刃魔の浸蝕髄": "Sleetsword Marrow",
-    "冰刃魔の蒼甲殻": "Sleetsword Shell",
-    "冰刃魔の冷鱗": "Sleetsword Scale",
     "冰刃魔の逆鱗": "Sleetsword Grudge",
-    "病の種": "Diseased Seedling",
     "焔獄魔の逆鱗": "Infernal Grudge",
-    "弧描角": "Horned Sculpture",
-    "純白の羽根": "Pure White Plume",
-    "冥暗の予言": "Gloom Prophecy",
-    "混色の禍の砕片": "Fused Calamity Debris",
-    "焔獄魔の巌翼": "Infernal Wing",
-    "雷霆魔の黄甲殻": "Levinlance Shell",
-    "切望の牙": "Tusk of Hope",
-    "碧樹の種子": "Turquoise Timber Seedling",
-    "焔獄魔の浸蝕髄": "Infernal Marrow",
-    "焔獄魔の心臓": "Infernal Heart",
-    "雷霆魔の電鱗": "Levinlance Scale",
-    "冰刃魔の心臓": "Sleetsword Heart",
-    "虚ろな墓穴": "Empty Grave",
-    "逆行薬": "Retrograde Elixir",
-    "雷霆魔の心臓": "Levinlance Heart",
-    "雷霆魔の浸蝕髄": "Levinlance Marrow",
-    "雷霆魔の巌翼": "Levinlance Wing",
     "雷霆魔の逆鱗": "Levinlance Grudge",
+    "雷霆魔の巌翼": "Levinlance Wing",
     "碧之珠": "Cereluean Gem",
     "緋之珠": "Scarlet Gem",
     "翠之珠": "Myrtle Gem",
     "白之珠": "Ivory Gem",
-    "黒之珠": "Obsidian Gem",
-    "空之珠": "Heavenly Marble",
-    "地之珠": "Earthen Marble"
+    "黒之珠": "Obsidian Gem"
 };
 
 // ===============================
-// ★修正①：空入力を弾く（重要）
+// あいまい検索スコア（Wiki用）
+// ===============================
+function scoreMatch(text, keyword) {
+    if (!keyword) return 0;
+    if (text === keyword) return 100;
+    if (text.includes(keyword)) return 70;
+    if (keyword.includes(text)) return 50;
+    return 0;
+}
+
+// ===============================
+// レシピ検索（Wiki強化）
 // ===============================
 function findRecipe(keyword) {
     keyword = keyword.trim();
+    if (!keyword) return null;
 
-    if (!keyword) return null; // ←これ追加（超重要）
+    let best = null;
+    let bestScore = 0;
 
-    return recipes.find(r =>
-        r.name.includes(keyword) ||
-        keyword.includes(r.name) ||
-        (r.weapon && (
-            r.weapon.name.includes(keyword) ||
-            r.weapon.jpName.includes(keyword)
-        ))
-    );
+    for (const r of recipes) {
+        const w = r.weapon;
+
+        const candidates = [
+            r.name,
+            w?.name,
+            w?.jpName,
+            w?.class
+        ].filter(Boolean);
+
+        for (const c of candidates) {
+            const score = scoreMatch(c, keyword);
+            if (score > bestScore) {
+                best = r;
+                bestScore = score;
+            }
+        }
+    }
+
+    return best;
 }
 
 // ===============================
@@ -123,43 +127,35 @@ function calculateMaterials() {
     const target = findRecipe(recipeName);
 
     if (!target) {
-        outputDiv.innerText = `【エラー】\nそのレシピ（${recipeName}）は存在しません。`;
+        outputDiv.innerText = "【エラー】\nレシピが見つかりません";
         outputDiv.style.color = "#ff6b6b";
         return;
     }
 
-    outputDiv.style.color = "#ffffff";
+    outputDiv.style.color = "#fff";
 
-    let result = `\n【必要素材（${makeCount}本分）】\n`;
+    let result = `【必要素材（${makeCount}本）】\n`;
 
-    if (!target.items || target.items.length === 0) {
-        result += "素材情報が登録されていません。";
-    } else {
-        target.items.forEach(m => {
-            result += ` - ${m.name} × ${(m.count * makeCount).toLocaleString()}\n`;
-        });
-    }
+    target.items.forEach(m => {
+        result += ` - ${m.name} × ${(m.count * makeCount).toLocaleString()}\n`;
+    });
 
-    if (target.weapon) {
-        const w = target.weapon;
+    const w = target.weapon;
 
-        result += `\n【武器ステータス】\n`;
-        result += `${w.name}（${w.jpName}）\n`;
-        result += `Lv${w.requiredLv} / ${w.class}\n`;
-        result += `ATK ${w.attack.min} ~ ${w.attack.max}\n`;
-        result += `耐久 ${w.durability.current}/${w.durability.max}\n\n`;
+    result += `\n【武器】\n${w.name}（${w.jpName}）`;
+    result += `\nLv${w.requiredLv} / ${w.class}`;
+    result += `\nATK ${w.attack.min}~${w.attack.max}`;
+    result += `\n耐久 ${w.durability.current}/${w.durability.max}\n`;
 
-        result += `【効果】\n`;
-        w.effects.forEach(e => result += ` - ${e}\n`);
+    result += `\n【効果】\n${w.effects.join("\n")}`;
 
-        result += `\n【説明】\n${w.description}`;
-    }
+    result += `\n\n【解説】\n${w.description}`;
 
     outputDiv.innerText = result;
 }
 
 // ===============================
-// ★修正②：入力前は検索しない
+// アイテム検索（カテゴリ＋ハイライト）
 // ===============================
 function searchItem() {
     const input = document.getElementById("itemSearchBox");
@@ -168,50 +164,50 @@ function searchItem() {
     const keyword = input.value.trim();
 
     if (!keyword) {
-        resultDiv.innerText = "入力してください";
+        resultDiv.innerText = "";
         return;
     }
 
     const results = [];
 
     for (const key in itemData) {
-        if (key.includes(keyword) || itemData[key].includes(keyword)) {
-            results.push(`${key} → ${itemData[key]}`);
+        const value = itemData[key];
+
+        if (key.includes(keyword) || value.includes(keyword)) {
+            results.push(`[素材] ${highlight(key, keyword)} → ${value}`);
         }
     }
 
-    resultDiv.innerText =
-        results.length ? results.join("\n") : "見つかりません";
+    resultDiv.innerHTML =
+        results.length ? results.join("<br>") : "見つかりません";
 }
 
 // ===============================
-// イベント（そのまま＋暴発防止）
+// ハイライト
+// ===============================
+function highlight(text, keyword) {
+    return text.replace(
+        new RegExp(keyword, "g"),
+        `<span style="color:#00ff99">${keyword}</span>`
+    );
+}
+
+// ===============================
+// イベント（完全安定版）
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
     const recipeInput = document.getElementById("recipeInput");
     const itemInput = document.getElementById("itemSearchBox");
 
-    let timer;
-
-    recipeInput.addEventListener("keydown", (e) => {
+    // レシピEnter
+    recipeInput.addEventListener("keydown", e => {
         if (e.key === "Enter") calculateMaterials();
     });
 
-    itemInput.addEventListener("keydown", (e) => {
+    // アイテムEnter
+    itemInput.addEventListener("keydown", e => {
         if (e.key === "Enter") searchItem();
     });
 
-    itemInput.addEventListener("input", () => {
-        clearTimeout(timer);
-
-        const val = itemInput.value.trim();
-
-        // ★修正③：空のときは検索しない
-        if (!val) {
-            document.getElementById("itemResult").innerText = "";
-            return;
-        }
-
-        timer = setTimeout(searchItem, 80);
-    });
+    // ❌リアルタイム検索は廃止（暴発防止）
 });
