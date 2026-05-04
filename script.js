@@ -167,3 +167,20 @@ window.addEventListener("DOMContentLoaded", () => {
         searchItem();
     });
 });
+
+
+window.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("itemSearchBox");
+
+    // Enterキー検索
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            searchItem();
+        }
+    });
+
+    // リアルタイム検索
+    input.addEventListener("input", () => {
+        searchItem();
+    });
+});
