@@ -102,7 +102,7 @@ const itemData = {
 "純白の羽根": "Pure White Plume",
 "冥暗の予言": "Gloom Prophecy",
 "混色の禍の砕片": "Fused Calamity Debris",
-"焔獄魔の嚴翼": "Infernal Wing",
+"焔獄魔の巌翼": "Infernal Wing",
 "雷霆魔の黄甲殻": "Levinlance Shell",
 "切望の牙": "Tusk of Hope",
 "碧樹の種子": "Turquoise Timber Seedling",
