@@ -160,3 +160,10 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+window.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("itemSearchBox");
+
+    input.addEventListener("input", () => {
+        searchItem();
+    });
+});
