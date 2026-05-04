@@ -95,7 +95,7 @@ const itemData = {
 };
 
 // ===============================
-// レシピ検索（あなたの差し替え版）
+// レシピ検索（あなたの差し替え版そのまま）
 // ===============================
 function findRecipe(keyword) {
     keyword = keyword.trim();
@@ -111,7 +111,7 @@ function findRecipe(keyword) {
 }
 
 // ===============================
-// 素材計算（ステータス付き）
+// 素材計算（変更なし）
 // ===============================
 function calculateMaterials() {
     const recipeName = document.getElementById("recipeInput").value.trim();
@@ -138,9 +138,6 @@ function calculateMaterials() {
         });
     }
 
-    // ===============================
-    // 武器ステータス表示
-    // ===============================
     if (target.weapon) {
         const w = target.weapon;
 
@@ -151,9 +148,7 @@ function calculateMaterials() {
         result += `耐久 ${w.durability.current}/${w.durability.max}\n\n`;
 
         result += `【効果】\n`;
-        w.effects.forEach(e => {
-            result += ` - ${e}\n`;
-        });
+        w.effects.forEach(e => result += ` - ${e}\n`);
 
         result += `\n【説明】\n${w.description}`;
     }
@@ -162,7 +157,7 @@ function calculateMaterials() {
 }
 
 // ===============================
-// アイテム検索（完全版）
+// アイテム検索（★ここだけ修正）
 // ===============================
 function searchItem() {
     const input = document.getElementById("itemSearchBox");
@@ -170,8 +165,9 @@ function searchItem() {
 
     const keyword = input.value.trim();
 
-    if (!keyword) {
-        resultDiv.innerText = "入力してください";
+    // ★★★ 修正ポイント（これだけ）★★★
+    if (keyword === "") {
+        resultDiv.innerText = "";
         return;
     }
 
@@ -191,7 +187,7 @@ function searchItem() {
 }
 
 // ===============================
-// イベント（Enter対応 + ボタン両対応）
+// イベント（変更なし）
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
     const recipeInput = document.getElementById("recipeInput");
@@ -199,17 +195,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
     let timer;
 
-    // レシピ Enter
     recipeInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") calculateMaterials();
     });
 
-    // アイテム Enter
     itemInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") searchItem();
     });
 
-    // リアルタイム検索
     itemInput.addEventListener("input", () => {
         clearTimeout(timer);
         timer = setTimeout(searchItem, 80);
