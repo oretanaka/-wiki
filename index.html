@@ -1,42 +1,102 @@
+<button onclick="calculateMaterials()">計算実行</button>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>モンスター＆アイテムWiki</title>
+    <meta charset="UTF-8">
+    <title>武器製作Wiki - 必要素材計算</title>
 
-<style>
-body {
-    font-family: monospace;
-    background: #1e1e1e;
-    color: #fff;
-    padding: 20px;
-}
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            line-height: 1.6;
+        }
 
-input, button {
-    padding: 6px;
-    margin: 5px;
-}
+        .console-area {
+            background: #000;
+            border: 1px solid #444;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-pre {
-    background: #000;
-    padding: 10px;
-    border: 1px solid #444;
-    white-space: pre-wrap;
-}
-</style>
+        .input-line {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        input {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #555;
+            padding: 5px;
+            font-family: monospace;
+            width: 150px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            transition: 0.2s;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #666;
+        }
+
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            color: #ffffff;
+            min-height: 50px;
+        }
+
+        .label {
+            color: #aaa;
+        }
+    </style>
 </head>
 
 <body>
 
-<h2>🔍 Wiki検索</h2>
+<div class="console-area">
 
-<input id="searchBox" placeholder="モンスター or アイテム">
-<button onclick="search()">検索</button>
+    <div class="input-line">
+        <span class="label">レシピ名を入力してください: </span>
+        <input type="text" id="recipeInput" placeholder="例: 無銘改">
+    </div>
 
-<pre id="output"></pre>
+    <div class="input-line">
+        <span class="label">何本作りますか？: </span>
+        <input type="number" id="countInput" value="1" min="1">
+    </div>
 
-<!-- ★ deferで確実に後読み込み -->
-<script src="script.js" defer></script>
+    <button onclick="calculateMaterials()">計算実行</button>
+
+    <div id="output">ここに出力されます</div>
+
+    <hr>
+
+    <!-- アイテム検索 -->
+    <h2>アイテム検索</h2>
+
+    <input id="itemSearchBox" placeholder="アイテムID入力（例: item_001）">
+    <button onclick="searchItem()">検索</button>
+
+    <p id="itemResult"></p>
+
+</div>
+
+<!-- ★これが重要 -->
+<script src="script.js"></script>
 
 </body>
 </html>
