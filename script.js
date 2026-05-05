@@ -1,70 +1,2323 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>武器製作Wiki</title>
+// ===============================
+// レシピデータ（完全保持）
+// ===============================
+const recipes = [
+    {
+        name: "境懐ノ無銘改",
+        weapon: {
+            name: "境懐ノ無銘改",
+            jpName: "きょうかいのむめいかい",
+            requiredLv: 112,
+            class: "双剣",
+            rarity: 0,
+            attack: { min: 8624, max: 9690 },
+            durability: { current: 880, max: 880 },
+            effects: [
+                "難度3以上の双剣スキル威力+40%",
+                "装備双剣2本以上で双剣スキル威力+30%",
+                "攻撃力+2500",
+                "双剣能力+25%",
+                "装備双剣2本以上で攻撃力+10%",
+                "装備双剣2本以上で双剣能力+15%",
+                "斬属性+30",
+                "耐久消費+5%",
+                "SP自然回復-5",
+                "移動速度-8",
+                "街属性-40"
+            ],
+            description:
+`静御前の武器解説
+平行世界から来た岡田以蔵の双剣を再構築した武器。
+刀身と鞘が一体化している特殊構造。`
+        },
+        items: [
+            { name: "境壊ノ二刀無銘", count: 1 },
+            { name: "焔獄魔の逆鱗", count: 30 },
+            { name: "焔獄魔の巌翼", count: 20 },
+            { name: "冰刃魔の逆鱗", count: 30 },
+            { name: "冰刃魔の巌翼", count: 20 },
+            { name: "雷霆魔の逆鱗", count: 30 },
+            { name: "雷霆魔の巌翼", count: 20 },
+            { name: "百足の卵", count: 50 },
+            { name: "百足の毒", count: 20 },
+            { name: "朱の盤の角", count: 50 },
+            { name: "乾いた舌", count: 20 },
+            { name: "斬鋭石", count: 50 },
+            { name: "剛毅石", count: 50 },
+            { name: "霊妙石", count: 50 },
+            { name: "穢珠", count: 30 }
+        ]
+    }
+];
 
-    <style>
-body {
-    -webkit-app-region: drag; 
-    background-color: rgba(30, 30, 30, 0.85);
-    border-radius: 10px;
-    border: 1px solid #444;
-    overflow: hidden;
+// ===============================
+// アイテムデータ（完全保持）
+// ===============================
+const itemData = {
+    
+    "印浮棘": "Sigil of Floating Thorns",
+    "焔獄魔の紅甲殻": "Infernal Shell",
+    "焔獄魔の熱鱗": "Infernal Scale",
+    "常夜の芥": "Tea OF Eternal Night",
+    "災難の萌芽": "Seedling of Calamity",
+    "緋散鱗": "Crimson Scale",
+    "冰刃魔の巌翼": "Sleetsword Wing",
+    "冰刃魔の浸蝕髄": "Sleetsword Marrow",
+    "冰刃魔の蒼甲殻": "Sleetsword Shell",
+    "冰刃魔の冷鱗": "Sleetsword Scale",
+    "冰刃魔の逆鱗": "Sleetsword Grudge",
+    "病の種": "Diseased Seedling",
+    "焔獄魔の逆鱗": "Infernal Grudge",
+    "弧描角": "Horned Sculpture",
+    "純白の羽根": "Pure White Plume",
+    "冥暗の予言": "Gloom Prophecy",
+    "混色の禍の砕片": "Fused Calamity Debris",
+    "焔獄魔の巌翼": "Infernal Wing",
+    "雷霆魔の黄甲殻": "Levinlance Shell",
+    "切望の牙": "Tusk of Hope",
+    "碧樹の種子": "Turquoise Timber Seedling",
+    "焔獄魔の浸蝕髄": "Infernal Marrow",
+    "焔獄魔の心臓": "Infernal Heart",
+    "雷霆魔の電鱗": "Levinlance Scale",
+    "冰刃魔の心臓": "Sleetsword Heart",
+    "虚ろな墓穴": "Empty Grave",
+    "逆行薬": "Retrograde Elixir",
+    "雷霆魔の心臓": "Levinlance Heart",
+    "雷霆魔の浸蝕髄": "Levinlance Marrow",
+    "雷霆魔の巌翼": "Levinlance Wing",
+    "雷霆魔の逆鱗": "Levinlance Grudge",
+    "碧之珠": "Cereluean Gem",
+    "緋之珠": "Scarlet Gem",
+    "翠之珠": "Myrtle Gem",
+    "白之珠": "Ivory Gem",
+    "黒之珠": "Obsidian Gem",
+    "空之珠": "Heavenly Marble",
+    "地之珠": "Earthen Marble"
+};
+const monsterData = {
+
+"鬱だるま": {
+    
+    name: "鬱だるま(大)",
+    kana: "うつダルマ",
+    drops: [
+        { item: "鬱だるまの欠片", price: 8 },
+        { item: "和紙", price: 213 },
+        { item: "だるまウヰスキー", price: 280 }
+    ],
+    locations: ["奇怪ヶ原","鬼ヶ島修験場","叫喚洞","鬼神殿","朱雀屋敷","外道丸のアジト"],
+    notes: "外道丸のアジトでは痛だるまと表示される",
+    weakness: ["炎"],
+    resistance: ["飛","闇"]
+},
+
+"痛だるま": {
+   
+    name: "痛だるま(大)",
+    kana: "いたダルマ",
+    drops: [
+        { item: "痛だるまの欠片", price: 1 },
+        { item: "干し鮑", price: 50 },
+        { item: "だるまウヰスキー", price: 280 }
+    ],
+    locations: ["阿傍の森","黒縄森林","鬼神殿","大隅平野西部"],
+    weakness: ["氷"],
+    resistance: ["飛","闇"]
+},
+
+"寿だるま": {
+    
+    name: "寿だるま(大)",
+    kana: "ことぶきダルマ",
+    drops: [
+        { item: "寿だるまの欠片", price: 10 },
+        { item: "熨斗袋", price: 50 },
+        { item: "だるまウヰスキー", price: 280 }
+    ],
+    locations: ["鬼神殿","白虎洞窟","大雷の洞窟"],
+    weakness: ["山"],
+    resistance: ["飛","闇"]
+},
+
+"福だるま": {
+    
+    name: "福だるま(大)",
+    kana: "ふくダルマ",
+    drops: [
+        { item: "福だるまの欠片", price: 10 },
+        { item: "大福", price: 50 },
+        { item: "だるまウヰスキー", price: 280 }
+    ],
+    locations: ["鬼神殿","黒縄森林","業魔窟","玄武寺院","出雲","大直毘の社","外道丸のアジト"],
+    weakness: ["雨"],
+    resistance: ["飛","闇"]
+},
+
+"滅だるま": {
+    
+    name: "滅だるま(大)",
+    kana: "めつダルマ",
+    drops: [
+        { item: "滅だるまの欠片", price: 10 },
+        { item: "墨汁", price: 50 },
+        { item: "だるまウヰスキー", price: 280 }
+    ],
+    locations: ["玄武寺院","奥出雲","外道丸のアジト","信太の森"],
+    weakness: ["天"],
+    resistance: ["飛","闇"]
+},
+
+"骸骨": {
+    
+    name: "骸骨",
+    kana: "がいこつ",
+    drops: [
+        { item: "あばらの骨", price: 12 },
+        { item: "あごの骨", price: 10 }
+    ],
+    locations: ["鬼ヶ島修験場","叫喚洞","業魔窟","夢見洞窟","桜島洞穴","白虎洞窟","鎮子の洞窟","泣沢女洞穴","大雷の洞窟","黄泉平良坂","五徳の井戸","凶骨の塒","裏関ヶ原"],
+    weakness: [],
+    resistance: ["衝","闇"]
+},
+
+"凶骨": {
+    
+    name: "凶骨",
+    kana: "きょうこつ",
+    drops: [
+        { item: "禍々しい骨", price: 40 },
+        { item: "大髑髏", price: 240 }
+    ],
+    locations: ["鬼ヶ島修験場","凶骨の塒","関ヶ原","蓮池亭の底","死の湖","竹林の井戸","果し合い"],
+    weakness: ["炎"],
+    resistance: ["氷","雷","雨","闇"]
+},
+
+"ぬまのべとべと": {
+    
+    drops: [
+        { item: "水草", price: 10 },
+        { item: "散蓮華", price: 30 },
+        { item: "小さなげた", price: 10 },
+        { item: "べとべと", price: 40 }
+    ],
+    locations: ["大吼洞穴","ホデリの祠","ミハシラ洞窟","青竜窟"],
+    weakness: ["雷"],
+    resistance: ["雨"]
+},
+
+"くさのべとべと": {
+    
+    drops: [
+        { item: "虫よけ薬", price: 10 },
+        { item: "青汁の粉", price: 30 },
+        { item: "小さなげた", price: 10 },
+        { item: "べとべと", price: 40 }
+    ],
+    locations: ["奇怪ヶ原","阿傍の森","大吼洞穴","戚揚の森","裏戚揚の森"],
+    weakness: ["氷"],
+    resistance: ["風"]
+},
+
+"いわのべとべと": {
+    
+    drops: [
+        { item: "岩清水", price: 10 },
+        { item: "土根性大根", price: 30 },
+        { item: "小さなげた", price: 10 },
+        { item: "べとべと", price: 40 }
+    ],
+    locations: ["叫喚洞","夢見洞窟","業魔窟","白虎洞窟","奥出雲"],
+    weakness: ["風"],
+    resistance: ["山"]
+},
+    
+"くれのべとべと": {
+    
+    drops: [
+        { item: "蜜柑の皮の汁", price: 10 },
+        { item: "夕暮れの物悲しさ", price: 40 },
+        { item: "小さなげた", price: 10 },
+        { item: "べとべと", price: 40 }
+    ],
+    locations: ["叫喚洞","ミハシラ洞窟","桜島深部"],
+    weakness: ["雨"],
+    resistance: ["炎"]
+},
+
+"やみのべとべと": {
+    
+    drops: [
+        { item: "烏の羽", price: 10 },
+        { item: "黒の色眼鏡", price: 30 },
+        { item: "小さなげた", price: 10 },
+        { item: "べとべと", price: 40 }
+    ],
+    locations: ["ミハシラ洞窟","祭礼の間","奥出雲","凶骨の塒"],
+    weakness: ["天"],
+    resistance: ["闇"]
+},
+
+"もものべとべと": {
+    
+    drops: [
+        { item: "渋い桃", price: 10 },
+        { item: "白桃ぷりん", price: 40 },
+        { item: "小さなげた", price: 10 },
+        { item: "べとべと", price: 40 }
+    ],
+    locations: ["朱雀屋敷"],
+    weakness: ["山"],
+    resistance: []
+},
+
+"雁首": {
+    
+    drops: [
+        { item: "かたい顎鬚", price: 20 },
+        { item: "狸の尾", price: 140 }
+    ],
+    locations: ["鬼神殿","ミハシラ洞窟","玄武寺院","大雷の洞窟","稲城森林"],
+    weakness: ["風"],
+    resistance: ["斬","山","闇"]
+},
+
+"反魂武者": {
+    
+    drops: [
+        { item: "前立の欠片", price: 20 },
+        { item: "朽ちた兜", price: 110 },
+        { item: "血塗れの面頬", price: 190 }
+    ],
+    locations: ["夢見洞窟","鬼神殿","玄武寺院","鞍馬山","関ヶ原"],
+    weakness: ["天"],
+    resistance: ["雨","斬"]
+},
+
+"首領だるま": {
+    drops: [
+        { item: "だるまのキセル", price: 40 },
+        { item: "金刺繍の座布団", price: 170 }
+    ],
+    locations: ["鬼神殿","八雲寺","果し合い"],
+    weakness: ["雨"],
+    resistance: ["雷","山","天","闇","炎"]
+},
+
+"キジムナー": {
+    
+    drops: [
+        { item: "爽やかな葉っぱ", price: 10 },
+        { item: "柔らかい嘴", price: 50 },
+        { item: "緑の毛玉", price: 20 }
+    ],
+    locations: ["奇怪ヶ原","阿傍の森","信太の森"],
+    weakness: ["炎"],
+    resistance: ["飛"]
+},
+
+"モミジナー": {
+    
+    drops: [
+        { item: "軽石", price: 10 },
+        { item: "もみじ", price: 40 }
+    ],
+    locations: ["奇怪ヶ原","阿傍の森","信太の森","鞍馬山"],
+    weakness: ["氷"],
+    resistance: ["飛"]
+},
+
+"菊蔵": {
+    
+    drops: [
+        { item: "三色団子", price: 10 },
+        { item: "うごめく苔", price: 40 },
+        { item: "折れた釣竿", price: 60 }
+    ],
+    locations: ["奇怪ヶ原","阿傍の森","椛の井戸"],
+    weakness: [],
+    resistance: ["山","天"]
 }
 
-/* 操作できるように解除 */
-input, button, pre {
-    -webkit-app-region: no-drag;
+};
+Object.assign(monsterData, {
+
+"灯台鬼": {
+    
+    kana: "とうだいき",
+    drops: [
+        { item: "こわれた灯篭", price: 10 },
+        { item: "焼けた護符", price: 120 }
+    ],
+    locations: ["業魔窟","出雲","火産霊の洞窟","大直毘の社","人力の森"],
+    weakness: ["雨"],
+    resistance: ["炎"]
+},
+
+"河童": {
+    
+    kana: "かっぱ",
+    drops: [
+        { item: "甲羅の欠片", price: 10 },
+        { item: "尻小玉", price: 60 }
+    ],
+    locations: ["奇怪ヶ原","黒縄森林","大吼洞穴","青竜窟","関ヶ原","孤剣の森"],
+    weakness: ["闇","氷"],
+    resistance: ["雷","雨"]
+},
+
+"愚連の河童": {
+    
+    kana: "ぐれんノかっぱ",
+    drops: [
+        { item: "巨大な胡瓜", price: 10 },
+        { item: "愚連なヒレ", price: 80 }
+    ],
+    locations: ["大吼洞穴","青竜窟","五徳の井戸","赤手洞窟","裏稲城森林"],
+    weakness: ["雷","天"],
+    resistance: ["山"]
+},
+
+"雨蛙": {
+    
+    kana: "あまがえる",
+    drops: [
+        { item: "雨蛙の粘膜", price: 10 },
+        { item: "雨蛙の舌", price: 50 }
+    ],
+    locations: ["奇怪ヶ原","夢見洞窟","大吼洞穴","桜島洞穴","青竜窟","信太の森"],
+    weakness: ["氷"],
+    resistance: ["突","雨","天"]
+},
+
+"朱の盤": {
+    
+    kana: "しゅノばん",
+    drops: [
+        { item: "朱の盤の角", price: 10 },
+        { item: "乾いた舌", price: 80 }
+    ],
+    locations: ["叫喚洞","赤手洞窟"],
+    weakness: [],
+    resistance: ["山"]
+},
+
+"一反木綿": {
+    
+    kana: "いったんもめん",
+    drops: [
+        { item: "木綿の切れ端", price: 10 },
+        { item: "上質な木綿", price: 20 },
+        { item: "新しい褌", price: 80 }
+    ],
+    locations: ["奇怪ヶ原","黒縄森林","大隅平野西部"],
+    weakness: ["炎"],
+    resistance: ["風"]
+},
+
+"蟹坊主": {
+    
+    kana: "かにぼうず",
+    drops: [
+        { item: "蟹真珠", price: 10 },
+        { item: "栗色真珠", price: 100 }
+    ],
+    locations: ["黒縄森林","赤手洞窟","裏関ヶ原"],
+    weakness: ["氷","山"],
+    resistance: ["斬","風","天","雨"]
+},
+
+"提灯お化け": {
+    
+    kana: "ちょうちんおばけ",
+    drops: [
+        { item: "竹ひご", price: 25 },
+        { item: "ふぐ提灯", price: 40 }
+    ],
+    locations: ["夢見洞窟","白虎洞窟","火産霊の洞窟","関ヶ原"],
+    weakness: ["雨","天"],
+    resistance: ["斬","炎","闇"]
+},
+
+"ぬりかべ": {
+    
+    drops: [
+        { item: "石膏", price: 10 },
+        { item: "鬼瓦", price: 150 }
+    ],
+    locations: ["夢見洞窟","奥出雲","玄武寺院","北陸道三号線"],
+    weakness: ["氷","雨"],
+    resistance: ["斬","山"]
+},
+
+"蝦蟇": {
+    
+    kana: "がま",
+    drops: [
+        { item: "蝦蟇の油", price: 10 },
+        { item: "蝦蟇の胃袋", price: 60 },
+        { item: "蝦蟇の最高級油", price: 120 }
+    ],
+    locations: ["桜島洞穴","大隅平野","青竜窟","信太の森"],
+    weakness: ["氷"],
+    resistance: ["炎","雨","山"]
+},
+
+"大百足": {
+    
+    kana: "おおむかで",
+    drops: [
+        { item: "百足の卵", price: 20 },
+        { item: "百足の毒", price: 80 }
+    ],
+    locations: ["桜島深部","孤剣の森"],
+    weakness: ["風"],
+    resistance: ["山"]
+},
+
+"子百足": {
+    
+    kana: "こむかで",
+    drops: [
+        { item: "子百足の触角", price: 12 },
+        { item: "臭い胃液", price: 50 }
+    ],
+    locations: ["桜島深部","ミハシラ洞窟","鎮子の洞窟"],
+    weakness: ["風"],
+    resistance: ["山","飛"]
+},
+
+"ティアマット": {
+    
+    drops: [
+        { item: "薄色の鱗", price: 40 },
+        { item: "薄色の逆鱗", price: 160 }
+    ],
+    locations: ["桜島深部","八雲寺"],
+    weakness: ["雨"],
+    resistance: ["突","闇","炎"]
+},
+
+"辻斬りモモタロウ": {
+    
+    drops: [
+        { item: "煤けた包帯", price: 40 },
+        { item: "きびだんご", price: 280 }
+    ],
+    locations: ["桜島深部"],
+    weakness: ["天"],
+    resistance: ["雷","雨","風","山","闇"]
+},
+
+"油すまし": {
+    
+    drops: [
+        { item: "黒い油", price: 10 },
+        { item: "蝋の欠片", price: 20 }
+    ],
+    locations: ["大隅平野西部","ミハシラ洞窟","朱雀屋敷"],
+    weakness: ["闇"],
+    resistance: ["突","山"]
+},
+
+"ぬっぺっぽう": {
+    
+    drops: [
+        { item: "ぷるぷるな肉", price: 20 },
+        { item: "ほろほろな肉", price: 90 }
+    ],
+    locations: ["ミハシラ洞窟","玄武寺院","関ヶ原","赤手洞窟"],
+    weakness: ["雨","炎"],
+    resistance: ["突"]
+},
+
+"大蝦蟇": {
+    
+    kana: "おおがま",
+    drops: [
+        { item: "蝦蟇の油", price: 10 },
+        { item: "蝦蟇の胃袋", price: 60 },
+        { item: "蝦蟇の最高級油", price: 120 }
+    ],
+    locations: ["ホデリの祠","裏赤手洞窟"],
+    weakness: ["氷","闇"],
+    resistance: ["雨","炎","山"]
+},
+
+"三つ目すまし": {
+    
+    drops: [
+        { item: "黒い油", price: 10 },
+        { item: "蝋の欠片", price: 20 },
+        { item: "澄んだ油", price: 20 }
+    ],
+    locations: ["大山家旧家屋"],
+    weakness: ["闇"],
+    resistance: ["風","天","山"]
+},
+
+"鬼鋏": {
+    
+    drops: [
+        { item: "ワカメの乾物", price: 15 },
+        { item: "蟹味噌", price: 120 },
+        { item: "呪いの蟹鋏", price: 1200 }
+    ],
+    locations: ["孤剣の森","北陸道三号線"],
+    weakness: ["雷","山"],
+    resistance: ["衝","雨"]
+},
+
+"化け猫": {
+    
+    drops: [
+        { item: "猫のひげ", price: 10 },
+        { item: "猫の足音", price: 120 }
+    ],
+    locations: ["大隅平野西部","朱雀屋敷","西寺"],
+    weakness: ["氷","闇"],
+    resistance: ["山","天","炎"]
+},
+
+"大鎧": {
+    
+    kana: "かなめ",
+    drops: [
+        { item: "立派な柄", price: 50 },
+        { item: "無双の前立", price: 110 },
+        { item: "血塗れの面頬", price: 190 }
+    ],
+    locations: ["鎮子の洞窟","果し合い"],
+    weakness: ["天"],
+    resistance: ["氷","雷","雨","風","闇"]
 }
 
-body {
-    font-family: monospace;
-    background: #1e1e1e;
-    color: #fff;
-    padding: 20px;
+});Object.assign(monsterData, {
+
+"灯台鬼": {
+    
+    kana: "とうだいき",
+    drops: [
+        { item: "こわれた灯篭", price: 10 },
+        { item: "焼けた護符", price: 120 }
+    ],
+    locations: ["業魔窟","出雲","火産霊の洞窟","大直毘の社","人力の森"],
+    weakness: ["雨"],
+    resistance: ["炎"]
+},
+
+"河童": {
+    
+    kana: "かっぱ",
+    drops: [
+        { item: "甲羅の欠片", price: 10 },
+        { item: "尻小玉", price: 60 }
+    ],
+    locations: ["奇怪ヶ原","黒縄森林","大吼洞穴","青竜窟","関ヶ原","孤剣の森"],
+    weakness: ["闇","氷"],
+    resistance: ["雷","雨"]
+},
+
+"愚連の河童": {
+    
+    kana: "ぐれんノかっぱ",
+    drops: [
+        { item: "巨大な胡瓜", price: 10 },
+        { item: "愚連なヒレ", price: 80 }
+    ],
+    locations: ["大吼洞穴","青竜窟","五徳の井戸","赤手洞窟","裏稲城森林"],
+    weakness: ["雷","天"],
+    resistance: ["山"]
+},
+
+"雨蛙": {
+    
+    kana: "あまがえる",
+    drops: [
+        { item: "雨蛙の粘膜", price: 10 },
+        { item: "雨蛙の舌", price: 50 }
+    ],
+    locations: ["奇怪ヶ原","夢見洞窟","大吼洞穴","桜島洞穴","青竜窟","信太の森"],
+    weakness: ["氷"],
+    resistance: ["突","雨","天"]
+},
+
+"朱の盤": {
+    
+    kana: "しゅノばん",
+    drops: [
+        { item: "朱の盤の角", price: 10 },
+        { item: "乾いた舌", price: 80 }
+    ],
+    locations: ["叫喚洞","赤手洞窟"],
+    weakness: [],
+    resistance: ["山"]
+},
+
+"一反木綿": {
+    
+    kana: "いったんもめん",
+    drops: [
+        { item: "木綿の切れ端", price: 10 },
+        { item: "上質な木綿", price: 20 },
+        { item: "新しい褌", price: 80 }
+    ],
+    locations: ["奇怪ヶ原","黒縄森林","大隅平野西部"],
+    weakness: ["炎"],
+    resistance: ["風"]
+},
+
+"蟹坊主": {
+   
+    kana: "かにぼうず",
+    drops: [
+        { item: "蟹真珠", price: 10 },
+        { item: "栗色真珠", price: 100 }
+    ],
+    locations: ["黒縄森林","赤手洞窟","裏関ヶ原"],
+    weakness: ["氷","山"],
+    resistance: ["斬","風","天","雨"]
+},
+
+"提灯お化け": {
+    
+    kana: "ちょうちんおばけ",
+    drops: [
+        { item: "竹ひご", price: 25 },
+        { item: "ふぐ提灯", price: 40 }
+    ],
+    locations: ["夢見洞窟","白虎洞窟","火産霊の洞窟","関ヶ原"],
+    weakness: ["雨","天"],
+    resistance: ["斬","炎","闇"]
+},
+
+"ぬりかべ": {
+    
+    drops: [
+        { item: "石膏", price: 10 },
+        { item: "鬼瓦", price: 150 }
+    ],
+    locations: ["夢見洞窟","奥出雲","玄武寺院","北陸道三号線"],
+    weakness: ["氷","雨"],
+    resistance: ["斬","山"]
+},
+
+"蝦蟇": {
+    
+    kana: "がま",
+    drops: [
+        { item: "蝦蟇の油", price: 10 },
+        { item: "蝦蟇の胃袋", price: 60 },
+        { item: "蝦蟇の最高級油", price: 120 }
+    ],
+    locations: ["桜島洞穴","大隅平野","青竜窟","信太の森"],
+    weakness: ["氷"],
+    resistance: ["炎","雨","山"]
+},
+
+"大百足": {
+    
+    kana: "おおむかで",
+    drops: [
+        { item: "百足の卵", price: 20 },
+        { item: "百足の毒", price: 80 }
+    ],
+    locations: ["桜島深部","孤剣の森"],
+    weakness: ["風"],
+    resistance: ["山"]
+},
+
+"子百足": {
+    
+    kana: "こむかで",
+    drops: [
+        { item: "子百足の触角", price: 12 },
+        { item: "臭い胃液", price: 50 }
+    ],
+    locations: ["桜島深部","ミハシラ洞窟","鎮子の洞窟"],
+    weakness: ["風"],
+    resistance: ["山","飛"]
+},
+
+"ティアマット": {
+    
+    drops: [
+        { item: "薄色の鱗", price: 40 },
+        { item: "薄色の逆鱗", price: 160 }
+    ],
+    locations: ["桜島深部","八雲寺"],
+    weakness: ["雨"],
+    resistance: ["突","闇","炎"]
+},
+
+"辻斬りモモタロウ": {
+    
+    drops: [
+        { item: "煤けた包帯", price: 40 },
+        { item: "きびだんご", price: 280 }
+    ],
+    locations: ["桜島深部"],
+    weakness: ["天"],
+    resistance: ["雷","雨","風","山","闇"]
+},
+
+"油すまし": {
+    
+    drops: [
+        { item: "黒い油", price: 10 },
+        { item: "蝋の欠片", price: 20 }
+    ],
+    locations: ["大隅平野西部","ミハシラ洞窟","朱雀屋敷"],
+    weakness: ["闇"],
+    resistance: ["突","山"]
+},
+
+"ぬっぺっぽう": {
+    
+    drops: [
+        { item: "ぷるぷるな肉", price: 20 },
+        { item: "ほろほろな肉", price: 90 }
+    ],
+    locations: ["ミハシラ洞窟","玄武寺院","関ヶ原","赤手洞窟"],
+    weakness: ["雨","炎"],
+    resistance: ["突"]
+},
+
+"大蝦蟇": {
+    
+    kana: "おおがま",
+    drops: [
+        { item: "蝦蟇の油", price: 10 },
+        { item: "蝦蟇の胃袋", price: 60 },
+        { item: "蝦蟇の最高級油", price: 120 }
+    ],
+    locations: ["ホデリの祠","裏赤手洞窟"],
+    weakness: ["氷","闇"],
+    resistance: ["雨","炎","山"]
+},
+
+"三つ目すまし": {
+    
+    drops: [
+        { item: "黒い油", price: 10 },
+        { item: "蝋の欠片", price: 20 },
+        { item: "澄んだ油", price: 20 }
+    ],
+    locations: ["大山家旧家屋"],
+    weakness: ["闇"],
+    resistance: ["風","天","山"]
+},
+
+"鬼鋏": {
+    
+    drops: [
+        { item: "ワカメの乾物", price: 15 },
+        { item: "蟹味噌", price: 120 },
+        { item: "呪いの蟹鋏", price: 1200 }
+    ],
+    locations: ["孤剣の森","北陸道三号線"],
+    weakness: ["雷","山"],
+    resistance: ["衝","雨"]
+},
+
+"化け猫": {
+    
+    drops: [
+        { item: "猫のひげ", price: 10 },
+        { item: "猫の足音", price: 120 }
+    ],
+    locations: ["大隅平野西部","朱雀屋敷","西寺"],
+    weakness: ["氷","闇"],
+    resistance: ["山","天","炎"]
+},
+
+"大鎧": {
+    
+    kana: "かなめ",
+    drops: [
+        { item: "立派な柄", price: 50 },
+        { item: "無双の前立", price: 110 },
+        { item: "血塗れの面頬", price: 190 }
+    ],
+    locations: ["鎮子の洞窟","果し合い"],
+    weakness: ["天"],
+    resistance: ["氷","雷","雨","風","闇"]
 }
 
-input, button {
-    margin: 5px;
-    padding: 5px;
+});
+Object.assign(monsterData, {
+
+"日照り神": {
+   
+    kana: "ひでりがみ",
+    drops: [
+        { item: "日照り神の吐息", price: 30 },
+        { item: "灼熱の香炉", price: 200 }
+    ],
+    locations: ["朱雀屋敷","火産霊の洞窟","孤剣の森"],
+    weakness: ["雨","闇"],
+    resistance: ["炎","風","山","天"]
+},
+
+"夜行さん": {
+    
+    kana: "やぎょうさん",
+    drops: [
+        { item: "夜行さんの涙", price: 10 },
+        { item: "和同開寶", price: 1500 }
+    ],
+    locations: ["玄武寺院","出雲","大直毘の社","東軍前線砦"],
+    weakness: ["氷","風"],
+    resistance: ["山"]
+},
+
+"雲外鏡": {
+    
+    kana: "うんがいきょう",
+    drops: [
+        { item: "妖鏡の欠片", price: 30 },
+        { item: "消えない雲", price: 160 }
+    ],
+    locations: ["祭礼の間","大雷の洞窟","八雲寺","奥出雲"],
+    weakness: ["炎","山"],
+    resistance: ["斬","雨","天"]
+},
+
+"アーリマン": {
+    
+    drops: [
+        { item: "黒鱗粉", price: 50 },
+        { item: "純色林檎", price: 240 }
+    ],
+    locations: ["祭礼の間","八雲寺"],
+    weakness: ["山","天","飛"],
+    resistance: ["雷","闇"]
+},
+
+"ムスカ": {
+    
+    drops: [
+        { item: "子蝿の翅", price: 1 },
+        { item: "子蝿の虹翅", price: 20 }
+    ],
+    locations: ["出雲","火産霊の洞窟","黄泉平良坂","奥出雲"],
+    weakness: ["天","風"],
+    resistance: ["突","山","飛","闇"]
+},
+
+"蝿の卵": {
+    
+    kana: "はえのたまご",
+    drops: [
+        { item: "半透膜", price: 40 },
+        { item: "胚", price: 100 }
+    ],
+    locations: ["出雲","火産霊の洞窟","黄泉平良坂","奥出雲"],
+    notes: "見た目が気持ち悪い"
+},
+
+"べんがら": {
+    
+    drops: [
+        { item: "赤い爪", price: 10 },
+        { item: "赤い染料", price: 10 },
+        { item: "たけとんぼ", price: 50 }
+    ],
+    locations: ["出雲","鞍馬山","孤剣の森"],
+    weakness: ["風"],
+    resistance: ["山","天"]
+},
+
+"ペナンガラン": {
+    
+    drops: [
+        { item: "赤い鱗", price: 20 },
+        { item: "ペナンガランの尾", price: 120 }
+    ],
+    locations: ["出雲","火産霊の洞窟","奥出雲"],
+    weakness: [],
+    resistance: ["闇"]
+},
+
+"鎧百足": {
+    
+    kana: "よろいむかで",
+    drops: [
+        { item: "百足の触覚", price: 10 },
+        { item: "蜈蚣", price: 426 }
+    ],
+    locations: ["火産霊の洞窟","裏鋒鋩窟"],
+    weakness: ["風"],
+    resistance: ["衝","山","天","闇"]
+},
+
+"くびれ鬼": {
+    
+    drops: [
+        { item: "ぼさぼさの髪", price: 10 },
+        { item: "荒縄", price: 80 }
+    ],
+    locations: ["泣沢女洞穴","西寺","裏関ヶ原"],
+    notes: "ブレスが強い",
+    weakness: ["天"],
+    resistance: ["雨"]
+},
+
+"輪入道": {
+    
+    kana: "わにゅうどう",
+    drops: [
+        { item: "車輪", price: 20 },
+        { item: "消えない松明", price: 140 }
+    ],
+    locations: ["泣沢女洞穴","孤剣の森"],
+    weakness: ["氷","風"],
+    resistance: ["突","炎","闇"]
+},
+
+"鵺": {
+   
+    drops: [
+        { item: "砂鉄", price: 10 },
+        { item: "鵺の鳴き声", price: 800 },
+        { item: "鵺の心臓", price: 60 }
+    ],
+    locations: ["大雷の洞窟","黄龍塔","採掘場"],
+    weakness: ["山","雨"],
+    resistance: ["雷","天","衝"]
+},
+
+"八束像": {
+    
+    drops: [
+        { item: "青銅の欠片", price: 20 },
+        { item: "お飾りの足", price: 960 }
+    ],
+    locations: ["大直毘の社"],
+    weakness: ["雨"],
+    resistance: ["斬","氷","雷","炎","山","闇"]
+},
+
+"餓鬼": {
+    
+    drops: [
+        { item: "黒い体毛", price: 30 },
+        { item: "骸骨のお面", price: 2000 }
+    ],
+    locations: ["黄泉平良坂","凶骨の塒"],
+    weakness: ["雷","闇"],
+    resistance: ["衝","炎","天"]
+},
+
+"百足蠱": {
+    
+    kana: "むかでこ",
+    drops: [
+        { item: "百足の体液", price: 26 },
+        { item: "蟲毒", price: 2080 }
+    ],
+    locations: ["幽邃の森","黄泉平良坂"],
+    weakness: ["炎","氷"],
+    resistance: ["衝","雨","山","闇"]
+},
+
+"ベルゼブブ": {
+    
+    drops: [
+        { item: "硫黄", price: 10 },
+        { item: "逆さまの羅針盤", price: 320 }
+    ],
+    locations: ["黄泉平良坂","八雲寺"],
+    weakness: ["天"],
+    resistance: ["衝","氷","雷","雨","山","闇"]
+},
+
+"外道丸": {
+    
+    drops: [
+        { item: "かたい顎鬚", price: 20 },
+        { item: "狸の尾", price: 2000 }
+    ],
+    locations: ["外道丸のアジト","果し合い"],
+    weakness: ["風"],
+    resistance: ["斬","氷","雷","闇","山"]
+},
+
+"橋姫": {
+    
+    drops: [
+        { item: "ぼさぼさの髪", price: 10 },
+        { item: "荒縄", price: 80 }
+    ],
+    locations: ["五徳の井戸","果し合い"],
+    weakness: ["天"],
+    resistance: ["氷","雨"]
+},
+
+"辻神": {
+    
+    drops: [
+        { item: "古い糸", price: 10 },
+        { item: "祟り神の鈴", price: 50 }
+    ],
+    locations: ["西寺","信太の森","関ヶ原"],
+    weakness: ["炎"],
+    resistance: ["突","風"]
+},
+
+"式札": {
+    
+    drops: [
+        { item: "灰", price: 1 },
+        { item: "呪", price: 30 }
+    ],
+    locations: ["黄龍塔","信太の森","鞍馬山"],
+    weakness: ["炎","雨"],
+    resistance: ["風","天"]
+},
+
+"黒式": {
+   
+    drops: [
+        { item: "灰", price: 1 },
+        { item: "呪", price: 30 }
+    ],
+    locations: ["黄龍塔","信太の森","鞍馬山"],
+    weakness: ["炎","天"],
+    resistance: ["山","闇"]
 }
-    </style>
-</head>
 
-<body>
+});
+Object.assign(monsterData, {
 
-<h2>素材計算</h2>
+"青式": {
+    
+    kana: "あおしき",
+    drops: [
+        { item: "灰", price: 1 },
+        { item: "呪", price: 30 }
+    ],
+    locations: ["信太の森"],
+    weakness: ["風","山"],
+    resistance: ["氷","炎"]
+},
 
-<input id="recipeInput" placeholder="レシピ名">
-<input id="countInput" type="number" value="1">
+"式神斬": {
+    
+    kana: "しきがみざん",
+    drops: [
+        { item: "灰", price: 1 },
+        { item: "紙兜", price: 20 },
+        { item: "五芒の星飾り", price: 90 }
+    ],
+    locations: ["信太の森"]
+},
 
-<button onclick="calculateMaterials()">計算</button>
+"式神突": {
+    
+    kana: "しきがみとつ",
+    drops: [
+        { item: "灰", price: 1 },
+        { item: "折り鶴", price: 20 },
+        { item: "厄除桃", price: 80 }
+    ]
+},
 
-<pre id="output"></pre>
+"式神呪": {
+    
+    kana: "しきがみじゅ",
+    drops: [
+        { item: "灰", price: 1 },
+        { item: "紙風船", price: 20 },
+        { item: "大極図", price: 80 }
+    ]
+},
 
-<hr>
+"血塗れ入道": {
+    
+    kana: "ちぬれにゅうどう",
+    drops: [
+        { item: "ひしゃげた五寸釘", price: 10 },
+        { item: "呪われた血", price: 1040 }
+    ],
+    locations: ["西寺","関ヶ原","裏赤手洞窟"],
+    weakness: ["雷","風"],
+    resistance: ["天","突","炎","闇"]
+},
 
-<h2>アイテム検索</h2>
+"弁慶": {
+    
+    drops: [
+        { item: "鉄の歯車", price: 70 },
+        { item: "燃える水", price: 300 }
+    ],
+    locations: ["黄龍塔","果し合い"],
+    weakness: ["雨"],
+    resistance: ["斬","氷","風","天","闇","衝","雷","飛"]
+},
 
-<input id="itemSearchBox" placeholder="アイテム名">
-<button onclick="searchItem()">検索</button>
+"赤眼壁": {
+    
+    drops: [
+        { item: "炭", price: 10 },
+        { item: "金剛の砂", price: 80 }
+    ],
+    locations: ["鞍馬山","裏関ヶ原"],
+    weakness: ["雨","氷","天","闇"],
+    resistance: ["斬","炎","雷","風","山"]
+},
 
-<pre id="itemResult"></pre>
+"オーディン": {
+   
+    drops: [
+        { item: "黄金の兜の欠片", price: 30 },
+        { item: "干し葡萄", price: 6000 }
+    ],
+    locations: ["鞍馬山"],
+    weakness: ["闇","雨"],
+    resistance: ["斬","炎","天"]
+},
 
-<hr>
+"エレメント": {
+    
+    drops: [
+        { item: "干し葡萄", price: 6000 }
+    ],
+    locations: ["鞍馬山","佐渡鉱山"],
+    notes: "ボス召喚系"
+},
 
-<!-- ★ここに翻訳機能を追加 -->
-<h2>翻訳</h2>
+"大筒武者": {
+    
+    kana: "おおづつむしゃ",
+    drops: [
+        { item: "湿気った火薬", price: 180 },
+        { item: "線香花火", price: 2880 }
+    ],
+    locations: ["東軍前線砦","旧北陸道"],
+    weakness: ["炎","山","天"],
+    resistance: ["雷"]
+},
 
-<input id="inputText" placeholder="英語を入力">
-<button onclick="translateText()">翻訳</button>
+"土転び": {
+    
+    drops: [
+        { item: "山菜", price: 10 },
+        { item: "岩の根", price: 120 }
+    ],
+    locations: ["裏関ヶ原","裏稲城森林"],
+    weakness: ["炎"],
+    resistance: ["飛","山"]
+},
 
-<pre id="result"></pre>
+"デスサイズ": {
+    
+    drops: [
+        { item: "鎌専用砥石", price: 10 },
+        { item: "駆逐除草剤", price: 800 }
+    ],
+    locations: ["鋒鋩窟","裏関ヶ原"],
+    weakness: ["天"],
+    resistance: ["氷","雷","雨","風","山","闇","飛"]
+},
 
-<!-- JSはまとめる -->
-<script src="script.js"></script>
-<script src="main.js"></script>
+"野槌": {
+    
+    kana: "のづち",
+    drops: [
+        { item: "野槌の消化液", price: 10 },
+        { item: "松茸", price: 1100 }
+    ],
+    locations: ["関ヶ原","裏関ヶ原"],
+    weakness: [],
+    resistance: ["斬","飛","山"]
+},
 
-</body>
-</html>
+"弓武者": {
+    
+    drops: [
+        { item: "矢羽", price: 180 },
+        { item: "絹の袋", price: 2880 }
+    ],
+    locations: ["関ヶ原"],
+    weakness: ["闇"],
+    resistance: ["風","雨","飛"]
+},
+
+"見上げ入道": {
+   
+    drops: [
+        { item: "錆びた剃刀", price: 26 },
+        { item: "入道の数珠", price: 416 }
+    ],
+    locations: ["関ヶ原"],
+    weakness: ["氷","風"],
+    resistance: ["雨","山","天"]
+},
+
+"死神": {
+    
+    drops: [
+        { item: "枯れた魂", price: 10 },
+        { item: "命の蝋燭", price: 2800 }
+    ],
+    locations: ["裏関ヶ原"],
+    weakness: ["天"],
+    resistance: ["闇"]
+},
+
+"霊化ケルベロス": {
+   
+    drops: [
+        { item: "棘付き首輪", price: 20 },
+        { item: "蜂蜜", price: 320 },
+        { item: "ケルベロ酢", price: 6400 }
+    ],
+    locations: ["霊化の首塚"],
+    weakness: ["突","炎","天"],
+    resistance: ["衝","氷","風","山","闇","斬","雨"]
+},
+
+"くされっぽう": {
+    
+    drops: [
+        { item: "ぷるぷるな肉", price: 20 },
+        { item: "ほろほろな肉", price: 90 }
+    ],
+    locations: ["黄泉平良坂"],
+    weakness: ["雨","炎"],
+    resistance: ["突"]
+},
+
+"再生ケルベロス": {
+    
+    drops: [
+        { item: "棘付き首輪", price: 20 },
+        { item: "蜂蜜", price: 320 },
+        { item: "ケルベロ酢", price: 6400 }
+    ],
+    locations: ["再生の首塚"],
+    weakness: ["斬","炎","天"],
+    resistance: ["突","氷","雨","風","闇","衝","雷"]
+},
+
+"保存ケルベロス": {
+    
+    drops: [
+        { item: "棘付き首輪", price: 20 },
+        { item: "蜂蜜", price: 320 },
+        { item: "ケルベロ酢", price: 6400 }
+    ],
+    locations: ["保存の首塚"],
+    weakness: ["衝","炎","雨","天"],
+    resistance: ["斬","雷","風","山","闇","突","氷"]
+},
+
+"家康": {
+    
+    drops: [
+        { item: "柿の種", price: 60 },
+        { item: "分福茶釜", price: 1200 }
+    ],
+    locations: ["関ヶ原"],
+    weakness: ["風"],
+    resistance: ["斬","突","雷","闇","山"]
+},
+
+"三成": {
+    
+    drops: [
+        { item: "関ヶ原おこし", price: 35 },
+        { item: "狐の根付", price: 2100 }
+    ],
+    locations: ["関ヶ原"],
+    weakness: ["雨"],
+    resistance: ["雷","闇","炎"]
+},
+
+"ハデス": {
+    
+    drops: [
+        { item: "暗黒の煙", price: 60 },
+        { item: "地獄の聖書", price: 5700 }
+    ],
+    locations: ["冥府"],
+    weakness: ["天"],
+    resistance: ["斬","突","炎","雷","風","山","闇"]
+},
+
+"姑獲鳥": {
+    
+    kana: "うぶめ",
+    drops: [
+        { item: "哺乳瓶", price: 10 },
+        { item: "安産祈願のお守り", price: 400 },
+        { item: "姑獲鳥の巣", price: 2800 }
+    ],
+    locations: ["蒼古の森","海底洞窟"],
+    weakness: ["山"],
+    resistance: ["闇","風","飛"]
+}
+
+});
+Object.assign(monsterData, {
+
+"化け草履": {
+    
+    kana: "ばけぞうり",
+    drops: [
+        { item: "千切れた鼻緒", price: 20 },
+        { item: "白足袋", price: 533 }
+    ],
+    locations: ["越後屋"],
+    weakness: ["雷","闇"],
+    resistance: ["衝","飛"]
+},
+
+"陰摩羅鬼": {
+    
+    kana: "おんもらき",
+    drops: [
+        { item: "火打石", price: 80 },
+        { item: "卒塔婆ソード", price: 133 },
+        { item: "屍食教典儀", price: 400 }
+    ],
+    locations: ["あざみの辻"],
+    weakness: ["炎","天"],
+    resistance: ["斬","氷","闇"]
+},
+
+"雨降小僧": {
+    
+    kana: "あめふりこぞう",
+    drops: [
+        { item: "あられ", price: 20 },
+        { item: "蛇の目傘", price: 266 },
+        { item: "雨畑硯", price: 1596 }
+    ],
+    locations: ["越後街道"],
+    weakness: ["炎","山"],
+    resistance: ["雨","風"]
+},
+
+"セコ": {
+    
+    drops: [
+        { item: "吹き矢", price: 40 },
+        { item: "装甲領域", price: 1600 }
+    ],
+    locations: ["銀座下水道"],
+    weakness: ["闇"],
+    resistance: ["炎","氷","雨","山"]
+},
+
+"艶冶鏡": {
+    
+    kana: "えんやきょう",
+    drops: [
+        { item: "毒々しい口紅", price: 100 },
+        { item: "ピンクのマッチ", price: 566 },
+        { item: "魔法の手鏡", price: 4245 }
+    ],
+    locations: ["水泉の森"],
+    weakness: ["氷","雨"],
+    resistance: ["突","炎","天"]
+},
+
+"山颪": {
+    
+    kana: "やまおろし",
+    drops: [
+        { item: "日照り神の吐息", price: 30 },
+        { item: "灼熱の香炉", price: 200 },
+        { item: "静かな情熱", price: 8000 },
+        { item: "蒼い炎のランタン", price: 16000 }
+    ],
+    locations: ["佐渡鉱山"],
+    weakness: ["雨","闇"],
+    resistance: ["炎","雷","風","山"]
+},
+
+"九尾の狐": {
+    
+    drops: [
+        { item: "妖狐の面", price: 60 },
+        { item: "殺生石の欠片", price: 1200 }
+    ],
+    locations: ["千鳥穴"],
+    weakness: ["雨"],
+    resistance: ["雷","闇","炎"]
+},
+
+"山姥": {
+    
+    drops: [
+        { item: "山姥の爪", price: 34 },
+        { item: "極上お新香", price: 544 }
+    ],
+    locations: ["山姥屋敷"],
+    weakness: ["炎","天"],
+    resistance: ["闇","斬","氷","風","山"]
+},
+
+"ニャルラトホテプ": {
+    
+    drops: [
+        { item: "テップのつゆ", price: 68 },
+        { item: "テップの笛", price: 108 },
+        { item: "混沌の本山葵", price: 360 },
+        { item: "生命の球根", price: 2700 }
+    ],
+    locations: ["越白園"],
+    weakness: [],
+    resistance: ["突","衝","雷","雨","風","山","闇"]
+},
+
+"大天狗": {
+    
+    drops: [
+        { item: "煙玉", price: 39 },
+        { item: "天狗の鼻息", price: 316 }
+    ],
+    locations: ["白虎洞窟"],
+    weakness: ["衝","山"],
+    resistance: ["天","闇","斬","突","雨","雷","風"]
+},
+
+"朧車": {
+    
+    drops: [
+        { item: "妖怪分布図", price: null },
+        { item: "金箔御簾", price: null },
+        { item: "交通安全のお守り", price: null },
+        { item: "回転軸", price: null }
+    ],
+    locations: ["泡沫の樹林"],
+    weakness: ["雨"],
+    resistance: ["ほぼ全属性"]
+},
+
+"テュポーン": {
+    
+    drops: [
+        { item: "触手", price: 32 },
+        { item: "無常の果実", price: 1280 }
+    ],
+    locations: ["佐渡鉱山"],
+    weakness: ["炎","闇"],
+    resistance: ["衝","雷","雨","風","天","氷"]
+},
+
+"サタン": {
+    
+    drops: [
+        { item: "震える風", price: 160 },
+        { item: "血錆の鍵", price: 160 },
+        { item: "晦冥の氷華", price: 100 },
+        { item: "万魔殿の混沌", price: 1600 },
+        { item: "叛逆の炎", price: 1600 },
+        { item: "憤怒の魔導書", price: 16000 },
+        { item: "堕天の翼", price: 16000 }
+    ],
+    locations: ["嘆きの川"],
+    weakness: ["天"],
+    resistance: ["炎","雨","雷","風","闇"]
+},
+
+"唐傘お化け": {
+    
+    drops: [
+        { item: "油紙", price: 32 },
+        { item: "西洋傘", price: 512 }
+    ],
+    locations: ["佐渡鉱山"],
+    weakness: ["炎","風"],
+    resistance: ["突","雨","飛"]
+},
+
+"ヴェロニカ＆セバス": {
+    
+    drops: [
+        { item: "新品のおしゃぶり", price: 90 },
+        { item: "ドクロリモコン", price: 231 },
+        { item: "緑の人面キノコ", price: 1617 }
+    ],
+    locations: ["蓮池亭"],
+    weakness: ["雷","雨"],
+    resistance: ["ほぼ全属性"]
+},
+
+"オッペンハイマー": {
+    
+    drops: [
+        { item: "賦魯天印", price: 120 },
+        { item: "尻久米縄", price: 360 },
+        { item: "大力の大岩", price: 2160 }
+    ],
+    locations: ["佐渡鉱山"],
+    weakness: ["雨"],
+    resistance: ["炎","雷","風","山","闇","飛"]
+},
+
+"御隠居": {
+    
+    drops: [
+        { item: "深紅の洋巾", price: 100 },
+        { item: "薬師蛇の硬貨", price: 266 },
+        { item: "天地の澱", price: 1000 }
+    ],
+    locations: ["江戸城地下"],
+    weakness: [],
+    resistance: ["全属性"]
+},
+
+"牛鬼": {
+    
+    drops: [
+        { item: "牛鬼ミルク", price: 500 },
+        { item: "牛鬼の角", price: 3600 },
+        { item: "蜘蛛の絹糸", price: 2150 }
+    ],
+    locations: ["銀座地下"],
+    weakness: ["風"],
+    resistance: ["氷","雷","雨","衝","闇"]
+},
+
+"屍烙": {
+    
+    drops: [
+        { item: "蝦蟇の油", price: 10 },
+        { item: "蝦蟇の胃袋", price: 60 }
+    ],
+    locations: ["日比谷下水道"],
+    weakness: ["突","雷"],
+    resistance: ["炎","氷","闇","雨","斬","山"]
+},
+"吉野": {
+    
+    name: "吉野",
+    drops: [
+        { item: "蝦蟇の油", price: 10 },
+        { item: "蝦蟇の胃袋", price: 60 },
+        { item: "毒蛙の神経毒", price: null }
+    ],
+    locations: ["日比谷下水道管理室"],
+    weakness: ["突","雷"],
+    resistance: ["炎","天","雨","風","山","多段","衝"]
+},
+
+"百々目鬼": {
+    
+    name: "百々目鬼",
+    drops: [
+        { item: "寒天", price: 100 },
+        { item: "点眼薬", price: 1000 },
+        { item: "角膜用透鏡", price: 266 }
+    ],
+    locations: ["丸ノ内三番下水管"],
+    weakness: ["氷","雷","天","飛"],
+    resistance: ["雨","風","炎","山","闇","突","毒"],
+    note: "目玉は近づくと爆発するため事前処理推奨"
+},
+
+"天燈鬼": {
+    
+    name: "天燈鬼",
+    drops: [
+        { item: "こわれた灯篭", price: 10 },
+        { item: "焼けた護符", price: 120 },
+        { item: "極太の金棒", price: null }
+    ],
+    locations: ["丸ノ内五番下水管"],
+    weakness: ["衝","闇","雨"],
+    resistance: ["毒","氷","雷","天","斬","突","炎"]
+},
+
+"霹靂入道": {
+    
+    name: "霹靂入道",
+    drops: [
+        { item: "ひしゃげた五寸釘", price: 10 },
+        { item: "呪われた血", price: 1040 },
+        { item: "避雷針", price: 1000 }
+    ],
+    locations: ["銀座第四番下水管","引金の洞窟"],
+    weakness: ["風","山"],
+    resistance: ["突","雷"]
+},
+
+"百雷行": {
+    
+    name: "百雷行",
+    drops: [
+        { item: "夜行さんの涙", price: 10 },
+        { item: "和同開寶", price: 1500 },
+        { item: "電気うなぎ", price: null }
+    ],
+    locations: ["日比谷二番下水管","引金の洞窟"],
+    weakness: ["氷","風"],
+    resistance: ["雨","山","多段","毒"]
+},
+
+"大毒壁": {
+    
+    name: "大毒壁",
+    drops: [
+        { item: "石膏", price: 10 },
+        { item: "鬼瓦", price: 150 },
+        { item: "立派な鏝", price: 1000 }
+    ],
+    locations: ["嘆きの川 下流"],
+    weakness: ["雷","雨","闇"],
+    resistance: ["天","斬","炎","風","毒"]
+},
+
+"絡繰武者": {
+    
+    name: "絡繰武者",
+    drops: [
+        { item: "前立の破片", price: 20 },
+        { item: "朽ちた兜", price: 110 },
+        { item: "血塗れの面頬", price: 190 }
+    ],
+    locations: ["丸ノ内下水道"],
+    weakness: ["炎","山"],
+    resistance: ["天"]
+},
+
+"青坊主": {
+    
+    name: "青坊主",
+    drops: [
+        { item: "羊羹", price: 740 },
+        { item: "御経の書かれたお札", price: 249 },
+        { item: "経文", price: null }
+    ],
+    locations: ["陽炎の森"],
+    weakness: ["衝","闇"],
+    resistance: ["斬","氷","雷","風","山","毒","飛","多段","クリティカル","炎","突","天"]
+},
+
+"女郎蜘蛛": {
+    
+    name: "女郎蜘蛛",
+    drops: [
+        { item: "高級乳液", price: 570 },
+        { item: "妖艶の香水", price: 266 },
+        { item: "女郎蜘蛛の丸帯", price: 1705 }
+    ],
+    locations: ["迷霧の廃鉱"],
+    weakness: ["衝","風","天"],
+    resistance: ["クリティカル","斬","突","炎","氷","雷","雨","多段","山","闇","毒"]
+},
+
+"狗神": {
+    
+    name: "狗神",
+    drops: [
+        { item: "罪祓いの斧", price: 600 },
+        { item: "手向けの菊", price: null },
+        { item: "魂の琴", price: null }
+    ],
+    locations: ["幻惑の石灰洞"],
+    weakness: ["闇"],
+    resistance: ["多段","クリティカル","突","衝","炎","氷","雷","風","天"]
+},
+
+"土蜘蛛": {
+    
+    name: "土蜘蛛",
+    drops: [
+        { item: "牛鬼ミルク", price: 500 },
+        { item: "牛鬼の角", price: 3600 },
+        { item: "牛鬼印チーズ", price: 1475 }
+    ],
+    locations: ["迷霧の廃鉱"],
+    weakness: ["風","天"],
+    resistance: ["雨","飛","クリティカル","山","毒"]
+};
+
+Object.assign(monsterData, {
+
+"提馬風": {
+    
+    drops: [
+        { item: "青銅の欠片", price: null },
+        { item: "お飾りの足", price: null },
+        { item: "風化した土偶", price: null }
+    ],
+    weakness: ["氷"],
+    resistance: ["天","毒","斬","炎","雷","雨","山","風","多段"],
+    locations: ["椰子島"]
+},
+
+"かじ": {
+    
+    drops: [
+        { item: "縞模様のバンダナ", price: 800 },
+        { item: "装甲領域", price: 1600 },
+        { item: "帆船模型", price: null }
+    ],
+    weakness: ["雨"],
+    resistance: ["突","氷","雷","山","闇","毒","多段","クリティカル","衝","風","炎"],
+    locations: ["庵羅島"]
+},
+
+"みよし": {
+    
+    drops: [],
+    weakness: [],
+    resistance: [],
+    locations: ["万寿果島"],
+    note: "HP1・ドロップなし"
+},
+
+"いかり": {
+    
+    drops: [
+        { item: "湿気った火薬", price: 180 },
+        { item: "ジルコニウム鉱石", price: null },
+        { item: "未使用の砲弾", price: null }
+    ],
+    weakness: ["雨"],
+    resistance: ["氷","天","毒","雷","風","炎","飛"],
+    locations: ["甘蕉島"]
+},
+
+"あたけ": {
+    
+    drops: [
+        { item: "ボロボロの地図", price: null },
+        { item: "ドクロの旗", price: 758 },
+        { item: "呪いの蟹鋏", price: 1200 }
+    ],
+    weakness: ["突","炎","雷"],
+    resistance: ["衝","風","山","天","闇","毒","クリティカル","氷","多段","斬","雨"],
+    locations: ["鬼木天蓼島"]
+},
+
+"賊だるま": {
+    
+    drops: [
+        { item: "だるま電池", price: 874 },
+        { item: "だるま危機一髪", price: 540 },
+        { item: "だるまウヰスキー", price: 280 }
+    ],
+    weakness: ["炎"],
+    resistance: ["天","飛","クリティカル"],
+    locations: []
+},
+
+"傀儡だるま": {
+    
+    drops: [
+        { item: "だるまのキセル", price: 40 },
+        { item: "金刺繍の座布団", price: 170 }
+    ],
+    weakness: ["雨"],
+    resistance: ["雷","山","天","闇","炎"],
+    locations: ["万寿果島"]
+},
+
+"鎧装蠕蟲": {
+    
+    drops: [
+        { item: "活きのいいミミズ", price: 300 },
+        { item: "硬質化した外殻", price: null },
+        { item: "げんこつ岩塩", price: null }
+    ],
+    weakness: ["雨","風"],
+    resistance: ["氷","天","多段","クリティカル","斬","突","炎","雷","山","闇","毒","飛"],
+    locations: ["針ノ山"]
+},
+
+"泥舟狸": {
+    
+    drops: [
+        { item: "狸の皮", price: 63 },
+        { item: "信楽焼", price: null },
+        { item: "刈り集めた柴", price: 1134 }
+    ],
+    weakness: ["雨"],
+    resistance: ["斬","突","雷","風","山","天","闇","多段","炎"],
+    locations: ["カルカ洞","虹の入り江"]
+},
+
+"天鼓猿": {
+    
+    drops: [
+        { item: "砂鉄", price: 10 },
+        { item: "鵺の鳴き声", price: 800 },
+        { item: "鵺の心臓", price: 60 }
+    ],
+    weakness: ["山"],
+    resistance: ["斬","雨","風","天","闇","毒","飛","多段","クリティカル","突","氷","雷"],
+    locations: ["引金の洞窟"]
+},
+
+"アフィラーマジムン": {
+   
+    drops: [
+        { item: "哺乳瓶", price: 10 },
+        { item: "安産祈願のお守り", price: 400 },
+        { item: "椰子の実", price: null }
+    ],
+    weakness: ["山"],
+    resistance: ["氷","雷","闇","風","飛"],
+    locations: ["東ノ表原"]
+},
+
+"黄金だるま": {
+    id: "124",
+    drops: [],
+    weakness: ["毒"],
+    resistance: ["炎","氷","雷","闇","雨","山","風","天","飛","斬","衝","突","多段","クリティカル"],
+    locations: []
+};
+const monsterData = {
+
+"焔獄魔ガーゴイル": {
+    
+    name: "焔獄魔ガーゴイル",
+    drops: [
+        { item: "焔獄魔の熱鱗", price: 500 },
+        { item: "焔獄魔の紅甲殻", price: 500 },
+        { item: "焔獄魔の逆鱗", price: 500 },
+        { item: "焔獄魔の巌翼", price: 500 },
+        { item: "焔獄魔の心臓", price: null },
+        { item: "焔獄魔の浸蝕髄", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["氷","雨"],
+    resistance: ["斬","突","衝","雷","山","天","毒","炎","闇","風","多段","クリティカル"]
+},
+
+"雷霆魔ガーゴイル": {
+   
+    name: "雷霆魔ガーゴイル",
+    drops: [
+        { item: "雷霆魔の電鱗", price: 500 },
+        { item: "雷霆魔の黄甲殻", price: 500 },
+        { item: "雷霆魔の逆鱗", price: 500 },
+        { item: "雷霆魔の巌翼", price: 500 },
+        { item: "雷霆魔の心臓", price: null },
+        { item: "雷霆魔の浸蝕髄", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["炎","風"],
+    resistance: ["衝","斬","突","氷","雨","天","毒","雷","山","闇","多段","クリティカル"]
+},
+
+"冰刃魔ガーゴイル": {
+    
+    name: "冰刃魔ガーゴイル",
+    drops: [
+        { item: "冰刃魔の冷鱗", price: 500 },
+        { item: "冰刃魔の蒼甲殻", price: 500 },
+        { item: "冰刃魔の逆鱗", price: 500 },
+        { item: "冰刃魔の巌翼", price: 500 },
+        { item: "冰刃魔の心臓", price: null },
+        { item: "冰刃魔の浸蝕髄", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["雷","山"],
+    resistance: ["突","斬","衝","炎","風","天","毒","氷","雨","闇","多段","クリティカル"]
+},
+
+"石像魔ガーゴイル": {
+    
+    name: "石像魔ガーゴイル",
+    drops: [
+        { item: "石像魔の硬鱗", price: 500 },
+        { item: "石像魔の灰甲殻", price: 500 },
+        { item: "石像魔の巌翼", price: 500 }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["雨"],
+    resistance: ["クリティカル"]
+},
+
+"アークデスサイズ": {
+    
+    name: "アークデスサイズ",
+    drops: [],
+    locations: ["大禍祓"],
+    weakness: ["炎","天"],
+    resistance: ["斬","突","毒"]
+},
+
+"双龍戦艦 蒼雨": {
+    
+    name: "双龍戦艦 蒼雨",
+    drops: [
+        { item: "雨龍鱗", price: null },
+        { item: "雨龍ノ帆布", price: null },
+        { item: "雨龍棘", price: null },
+        { item: "雨龍ノ逆鱗", price: null },
+        { item: "雨龍骨", price: null },
+        { item: "雨龍ノ宝珠", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["炎","風"],
+    resistance: ["衝","氷","闇","山","天","毒","飛","多段","雷","雨","斬","クリティカル"]
+},
+
+"双龍戦艦 嶽峰": {
+    
+    name: "双龍戦艦 嶽峰",
+    drops: [
+        { item: "峰龍鱗", price: null },
+        { item: "峰龍ノ帆布", price: null },
+        { item: "峰龍棘", price: null },
+        { item: "峰龍ノ逆鱗", price: null },
+        { item: "峰龍骨", price: null },
+        { item: "峰龍ノ宝珠", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["氷","雨"],
+    resistance: ["突","炎","雷","闇","天","毒","飛","多段","山","風","斬","衝","クリティカル"]
+},
+
+"双龍戦艦 天翔": {
+    
+    name: "双龍戦艦 天翔",
+    drops: [
+        { item: "天龍鱗", price: null },
+        { item: "天龍ノ帆布", price: null },
+        { item: "天龍棘", price: null },
+        { item: "天龍ノ逆鱗", price: null },
+        { item: "天龍骨", price: null },
+        { item: "天龍ノ宝珠", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["闇","雨"],
+    resistance: ["氷","斬","雷","山","風","飛","多段","炎","天","衝","突","クリティカル"]
+},
+
+"荒神像 岩漿": {
+    
+    name: "荒神像 岩漿",
+    drops: [],
+    locations: ["大禍祓"],
+    weakness: ["雨"],
+    resistance: ["衝","クリティカル","闇","山","風","天","斬","炎"]
+},
+
+"スライム": {
+    
+    name: "スライム",
+    drops: [
+        { item: "きな粉", price: 500 },
+        { item: "核細胞", price: 3050 }
+    ],
+    locations: [],
+    weakness: ["炎"],
+    resistance: ["雨","天","斬","毒","飛","多段","クリティカル"]
+},
+
+"警護型ベンケイ": {
+    
+    name: "警護型ベンケイ",
+    drops: [
+        { item: "鉄の歯車", price: 70 },
+        { item: "制御盤", price: 3050 }
+    ],
+    locations: [],
+    weakness: ["衝","雨"],
+    resistance: ["斬","クリティカル","突","炎","風","山","闇","毒","飛","多段","雷"]
+},
+
+"アカナー": {
+    
+    name: "アカナー",
+    drops: [
+        { item: "緑の毛玉", price: 20 },
+        { item: "柔らかい嘴", price: 50 },
+        { item: "アカナーの桃", price: 3050 }
+    ],
+    locations: ["嵐の大洋"],
+    weakness: ["闇"],
+    resistance: ["斬","突","衝","炎","氷","雷","雨","風","山","天","毒","多段","クリティカル"]
+},
+
+"グレイ": {
+    
+    name: "グレイ",
+    drops: [
+        { item: "大きな水晶体", price: 500 },
+        { item: "精密な棍棒", price: 3050 },
+        { item: "光る脳髄", price: 3050 },
+        { item: "光線銃", price: 3050 }
+    ],
+    locations: [],
+    weakness: [],
+    resistance: ["突","氷","天","闇","クリティカル","毒","飛","多段"]
+};
+const monsterData = {
+  "月魄 赫映姫": {
+    
+    name: "月魄 赫映姫",
+    drops: [
+      { item: "眼帯", price: null },
+      { item: "月魄の証", price: null }
+    ],
+    weakness: ["闇"],
+    resistance: ["斬","衝","炎","雷","雨","風","毒","多段","天","クリティカル"],
+    locations: ["雨の御殿"]
+  },
+
+  "夜樹神 ニャルラトホテプ": {
+    
+    name: "夜樹神 ニャルラトホテプ",
+    drops: [
+      { item: "テップのつゆ", price: null },
+      { item: "テップの笛", price: null },
+      { item: "混沌の本山葵", price: null },
+      { item: "生命の球根", price: null }
+    ],
+    weakness: [],
+    resistance: ["多段","斬","突","衝","雷","雨","風","山","天","闇","毒"],
+    locations: ["大禍祓"]
+  },
+
+  "ルシファー": {
+    
+    name: "ルシファー",
+    drops: [
+      { item: "純白の羽根", price: null },
+      { item: "天墜の十字架", price: null }
+    ],
+    weakness: ["闇"],
+    resistance: ["衝","クリティカル","斬","氷","雨","多段","雷","風","天"],
+    locations: ["黒の聖壇"]
+  },
+
+  "ワーウルフ": {
+    
+    name: "ワーウルフ",
+    drops: [
+      { item: "剛毛な尻尾", price: null }
+    ],
+    weakness: ["山"],
+    resistance: ["炎","氷","風"],
+    locations: ["奥州最奥"]
+  },
+
+  "グラキエステュポーン": {
+    
+    name: "グラキエステュポーン",
+    drops: [
+      { item: "憤怒の暴風", price: null },
+      { item: "奈落の氷晶角", price: null }
+    ],
+    weakness: ["炎","山","天"],
+    resistance: ["斬","突","雷","雨","風","衝","氷","闇"],
+    locations: ["大禍祓"]
+  },
+
+  "ヴィズルオーディン": {
+    
+    name: "ヴィズルオーディン",
+    drops: [
+      { item: "黄金の兜の欠片", price: null },
+      { item: "干し葡萄", price: null }
+    ],
+    weakness: ["氷","闇","雨"],
+    resistance: ["斬","突","衝","雷","風","山","多段","炎","天","毒"],
+    locations: ["大禍祓"]
+  },
+
+  "メフィストフェレス": {
+    
+    name: "メフィストフェレス",
+    drops: [
+      { item: "眠りの毒薬", price: null },
+      { item: "陽炎のホムンクルス", price: null }
+    ],
+    weakness: ["風","山"],
+    resistance: ["斬","突","衝","毒","多段","炎","雷","雨","天","闇","クリティカル"],
+    locations: ["旧祭礼の間","契約の間"]
+  },
+
+  "アビスガーゴイル": {
+    
+    name: "アビスガーゴイル",
+    drops: [
+      { item: "渾沌の脳髄", price: null },
+      { item: "常夜の芥", price: null }
+    ],
+    weakness: ["山","飛"],
+    resistance: ["闇","炎","氷","雷","多段","クリティカル"],
+    locations: ["大禍祓"]
+  },
+
+  "ロゴスアーリマン": {
+    
+    name: "ロゴスアーリマン",
+    drops: [
+      { item: "病の種", price: null },
+      { item: "冥暗の予言", price: null },
+      { item: "災難の萌芽", price: null }
+    ],
+    weakness: ["山","天"],
+    resistance: ["斬","突","衝","炎","氷","雨","多段","雷","闇","毒"],
+    locations: ["大禍祓"]
+  },
+
+  "泥田坊": {
+    
+    name: "泥田坊",
+    drops: [],
+    weakness: ["雨","闇"],
+    resistance: ["炎","風","天","衝","斬","山"],
+    locations: ["こがね洞"]
+  },
+
+  "ブリッツティアマット": {
+    id: "155",
+    name: "ブリッツティアマット",
+    drops: [
+      { item: "閃く角", price: null },
+      { item: "朧朧たる飛膜", price: null },
+      { item: "燦爛の脊椎", price: null }
+    ],
+    weakness: ["山","闇"],
+    resistance: ["斬","突","衝","炎","氷","雨","風","雷","天","クリティカル"],
+    locations: ["大禍祓"]
+  }
+};
+
+
+
+
+
+
+console.log("script.js 読み込み成功");
+
+// ===============================
+// モンスター逆引き
+// ===============================
+function findDropSource(itemKey) {
+    const result = new Set();
+
+    if (!window.monsterData) return [];
+
+    for (const key in monsterData) {
+        const m = monsterData[key];
+        if (!m?.drops) continue;
+
+        const id = m.no || m.id || key;
+
+        m.drops.forEach(d => {
+            if (!d?.item) return;
+
+            const name = d.item;
+
+            if (
+                name === itemKey ||
+                name.includes(itemKey) ||
+                itemKey.includes(name)
+            ) {
+                result.add(`${m.name || key}（No.${id}）`);
+            }
+        });
+    }
+
+    return [...result];
+}
+
+
+// ===============================
+// アイテム検索
+// ===============================
+function searchItem() {
+    const input = document.getElementById("itemSearchBox");
+    const resultDiv = document.getElementById("itemResult");
+
+    const keyword = input.value.trim();
+    if (!keyword) return (resultDiv.innerText = "");
+
+    const results = [];
+
+    if (!window.itemData) {
+        resultDiv.innerText = "itemData未読み込み";
+        return;
+    }
+
+    for (const key in itemData) {
+        const val = itemData[key];
+
+        if (key.includes(keyword) || val.includes(keyword)) {
+            results.push(`[素材] ${key} → ${val}`);
+        }
+    }
+
+    resultDiv.innerText =
+        results.length ? results.join("\n") : "見つかりません";
+}
+
+
+// ===============================
+// レシピ検索
+// ===============================
+function findRecipe(keyword) {
+    if (!keyword) return null;
+
+    return recipes.find(r =>
+        r.name.includes(keyword) ||
+        keyword.includes(r.name)
+    );
+}
+
+
+// ===============================
+// 計算
+// ===============================
+function calculateMaterials() {
+    const recipeName = document.getElementById("recipeInput").value.trim();
+    const count = parseInt(document.getElementById("countInput").value) || 1;
+    const output = document.getElementById("output");
+
+    const target = findRecipe(recipeName);
+
+    if (!target) {
+        output.innerText = "レシピが見つかりません";
+        return;
+    }
+
+    let text = `【必要素材（${count}本）】\n`;
+
+    target.items.forEach(i => {
+        text += ` - ${i.name} × ${i.count * count}\n`;
+    });
+
+    text += `\n【入手方法】\n`;
+
+    target.items.forEach(i => {
+        const src = findDropSource(i.name);
+        text += ` - ${i.name} → ${src.length ? src.join(", ") : "不明"}\n`;
+    });
+
+    const w = target.weapon;
+
+    text += `\n【武器】\n${w.name}`;
+    text += `\nATK ${w.attack.min}~${w.attack.max}`;
+
+    output.innerText = text;
+}
+
+
+// ===============================
+// Enter対応
+// ===============================
+window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("recipeInput")
+        .addEventListener("keydown", e => {
+            if (e.key === "Enter") calculateMaterials();
+        });
+
+    document.getElementById("itemSearchBox")
+        .addEventListener("keydown", e => {
+            if (e.key === "Enter") searchItem();
+        });
+});
