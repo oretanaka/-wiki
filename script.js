@@ -97,7 +97,7 @@ const itemData = {
 const monsterData = {
 
 "鬱だるま": {
-    id: "001",
+    
     name: "鬱だるま(大)",
     kana: "うつダルマ",
     drops: [
@@ -112,7 +112,7 @@ const monsterData = {
 },
 
 "痛だるま": {
-    id: "002",
+   
     name: "痛だるま(大)",
     kana: "いたダルマ",
     drops: [
@@ -126,7 +126,7 @@ const monsterData = {
 },
 
 "寿だるま": {
-    id: "003",
+    
     name: "寿だるま(大)",
     kana: "ことぶきダルマ",
     drops: [
@@ -140,7 +140,7 @@ const monsterData = {
 },
 
 "福だるま": {
-    id: "004",
+    
     name: "福だるま(大)",
     kana: "ふくダルマ",
     drops: [
@@ -154,7 +154,7 @@ const monsterData = {
 },
 
 "滅だるま": {
-    id: "005",
+    
     name: "滅だるま(大)",
     kana: "めつダルマ",
     drops: [
@@ -168,7 +168,7 @@ const monsterData = {
 },
 
 "骸骨": {
-    id: "006",
+    
     name: "骸骨",
     kana: "がいこつ",
     drops: [
@@ -181,7 +181,7 @@ const monsterData = {
 },
 
 "凶骨": {
-    id: "007",
+    
     name: "凶骨",
     kana: "きょうこつ",
     drops: [
@@ -194,7 +194,7 @@ const monsterData = {
 },
 
 "ぬまのべとべと": {
-    id: "008",
+    
     drops: [
         { item: "水草", price: 10 },
         { item: "散蓮華", price: 30 },
@@ -207,7 +207,7 @@ const monsterData = {
 },
 
 "くさのべとべと": {
-    id: "009",
+    
     drops: [
         { item: "虫よけ薬", price: 10 },
         { item: "青汁の粉", price: 30 },
@@ -220,7 +220,7 @@ const monsterData = {
 },
 
 "いわのべとべと": {
-    id: "010",
+    
     drops: [
         { item: "岩清水", price: 10 },
         { item: "土根性大根", price: 30 },
@@ -233,7 +233,7 @@ const monsterData = {
 },
     
 "くれのべとべと": {
-    id: "011",
+    
     drops: [
         { item: "蜜柑の皮の汁", price: 10 },
         { item: "夕暮れの物悲しさ", price: 40 },
@@ -246,7 +246,7 @@ const monsterData = {
 },
 
 "やみのべとべと": {
-    id: "012",
+    
     drops: [
         { item: "烏の羽", price: 10 },
         { item: "黒の色眼鏡", price: 30 },
@@ -259,7 +259,7 @@ const monsterData = {
 },
 
 "もものべとべと": {
-    id: "013",
+    
     drops: [
         { item: "渋い桃", price: 10 },
         { item: "白桃ぷりん", price: 40 },
@@ -272,7 +272,7 @@ const monsterData = {
 },
 
 "雁首": {
-    id: "015",
+    
     drops: [
         { item: "かたい顎鬚", price: 20 },
         { item: "狸の尾", price: 140 }
@@ -283,7 +283,7 @@ const monsterData = {
 },
 
 "反魂武者": {
-    id: "016",
+    
     drops: [
         { item: "前立の欠片", price: 20 },
         { item: "朽ちた兜", price: 110 },
@@ -295,7 +295,6 @@ const monsterData = {
 },
 
 "首領だるま": {
-    id: "017",
     drops: [
         { item: "だるまのキセル", price: 40 },
         { item: "金刺繍の座布団", price: 170 }
@@ -306,7 +305,7 @@ const monsterData = {
 },
 
 "キジムナー": {
-    id: "018",
+    
     drops: [
         { item: "爽やかな葉っぱ", price: 10 },
         { item: "柔らかい嘴", price: 50 },
@@ -318,7 +317,7 @@ const monsterData = {
 },
 
 "モミジナー": {
-    id: "019",
+    
     drops: [
         { item: "軽石", price: 10 },
         { item: "もみじ", price: 40 }
@@ -329,7 +328,7 @@ const monsterData = {
 },
 
 "菊蔵": {
-    id: "020",
+    
     drops: [
         { item: "三色団子", price: 10 },
         { item: "うごめく苔", price: 40 },
@@ -344,7 +343,7 @@ const monsterData = {
 Object.assign(monsterData, {
 
 "灯台鬼": {
-    id: "021",
+    
     kana: "とうだいき",
     drops: [
         { item: "こわれた灯篭", price: 10 },
@@ -356,7 +355,7 @@ Object.assign(monsterData, {
 },
 
 "河童": {
-    id: "022",
+    
     kana: "かっぱ",
     drops: [
         { item: "甲羅の欠片", price: 10 },
@@ -368,7 +367,7 @@ Object.assign(monsterData, {
 },
 
 "愚連の河童": {
-    id: "023",
+    
     kana: "ぐれんノかっぱ",
     drops: [
         { item: "巨大な胡瓜", price: 10 },
@@ -380,7 +379,7 @@ Object.assign(monsterData, {
 },
 
 "雨蛙": {
-    id: "024",
+    
     kana: "あまがえる",
     drops: [
         { item: "雨蛙の粘膜", price: 10 },
@@ -392,7 +391,7 @@ Object.assign(monsterData, {
 },
 
 "朱の盤": {
-    id: "025",
+    
     kana: "しゅノばん",
     drops: [
         { item: "朱の盤の角", price: 10 },
@@ -404,7 +403,7 @@ Object.assign(monsterData, {
 },
 
 "一反木綿": {
-    id: "026",
+    
     kana: "いったんもめん",
     drops: [
         { item: "木綿の切れ端", price: 10 },
@@ -417,7 +416,7 @@ Object.assign(monsterData, {
 },
 
 "蟹坊主": {
-    id: "027",
+    
     kana: "かにぼうず",
     drops: [
         { item: "蟹真珠", price: 10 },
@@ -429,7 +428,7 @@ Object.assign(monsterData, {
 },
 
 "提灯お化け": {
-    id: "028",
+    
     kana: "ちょうちんおばけ",
     drops: [
         { item: "竹ひご", price: 25 },
@@ -441,7 +440,7 @@ Object.assign(monsterData, {
 },
 
 "ぬりかべ": {
-    id: "029",
+    
     drops: [
         { item: "石膏", price: 10 },
         { item: "鬼瓦", price: 150 }
@@ -452,7 +451,7 @@ Object.assign(monsterData, {
 },
 
 "蝦蟇": {
-    id: "030",
+    
     kana: "がま",
     drops: [
         { item: "蝦蟇の油", price: 10 },
@@ -465,7 +464,7 @@ Object.assign(monsterData, {
 },
 
 "大百足": {
-    id: "031",
+    
     kana: "おおむかで",
     drops: [
         { item: "百足の卵", price: 20 },
@@ -477,7 +476,7 @@ Object.assign(monsterData, {
 },
 
 "子百足": {
-    id: "032",
+    
     kana: "こむかで",
     drops: [
         { item: "子百足の触角", price: 12 },
@@ -489,7 +488,7 @@ Object.assign(monsterData, {
 },
 
 "ティアマット": {
-    id: "033",
+    
     drops: [
         { item: "薄色の鱗", price: 40 },
         { item: "薄色の逆鱗", price: 160 }
@@ -500,7 +499,7 @@ Object.assign(monsterData, {
 },
 
 "辻斬りモモタロウ": {
-    id: "034",
+    
     drops: [
         { item: "煤けた包帯", price: 40 },
         { item: "きびだんご", price: 280 }
@@ -511,7 +510,7 @@ Object.assign(monsterData, {
 },
 
 "油すまし": {
-    id: "035",
+    
     drops: [
         { item: "黒い油", price: 10 },
         { item: "蝋の欠片", price: 20 }
@@ -522,7 +521,7 @@ Object.assign(monsterData, {
 },
 
 "ぬっぺっぽう": {
-    id: "036",
+    
     drops: [
         { item: "ぷるぷるな肉", price: 20 },
         { item: "ほろほろな肉", price: 90 }
@@ -533,7 +532,7 @@ Object.assign(monsterData, {
 },
 
 "大蝦蟇": {
-    id: "037",
+    
     kana: "おおがま",
     drops: [
         { item: "蝦蟇の油", price: 10 },
@@ -546,7 +545,7 @@ Object.assign(monsterData, {
 },
 
 "三つ目すまし": {
-    id: "038",
+    
     drops: [
         { item: "黒い油", price: 10 },
         { item: "蝋の欠片", price: 20 },
@@ -558,7 +557,7 @@ Object.assign(monsterData, {
 },
 
 "鬼鋏": {
-    id: "039",
+    
     drops: [
         { item: "ワカメの乾物", price: 15 },
         { item: "蟹味噌", price: 120 },
@@ -570,7 +569,7 @@ Object.assign(monsterData, {
 },
 
 "化け猫": {
-    id: "040",
+    
     drops: [
         { item: "猫のひげ", price: 10 },
         { item: "猫の足音", price: 120 }
@@ -581,7 +580,7 @@ Object.assign(monsterData, {
 },
 
 "大鎧": {
-    id: "041",
+    
     kana: "かなめ",
     drops: [
         { item: "立派な柄", price: 50 },
@@ -596,7 +595,7 @@ Object.assign(monsterData, {
 });Object.assign(monsterData, {
 
 "灯台鬼": {
-    id: "021",
+    
     kana: "とうだいき",
     drops: [
         { item: "こわれた灯篭", price: 10 },
@@ -608,7 +607,7 @@ Object.assign(monsterData, {
 },
 
 "河童": {
-    id: "022",
+    
     kana: "かっぱ",
     drops: [
         { item: "甲羅の欠片", price: 10 },
@@ -620,7 +619,7 @@ Object.assign(monsterData, {
 },
 
 "愚連の河童": {
-    id: "023",
+    
     kana: "ぐれんノかっぱ",
     drops: [
         { item: "巨大な胡瓜", price: 10 },
@@ -632,7 +631,7 @@ Object.assign(monsterData, {
 },
 
 "雨蛙": {
-    id: "024",
+    
     kana: "あまがえる",
     drops: [
         { item: "雨蛙の粘膜", price: 10 },
@@ -644,7 +643,7 @@ Object.assign(monsterData, {
 },
 
 "朱の盤": {
-    id: "025",
+    
     kana: "しゅノばん",
     drops: [
         { item: "朱の盤の角", price: 10 },
@@ -656,7 +655,7 @@ Object.assign(monsterData, {
 },
 
 "一反木綿": {
-    id: "026",
+    
     kana: "いったんもめん",
     drops: [
         { item: "木綿の切れ端", price: 10 },
@@ -669,7 +668,7 @@ Object.assign(monsterData, {
 },
 
 "蟹坊主": {
-    id: "027",
+   
     kana: "かにぼうず",
     drops: [
         { item: "蟹真珠", price: 10 },
@@ -681,7 +680,7 @@ Object.assign(monsterData, {
 },
 
 "提灯お化け": {
-    id: "028",
+    
     kana: "ちょうちんおばけ",
     drops: [
         { item: "竹ひご", price: 25 },
@@ -693,7 +692,7 @@ Object.assign(monsterData, {
 },
 
 "ぬりかべ": {
-    id: "029",
+    
     drops: [
         { item: "石膏", price: 10 },
         { item: "鬼瓦", price: 150 }
@@ -704,7 +703,7 @@ Object.assign(monsterData, {
 },
 
 "蝦蟇": {
-    id: "030",
+    
     kana: "がま",
     drops: [
         { item: "蝦蟇の油", price: 10 },
@@ -717,7 +716,7 @@ Object.assign(monsterData, {
 },
 
 "大百足": {
-    id: "031",
+    
     kana: "おおむかで",
     drops: [
         { item: "百足の卵", price: 20 },
@@ -729,7 +728,7 @@ Object.assign(monsterData, {
 },
 
 "子百足": {
-    id: "032",
+    
     kana: "こむかで",
     drops: [
         { item: "子百足の触角", price: 12 },
@@ -741,7 +740,7 @@ Object.assign(monsterData, {
 },
 
 "ティアマット": {
-    id: "033",
+    
     drops: [
         { item: "薄色の鱗", price: 40 },
         { item: "薄色の逆鱗", price: 160 }
@@ -752,7 +751,7 @@ Object.assign(monsterData, {
 },
 
 "辻斬りモモタロウ": {
-    id: "034",
+    
     drops: [
         { item: "煤けた包帯", price: 40 },
         { item: "きびだんご", price: 280 }
@@ -763,7 +762,7 @@ Object.assign(monsterData, {
 },
 
 "油すまし": {
-    id: "035",
+    
     drops: [
         { item: "黒い油", price: 10 },
         { item: "蝋の欠片", price: 20 }
@@ -774,7 +773,7 @@ Object.assign(monsterData, {
 },
 
 "ぬっぺっぽう": {
-    id: "036",
+    
     drops: [
         { item: "ぷるぷるな肉", price: 20 },
         { item: "ほろほろな肉", price: 90 }
@@ -785,7 +784,7 @@ Object.assign(monsterData, {
 },
 
 "大蝦蟇": {
-    id: "037",
+    
     kana: "おおがま",
     drops: [
         { item: "蝦蟇の油", price: 10 },
@@ -798,7 +797,7 @@ Object.assign(monsterData, {
 },
 
 "三つ目すまし": {
-    id: "038",
+    
     drops: [
         { item: "黒い油", price: 10 },
         { item: "蝋の欠片", price: 20 },
@@ -810,7 +809,7 @@ Object.assign(monsterData, {
 },
 
 "鬼鋏": {
-    id: "039",
+    
     drops: [
         { item: "ワカメの乾物", price: 15 },
         { item: "蟹味噌", price: 120 },
@@ -822,7 +821,7 @@ Object.assign(monsterData, {
 },
 
 "化け猫": {
-    id: "040",
+    
     drops: [
         { item: "猫のひげ", price: 10 },
         { item: "猫の足音", price: 120 }
@@ -833,7 +832,7 @@ Object.assign(monsterData, {
 },
 
 "大鎧": {
-    id: "041",
+    
     kana: "かなめ",
     drops: [
         { item: "立派な柄", price: 50 },
@@ -849,7 +848,7 @@ Object.assign(monsterData, {
 Object.assign(monsterData, {
 
 "日照り神": {
-    id: "042",
+   
     kana: "ひでりがみ",
     drops: [
         { item: "日照り神の吐息", price: 30 },
@@ -861,7 +860,7 @@ Object.assign(monsterData, {
 },
 
 "夜行さん": {
-    id: "043",
+    
     kana: "やぎょうさん",
     drops: [
         { item: "夜行さんの涙", price: 10 },
@@ -873,7 +872,7 @@ Object.assign(monsterData, {
 },
 
 "雲外鏡": {
-    id: "044",
+    
     kana: "うんがいきょう",
     drops: [
         { item: "妖鏡の欠片", price: 30 },
@@ -885,7 +884,7 @@ Object.assign(monsterData, {
 },
 
 "アーリマン": {
-    id: "045",
+    
     drops: [
         { item: "黒鱗粉", price: 50 },
         { item: "純色林檎", price: 240 }
@@ -896,7 +895,7 @@ Object.assign(monsterData, {
 },
 
 "ムスカ": {
-    id: "046",
+    
     drops: [
         { item: "子蝿の翅", price: 1 },
         { item: "子蝿の虹翅", price: 20 }
@@ -907,7 +906,7 @@ Object.assign(monsterData, {
 },
 
 "蝿の卵": {
-    id: "なし",
+    
     kana: "はえのたまご",
     drops: [
         { item: "半透膜", price: 40 },
@@ -918,7 +917,7 @@ Object.assign(monsterData, {
 },
 
 "べんがら": {
-    id: "047",
+    
     drops: [
         { item: "赤い爪", price: 10 },
         { item: "赤い染料", price: 10 },
@@ -930,7 +929,7 @@ Object.assign(monsterData, {
 },
 
 "ペナンガラン": {
-    id: "048",
+    
     drops: [
         { item: "赤い鱗", price: 20 },
         { item: "ペナンガランの尾", price: 120 }
@@ -941,7 +940,7 @@ Object.assign(monsterData, {
 },
 
 "鎧百足": {
-    id: "049",
+    
     kana: "よろいむかで",
     drops: [
         { item: "百足の触覚", price: 10 },
@@ -953,7 +952,7 @@ Object.assign(monsterData, {
 },
 
 "くびれ鬼": {
-    id: "050",
+    
     drops: [
         { item: "ぼさぼさの髪", price: 10 },
         { item: "荒縄", price: 80 }
@@ -965,7 +964,7 @@ Object.assign(monsterData, {
 },
 
 "輪入道": {
-    id: "051",
+    
     kana: "わにゅうどう",
     drops: [
         { item: "車輪", price: 20 },
@@ -977,7 +976,7 @@ Object.assign(monsterData, {
 },
 
 "鵺": {
-    id: "052",
+   
     drops: [
         { item: "砂鉄", price: 10 },
         { item: "鵺の鳴き声", price: 800 },
@@ -989,7 +988,7 @@ Object.assign(monsterData, {
 },
 
 "八束像": {
-    id: "053",
+    
     drops: [
         { item: "青銅の欠片", price: 20 },
         { item: "お飾りの足", price: 960 }
@@ -1000,7 +999,7 @@ Object.assign(monsterData, {
 },
 
 "餓鬼": {
-    id: "054",
+    
     drops: [
         { item: "黒い体毛", price: 30 },
         { item: "骸骨のお面", price: 2000 }
@@ -1011,7 +1010,7 @@ Object.assign(monsterData, {
 },
 
 "百足蠱": {
-    id: "055",
+    
     kana: "むかでこ",
     drops: [
         { item: "百足の体液", price: 26 },
@@ -1023,7 +1022,7 @@ Object.assign(monsterData, {
 },
 
 "ベルゼブブ": {
-    id: "056",
+    
     drops: [
         { item: "硫黄", price: 10 },
         { item: "逆さまの羅針盤", price: 320 }
@@ -1034,7 +1033,7 @@ Object.assign(monsterData, {
 },
 
 "外道丸": {
-    id: "057",
+    
     drops: [
         { item: "かたい顎鬚", price: 20 },
         { item: "狸の尾", price: 2000 }
@@ -1045,7 +1044,7 @@ Object.assign(monsterData, {
 },
 
 "橋姫": {
-    id: "058",
+    
     drops: [
         { item: "ぼさぼさの髪", price: 10 },
         { item: "荒縄", price: 80 }
@@ -1056,7 +1055,7 @@ Object.assign(monsterData, {
 },
 
 "辻神": {
-    id: "059",
+    
     drops: [
         { item: "古い糸", price: 10 },
         { item: "祟り神の鈴", price: 50 }
@@ -1067,7 +1066,7 @@ Object.assign(monsterData, {
 },
 
 "式札": {
-    id: "060",
+    
     drops: [
         { item: "灰", price: 1 },
         { item: "呪", price: 30 }
@@ -1078,7 +1077,7 @@ Object.assign(monsterData, {
 },
 
 "黒式": {
-    id: "061",
+   
     drops: [
         { item: "灰", price: 1 },
         { item: "呪", price: 30 }
@@ -1092,7 +1091,7 @@ Object.assign(monsterData, {
 Object.assign(monsterData, {
 
 "青式": {
-    id: "062",
+    
     kana: "あおしき",
     drops: [
         { item: "灰", price: 1 },
@@ -1104,7 +1103,7 @@ Object.assign(monsterData, {
 },
 
 "式神斬": {
-    id: "なし",
+    
     kana: "しきがみざん",
     drops: [
         { item: "灰", price: 1 },
@@ -1115,7 +1114,7 @@ Object.assign(monsterData, {
 },
 
 "式神突": {
-    id: "なし",
+    
     kana: "しきがみとつ",
     drops: [
         { item: "灰", price: 1 },
@@ -1125,7 +1124,7 @@ Object.assign(monsterData, {
 },
 
 "式神呪": {
-    id: "なし",
+    
     kana: "しきがみじゅ",
     drops: [
         { item: "灰", price: 1 },
@@ -1135,7 +1134,7 @@ Object.assign(monsterData, {
 },
 
 "血塗れ入道": {
-    id: "063",
+    
     kana: "ちぬれにゅうどう",
     drops: [
         { item: "ひしゃげた五寸釘", price: 10 },
@@ -1147,7 +1146,7 @@ Object.assign(monsterData, {
 },
 
 "弁慶": {
-    id: "064",
+    
     drops: [
         { item: "鉄の歯車", price: 70 },
         { item: "燃える水", price: 300 }
@@ -1158,7 +1157,7 @@ Object.assign(monsterData, {
 },
 
 "赤眼壁": {
-    id: "065",
+    
     drops: [
         { item: "炭", price: 10 },
         { item: "金剛の砂", price: 80 }
@@ -1169,7 +1168,7 @@ Object.assign(monsterData, {
 },
 
 "オーディン": {
-    id: "066",
+   
     drops: [
         { item: "黄金の兜の欠片", price: 30 },
         { item: "干し葡萄", price: 6000 }
@@ -1180,7 +1179,7 @@ Object.assign(monsterData, {
 },
 
 "エレメント": {
-    id: "なし",
+    
     drops: [
         { item: "干し葡萄", price: 6000 }
     ],
@@ -1189,7 +1188,7 @@ Object.assign(monsterData, {
 },
 
 "大筒武者": {
-    id: "067",
+    
     kana: "おおづつむしゃ",
     drops: [
         { item: "湿気った火薬", price: 180 },
@@ -1201,7 +1200,7 @@ Object.assign(monsterData, {
 },
 
 "土転び": {
-    id: "068",
+    
     drops: [
         { item: "山菜", price: 10 },
         { item: "岩の根", price: 120 }
@@ -1212,7 +1211,7 @@ Object.assign(monsterData, {
 },
 
 "デスサイズ": {
-    id: "069",
+    
     drops: [
         { item: "鎌専用砥石", price: 10 },
         { item: "駆逐除草剤", price: 800 }
@@ -1223,7 +1222,7 @@ Object.assign(monsterData, {
 },
 
 "野槌": {
-    id: "070",
+    
     kana: "のづち",
     drops: [
         { item: "野槌の消化液", price: 10 },
@@ -1235,7 +1234,7 @@ Object.assign(monsterData, {
 },
 
 "弓武者": {
-    id: "071",
+    
     drops: [
         { item: "矢羽", price: 180 },
         { item: "絹の袋", price: 2880 }
@@ -1246,7 +1245,7 @@ Object.assign(monsterData, {
 },
 
 "見上げ入道": {
-    id: "072",
+   
     drops: [
         { item: "錆びた剃刀", price: 26 },
         { item: "入道の数珠", price: 416 }
@@ -1257,7 +1256,7 @@ Object.assign(monsterData, {
 },
 
 "死神": {
-    id: "073",
+    
     drops: [
         { item: "枯れた魂", price: 10 },
         { item: "命の蝋燭", price: 2800 }
@@ -1268,7 +1267,7 @@ Object.assign(monsterData, {
 },
 
 "霊化ケルベロス": {
-    id: "074",
+   
     drops: [
         { item: "棘付き首輪", price: 20 },
         { item: "蜂蜜", price: 320 },
@@ -1280,7 +1279,7 @@ Object.assign(monsterData, {
 },
 
 "くされっぽう": {
-    id: "075",
+    
     drops: [
         { item: "ぷるぷるな肉", price: 20 },
         { item: "ほろほろな肉", price: 90 }
@@ -1291,7 +1290,7 @@ Object.assign(monsterData, {
 },
 
 "再生ケルベロス": {
-    id: "076",
+    
     drops: [
         { item: "棘付き首輪", price: 20 },
         { item: "蜂蜜", price: 320 },
@@ -1303,7 +1302,7 @@ Object.assign(monsterData, {
 },
 
 "保存ケルベロス": {
-    id: "077",
+    
     drops: [
         { item: "棘付き首輪", price: 20 },
         { item: "蜂蜜", price: 320 },
@@ -1315,7 +1314,7 @@ Object.assign(monsterData, {
 },
 
 "家康": {
-    id: "078",
+    
     drops: [
         { item: "柿の種", price: 60 },
         { item: "分福茶釜", price: 1200 }
@@ -1326,7 +1325,7 @@ Object.assign(monsterData, {
 },
 
 "三成": {
-    id: "079",
+    
     drops: [
         { item: "関ヶ原おこし", price: 35 },
         { item: "狐の根付", price: 2100 }
@@ -1337,7 +1336,7 @@ Object.assign(monsterData, {
 },
 
 "ハデス": {
-    id: "080",
+    
     drops: [
         { item: "暗黒の煙", price: 60 },
         { item: "地獄の聖書", price: 5700 }
@@ -1348,7 +1347,7 @@ Object.assign(monsterData, {
 },
 
 "姑獲鳥": {
-    id: "081",
+    
     kana: "うぶめ",
     drops: [
         { item: "哺乳瓶", price: 10 },
@@ -1364,7 +1363,7 @@ Object.assign(monsterData, {
 Object.assign(monsterData, {
 
 "化け草履": {
-    id: "082",
+    
     kana: "ばけぞうり",
     drops: [
         { item: "千切れた鼻緒", price: 20 },
@@ -1376,7 +1375,7 @@ Object.assign(monsterData, {
 },
 
 "陰摩羅鬼": {
-    id: "083",
+    
     kana: "おんもらき",
     drops: [
         { item: "火打石", price: 80 },
@@ -1389,7 +1388,7 @@ Object.assign(monsterData, {
 },
 
 "雨降小僧": {
-    id: "084",
+    
     kana: "あめふりこぞう",
     drops: [
         { item: "あられ", price: 20 },
@@ -1402,7 +1401,7 @@ Object.assign(monsterData, {
 },
 
 "セコ": {
-    id: "085",
+    
     drops: [
         { item: "吹き矢", price: 40 },
         { item: "装甲領域", price: 1600 }
@@ -1413,7 +1412,7 @@ Object.assign(monsterData, {
 },
 
 "艶冶鏡": {
-    id: "086",
+    
     kana: "えんやきょう",
     drops: [
         { item: "毒々しい口紅", price: 100 },
@@ -1426,7 +1425,7 @@ Object.assign(monsterData, {
 },
 
 "山颪": {
-    id: "087",
+    
     kana: "やまおろし",
     drops: [
         { item: "日照り神の吐息", price: 30 },
@@ -1440,7 +1439,7 @@ Object.assign(monsterData, {
 },
 
 "九尾の狐": {
-    id: "088",
+    
     drops: [
         { item: "妖狐の面", price: 60 },
         { item: "殺生石の欠片", price: 1200 }
@@ -1451,7 +1450,7 @@ Object.assign(monsterData, {
 },
 
 "山姥": {
-    id: "089",
+    
     drops: [
         { item: "山姥の爪", price: 34 },
         { item: "極上お新香", price: 544 }
@@ -1462,7 +1461,7 @@ Object.assign(monsterData, {
 },
 
 "ニャルラトホテプ": {
-    id: "090",
+    
     drops: [
         { item: "テップのつゆ", price: 68 },
         { item: "テップの笛", price: 108 },
@@ -1475,7 +1474,7 @@ Object.assign(monsterData, {
 },
 
 "大天狗": {
-    id: "091",
+    
     drops: [
         { item: "煙玉", price: 39 },
         { item: "天狗の鼻息", price: 316 }
@@ -1486,7 +1485,7 @@ Object.assign(monsterData, {
 },
 
 "朧車": {
-    id: "092",
+    
     drops: [
         { item: "妖怪分布図", price: null },
         { item: "金箔御簾", price: null },
@@ -1499,7 +1498,7 @@ Object.assign(monsterData, {
 },
 
 "テュポーン": {
-    id: "093",
+    
     drops: [
         { item: "触手", price: 32 },
         { item: "無常の果実", price: 1280 }
@@ -1510,7 +1509,7 @@ Object.assign(monsterData, {
 },
 
 "サタン": {
-    id: "094",
+    
     drops: [
         { item: "震える風", price: 160 },
         { item: "血錆の鍵", price: 160 },
@@ -1526,7 +1525,7 @@ Object.assign(monsterData, {
 },
 
 "唐傘お化け": {
-    id: "096",
+    
     drops: [
         { item: "油紙", price: 32 },
         { item: "西洋傘", price: 512 }
@@ -1537,7 +1536,7 @@ Object.assign(monsterData, {
 },
 
 "ヴェロニカ＆セバス": {
-    id: "097",
+    
     drops: [
         { item: "新品のおしゃぶり", price: 90 },
         { item: "ドクロリモコン", price: 231 },
@@ -1549,7 +1548,7 @@ Object.assign(monsterData, {
 },
 
 "オッペンハイマー": {
-    id: "098",
+    
     drops: [
         { item: "賦魯天印", price: 120 },
         { item: "尻久米縄", price: 360 },
@@ -1561,7 +1560,7 @@ Object.assign(monsterData, {
 },
 
 "御隠居": {
-    id: "099",
+    
     drops: [
         { item: "深紅の洋巾", price: 100 },
         { item: "薬師蛇の硬貨", price: 266 },
@@ -1573,7 +1572,7 @@ Object.assign(monsterData, {
 },
 
 "牛鬼": {
-    id: "100",
+    
     drops: [
         { item: "牛鬼ミルク", price: 500 },
         { item: "牛鬼の角", price: 3600 },
@@ -1585,7 +1584,7 @@ Object.assign(monsterData, {
 },
 
 "屍烙": {
-    id: "101",
+    
     drops: [
         { item: "蝦蟇の油", price: 10 },
         { item: "蝦蟇の胃袋", price: 60 }
@@ -1595,7 +1594,7 @@ Object.assign(monsterData, {
     resistance: ["炎","氷","闇","雨","斬","山"]
 },
 "吉野": {
-    id: "102",
+    
     name: "吉野",
     drops: [
         { item: "蝦蟇の油", price: 10 },
@@ -1608,7 +1607,7 @@ Object.assign(monsterData, {
 },
 
 "百々目鬼": {
-    id: "103",
+    
     name: "百々目鬼",
     drops: [
         { item: "寒天", price: 100 },
@@ -1622,7 +1621,7 @@ Object.assign(monsterData, {
 },
 
 "天燈鬼": {
-    id: "104",
+    
     name: "天燈鬼",
     drops: [
         { item: "こわれた灯篭", price: 10 },
@@ -1635,7 +1634,7 @@ Object.assign(monsterData, {
 },
 
 "霹靂入道": {
-    id: "105",
+    
     name: "霹靂入道",
     drops: [
         { item: "ひしゃげた五寸釘", price: 10 },
@@ -1648,7 +1647,7 @@ Object.assign(monsterData, {
 },
 
 "百雷行": {
-    id: "106",
+    
     name: "百雷行",
     drops: [
         { item: "夜行さんの涙", price: 10 },
@@ -1661,7 +1660,7 @@ Object.assign(monsterData, {
 },
 
 "大毒壁": {
-    id: "107",
+    
     name: "大毒壁",
     drops: [
         { item: "石膏", price: 10 },
@@ -1674,7 +1673,7 @@ Object.assign(monsterData, {
 },
 
 "絡繰武者": {
-    id: "108",
+    
     name: "絡繰武者",
     drops: [
         { item: "前立の破片", price: 20 },
@@ -1687,7 +1686,7 @@ Object.assign(monsterData, {
 },
 
 "青坊主": {
-    id: "109",
+    
     name: "青坊主",
     drops: [
         { item: "羊羹", price: 740 },
@@ -1700,7 +1699,7 @@ Object.assign(monsterData, {
 },
 
 "女郎蜘蛛": {
-    id: "110",
+    
     name: "女郎蜘蛛",
     drops: [
         { item: "高級乳液", price: 570 },
@@ -1713,7 +1712,7 @@ Object.assign(monsterData, {
 },
 
 "狗神": {
-    id: "111",
+    
     name: "狗神",
     drops: [
         { item: "罪祓いの斧", price: 600 },
@@ -1726,7 +1725,7 @@ Object.assign(monsterData, {
 },
 
 "土蜘蛛": {
-    id: "112",
+    
     name: "土蜘蛛",
     drops: [
         { item: "牛鬼ミルク", price: 500 },
@@ -1741,7 +1740,7 @@ Object.assign(monsterData, {
 Object.assign(monsterData, {
 
 "提馬風": {
-    id: "113",
+    
     drops: [
         { item: "青銅の欠片", price: null },
         { item: "お飾りの足", price: null },
@@ -1753,7 +1752,7 @@ Object.assign(monsterData, {
 },
 
 "かじ": {
-    id: "114",
+    
     drops: [
         { item: "縞模様のバンダナ", price: 800 },
         { item: "装甲領域", price: 1600 },
@@ -1765,7 +1764,7 @@ Object.assign(monsterData, {
 },
 
 "みよし": {
-    id: "115",
+    
     drops: [],
     weakness: [],
     resistance: [],
@@ -1774,7 +1773,7 @@ Object.assign(monsterData, {
 },
 
 "いかり": {
-    id: "116",
+    
     drops: [
         { item: "湿気った火薬", price: 180 },
         { item: "ジルコニウム鉱石", price: null },
@@ -1786,7 +1785,7 @@ Object.assign(monsterData, {
 },
 
 "あたけ": {
-    id: "117",
+    
     drops: [
         { item: "ボロボロの地図", price: null },
         { item: "ドクロの旗", price: 758 },
@@ -1798,7 +1797,7 @@ Object.assign(monsterData, {
 },
 
 "賊だるま": {
-    id: "118",
+    
     drops: [
         { item: "だるま電池", price: 874 },
         { item: "だるま危機一髪", price: 540 },
@@ -1810,7 +1809,7 @@ Object.assign(monsterData, {
 },
 
 "傀儡だるま": {
-    id: "119",
+    
     drops: [
         { item: "だるまのキセル", price: 40 },
         { item: "金刺繍の座布団", price: 170 }
@@ -1821,7 +1820,7 @@ Object.assign(monsterData, {
 },
 
 "鎧装蠕蟲": {
-    id: "120",
+    
     drops: [
         { item: "活きのいいミミズ", price: 300 },
         { item: "硬質化した外殻", price: null },
@@ -1833,7 +1832,7 @@ Object.assign(monsterData, {
 },
 
 "泥舟狸": {
-    id: "121",
+    
     drops: [
         { item: "狸の皮", price: 63 },
         { item: "信楽焼", price: null },
@@ -1845,7 +1844,7 @@ Object.assign(monsterData, {
 },
 
 "天鼓猿": {
-    id: "122",
+    
     drops: [
         { item: "砂鉄", price: 10 },
         { item: "鵺の鳴き声", price: 800 },
@@ -1857,7 +1856,7 @@ Object.assign(monsterData, {
 },
 
 "アフィラーマジムン": {
-    id: "123",
+   
     drops: [
         { item: "哺乳瓶", price: 10 },
         { item: "安産祈願のお守り", price: 400 },
@@ -1878,7 +1877,7 @@ Object.assign(monsterData, {
 const monsterData = {
 
 "焔獄魔ガーゴイル": {
-    id: "125",
+    
     name: "焔獄魔ガーゴイル",
     drops: [
         { item: "焔獄魔の熱鱗", price: 500 },
@@ -1894,7 +1893,7 @@ const monsterData = {
 },
 
 "雷霆魔ガーゴイル": {
-    id: "126",
+   
     name: "雷霆魔ガーゴイル",
     drops: [
         { item: "雷霆魔の電鱗", price: 500 },
@@ -1910,7 +1909,7 @@ const monsterData = {
 },
 
 "冰刃魔ガーゴイル": {
-    id: "127",
+    
     name: "冰刃魔ガーゴイル",
     drops: [
         { item: "冰刃魔の冷鱗", price: 500 },
@@ -1926,7 +1925,7 @@ const monsterData = {
 },
 
 "石像魔ガーゴイル": {
-    id: "128",
+    
     name: "石像魔ガーゴイル",
     drops: [
         { item: "石像魔の硬鱗", price: 500 },
@@ -1939,7 +1938,7 @@ const monsterData = {
 },
 
 "アークデスサイズ": {
-    id: "130",
+    
     name: "アークデスサイズ",
     drops: [],
     locations: ["大禍祓"],
@@ -1948,7 +1947,7 @@ const monsterData = {
 },
 
 "双龍戦艦 蒼雨": {
-    id: "131",
+    
     name: "双龍戦艦 蒼雨",
     drops: [
         { item: "雨龍鱗", price: null },
@@ -1964,7 +1963,7 @@ const monsterData = {
 },
 
 "双龍戦艦 嶽峰": {
-    id: "133",
+    
     name: "双龍戦艦 嶽峰",
     drops: [
         { item: "峰龍鱗", price: null },
@@ -1980,7 +1979,7 @@ const monsterData = {
 },
 
 "双龍戦艦 天翔": {
-    id: "134",
+    
     name: "双龍戦艦 天翔",
     drops: [
         { item: "天龍鱗", price: null },
@@ -1996,7 +1995,7 @@ const monsterData = {
 },
 
 "荒神像 岩漿": {
-    id: "136",
+    
     name: "荒神像 岩漿",
     drops: [],
     locations: ["大禍祓"],
@@ -2005,7 +2004,7 @@ const monsterData = {
 },
 
 "スライム": {
-    id: "137",
+    
     name: "スライム",
     drops: [
         { item: "きな粉", price: 500 },
@@ -2017,7 +2016,7 @@ const monsterData = {
 },
 
 "警護型ベンケイ": {
-    id: "138",
+    
     name: "警護型ベンケイ",
     drops: [
         { item: "鉄の歯車", price: 70 },
@@ -2029,7 +2028,7 @@ const monsterData = {
 },
 
 "アカナー": {
-    id: "140",
+    
     name: "アカナー",
     drops: [
         { item: "緑の毛玉", price: 20 },
@@ -2042,7 +2041,7 @@ const monsterData = {
 },
 
 "グレイ": {
-    id: "141",
+    
     name: "グレイ",
     drops: [
         { item: "大きな水晶体", price: 500 },
@@ -2056,7 +2055,7 @@ const monsterData = {
 };
 const monsterData = {
   "月魄 赫映姫": {
-    id: "143",
+    
     name: "月魄 赫映姫",
     drops: [
       { item: "眼帯", price: null },
@@ -2068,7 +2067,7 @@ const monsterData = {
   },
 
   "夜樹神 ニャルラトホテプ": {
-    id: "144",
+    
     name: "夜樹神 ニャルラトホテプ",
     drops: [
       { item: "テップのつゆ", price: null },
@@ -2082,7 +2081,7 @@ const monsterData = {
   },
 
   "ルシファー": {
-    id: "145",
+    
     name: "ルシファー",
     drops: [
       { item: "純白の羽根", price: null },
@@ -2094,7 +2093,7 @@ const monsterData = {
   },
 
   "ワーウルフ": {
-    id: "146",
+    
     name: "ワーウルフ",
     drops: [
       { item: "剛毛な尻尾", price: null }
@@ -2105,7 +2104,7 @@ const monsterData = {
   },
 
   "グラキエステュポーン": {
-    id: "147",
+    
     name: "グラキエステュポーン",
     drops: [
       { item: "憤怒の暴風", price: null },
@@ -2117,7 +2116,7 @@ const monsterData = {
   },
 
   "ヴィズルオーディン": {
-    id: "148",
+    
     name: "ヴィズルオーディン",
     drops: [
       { item: "黄金の兜の欠片", price: null },
@@ -2129,7 +2128,7 @@ const monsterData = {
   },
 
   "メフィストフェレス": {
-    id: "149",
+    
     name: "メフィストフェレス",
     drops: [
       { item: "眠りの毒薬", price: null },
@@ -2141,7 +2140,7 @@ const monsterData = {
   },
 
   "アビスガーゴイル": {
-    id: "150",
+    
     name: "アビスガーゴイル",
     drops: [
       { item: "渾沌の脳髄", price: null },
@@ -2153,7 +2152,7 @@ const monsterData = {
   },
 
   "ロゴスアーリマン": {
-    id: "151",
+    
     name: "ロゴスアーリマン",
     drops: [
       { item: "病の種", price: null },
@@ -2166,7 +2165,7 @@ const monsterData = {
   },
 
   "泥田坊": {
-    id: "152",
+    
     name: "泥田坊",
     drops: [],
     weakness: ["雨","闇"],
