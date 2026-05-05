@@ -1,76 +1,119 @@
+// ===============================
+// モンスターデータ
+// ===============================
+const monsterData = {
+    "鬱だるま": {
+        name: "鬱だるま(大)",
+        kana: "うつだるま",
+        drops: [
+            { item: "鬱だるまの欠片", price: 8 },
+            { item: "和紙", price: 213 },
+            { item: "だるまウヰスキー", price: 280 }
+        ],
+        locations: ["奇怪ヶ原", "鬼ヶ島修験場", "叫喚洞"],
+        notes: "外道丸のアジトでは痛だるまと表示",
+        weakness: ["炎"],
+        resistance: ["飛", "闇"]
+    },
 
-// ===============================
-// アイテムデータ（完全保持）
-// ===============================
-const itemData = {
-    
-    "印浮棘": "Sigil of Floating Thorns",
-    "焔獄魔の紅甲殻": "Infernal Shell",
-    "焔獄魔の熱鱗": "Infernal Scale",
-    "常夜の芥": "Tea OF Eternal Night",
-    "災難の萌芽": "Seedling of Calamity",
-    "緋散鱗": "Crimson Scale",
-    "冰刃魔の巌翼": "Sleetsword Wing",
-    "冰刃魔の浸蝕髄": "Sleetsword Marrow",
-    "冰刃魔の蒼甲殻": "Sleetsword Shell",
-    "冰刃魔の冷鱗": "Sleetsword Scale",
-    "冰刃魔の逆鱗": "Sleetsword Grudge",
-    "病の種": "Diseased Seedling",
-    "焔獄魔の逆鱗": "Infernal Grudge",
-    "弧描角": "Horned Sculpture",
-    "純白の羽根": "Pure White Plume",
-    "冥暗の予言": "Gloom Prophecy",
-    "混色の禍の砕片": "Fused Calamity Debris",
-    "焔獄魔の巌翼": "Infernal Wing",
-    "雷霆魔の黄甲殻": "Levinlance Shell",
-    "切望の牙": "Tusk of Hope",
-    "碧樹の種子": "Turquoise Timber Seedling",
-    "焔獄魔の浸蝕髄": "Infernal Marrow",
-    "焔獄魔の心臓": "Infernal Heart",
-    "雷霆魔の電鱗": "Levinlance Scale",
-    "冰刃魔の心臓": "Sleetsword Heart",
-    "虚ろな墓穴": "Empty Grave",
-    "逆行薬": "Retrograde Elixir",
-    "雷霆魔の心臓": "Levinlance Heart",
-    "雷霆魔の浸蝕髄": "Levinlance Marrow",
-    "雷霆魔の巌翼": "Levinlance Wing",
-    "雷霆魔の逆鱗": "Levinlance Grudge",
-    "碧之珠": "Cereluean Gem",
-    "緋之珠": "Scarlet Gem",
-    "翠之珠": "Myrtle Gem",
-    "白之珠": "Ivory Gem",
-    "黒之珠": "Obsidian Gem",
-    "空之珠": "Heavenly Marble",
-    "地之珠": "Earthen Marble"
+    "痛だるま": {
+        name: "痛だるま(大)",
+        kana: "いただるま",
+        drops: [
+            { item: "痛だるまの欠片", price: 1 },
+            { item: "干し鮑", price: 50 },
+            { item: "だるまウヰスキー", price: 280 }
+        ],
+        locations: ["阿傍の森", "黒縄森林"],
+        weakness: ["氷"],
+        resistance: ["飛", "闇"]
+    }
 };
 
+// ===============================
+// 逆引きインデックス
+// ===============================
+const itemToMonster = {};
 
+function buildIndex() {
+    for (const monsterName in monsterData) {
+        const monster = monsterData[monsterName];
 
-
-
-
-
-
-function searchItem() {
-    const input = document.getElementById("itemSearchBox");
-    const resultDiv = document.getElementById("itemResult");
-
-    const keyword = input.value.trim();
-    if (!keyword) {
-        resultDiv.innerText = "";
-        return;
+        monster.drops.forEach(d => {
+            if (!itemToMonster[d.item]) {
+                itemToMonster[d.item] = [];
+            }
+            itemToMonster[d.item].push(monsterName);
+        });
     }
+}
 
-    const results = [];
+// 初期化
+buildIndex();
 
-    for (const key in itemData) {
-        const val = itemData[key];
+// ===============================
+// 検索機能（Wikiコア）
+// ===============================
+function search() {
+    const keyword = document.getElementById("searchBox").value.trim();
+    const output = document.getElementById("output");
 
-        if (key.includes(keyword) || val.includes(keyword)) {
-            results.push(`[素材] ${key} → ${val}`);
+    if (!keyword) return;
+
+    let result = [];
+
+    // =========================
+    // ① モンスター検索
+    // =========================
+    for (const mName in monsterData) {
+        const m = monsterData[mName];
+
+        if (
+            mName.includes(keyword) ||
+            m.name.includes(keyword) ||
+            m.kana.includes(keyword)
+        ) {
+            result.push(`=== モンスター: ${m.name} ===`);
+            result.push(`読み: ${m.kana}`);
+
+            result.push("\n▼ ドロップ");
+            m.drops.forEach(d => {
+                result.push(`- ${d.item} (価値:${d.price})`);
+            });
+
+            result.push("\n▼ 出現場所");
+            result.push(m.locations.join(", "));
+
+            result.push("\n▼ 弱点");
+            result.push(m.weakness.join(", "));
+
+            result.push("\n▼ 耐性");
+            result.push(m.resistance.join(", "));
+
+            if (m.notes) {
+                result.push("\n▼ 備考");
+                result.push(m.notes);
+            }
+
+            result.push("\n----------------------\n");
         }
     }
 
-    resultDiv.innerText =
-        results.length ? results.join("\n") : "見つかりません";
+    // =========================
+    // ② アイテム検索（逆引き）
+    // =========================
+    for (const item in itemToMonster) {
+        if (item.includes(keyword)) {
+            result.push(`=== アイテム: ${item} ===`);
+
+            itemToMonster[item].forEach(monsterName => {
+                const m = monsterData[monsterName];
+                result.push(`- ${m.name}`);
+            });
+
+            result.push("\n----------------------\n");
+        }
+    }
+
+    output.innerText = result.length ? result.join("\n") : "見つかりません";
 }
