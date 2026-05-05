@@ -2192,6 +2192,40 @@ const monsterData = {
 
 
 
+
+// ===============================
+// アイテム翻訳（日本語 ⇄ 英語）
+// ===============================
+function translateText() {
+    const input = document.getElementById("inputText");
+    const result = document.getElementById("result");
+
+    const keyword = input.value.trim();
+    if (!keyword) {
+        result.innerText = "";
+        return;
+    }
+
+    let found = [];
+
+    // 日本語 → 英語
+    if (itemData[keyword]) {
+        found.push(`${keyword} → ${itemData[keyword]}`);
+    }
+
+    // 英語 → 日本語（逆引き）
+    for (const jp in itemData) {
+        const en = itemData[jp];
+
+        if (en.toLowerCase().includes(keyword.toLowerCase())) {
+            found.push(`${en} → ${jp}`);
+        }
+    }
+
+    result.innerText = found.length ? found.join("\n") : "見つかりません";
+}
+
+
 console.log("script.js 読み込み成功");
 
 // ===============================
