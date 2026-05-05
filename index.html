@@ -1,102 +1,92 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>武器製作Wiki - 必要素材計算</title>
+<meta charset="UTF-8">
+<title>武器製作Wiki - 必要素材計算</title>
 
-    <style>
-        body {
-            font-family: monospace;
-            padding: 20px;
-            background-color: #1e1e1e;
-            color: #d4d4d4;
-            line-height: 1.6;
-        }
+<style>
+body {
+    font-family: monospace;
+    padding: 20px;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+}
 
-        .console-area {
-            background: #000;
-            border: 1px solid #444;
-            padding: 20px;
-            border-radius: 5px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+.console-area {
+    background: #000;
+    border: 1px solid #444;
+    padding: 20px;
+    border-radius: 6px;
+    max-width: 650px;
+    margin: auto;
+}
 
-        .input-line {
-            margin-bottom: 15px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
+.input-line {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
 
-        input {
-            background: #000;
-            color: #00ff00;
-            border: 1px solid #555;
-            padding: 5px;
-            font-family: monospace;
-            width: 150px;
-        }
+input {
+    background: #000;
+    color: #00ff00;
+    border: 1px solid #555;
+    padding: 6px;
+    width: 180px;
+}
 
-        button {
-            cursor: pointer;
-            background: #444;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            transition: 0.2s;
-            border-radius: 4px;
-        }
+button {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-        button:hover {
-            background: #666;
-        }
+button:hover {
+    background: #666;
+}
 
-        #output {
-            margin-top: 20px;
-            white-space: pre-wrap;
-            color: #ffffff;
-            min-height: 50px;
-        }
-
-        .label {
-            color: #aaa;
-        }
-    </style>
+#output, #itemResult {
+    margin-top: 15px;
+    white-space: pre-wrap;
+    color: #fff;
+    min-height: 40px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="console-area">
 
-    <!-- レシピ -->
     <div class="input-line">
-        <span class="label">レシピ名を入力してください: </span>
+        レシピ名:
         <input type="text" id="recipeInput" placeholder="例: 無銘改">
     </div>
 
     <div class="input-line">
-        <span class="label">何本作りますか？: </span>
+        作成数:
         <input type="number" id="countInput" value="1" min="1">
     </div>
 
-    <button onclick="calculateMaterials()">計算実行</button>
+    <button onclick="calculateMaterials()">計算</button>
 
-    <div id="output">ここに出力されます</div>
+    <div id="output">結果表示</div>
 
     <hr>
 
-    <!-- アイテム検索 -->
     <h2>アイテム検索</h2>
 
-    <input id="itemSearchBox" placeholder="アイテム名 or 英語">
+    <input id="itemSearchBox" placeholder="アイテム名 / 英語">
     <button onclick="searchItem()">検索</button>
 
-    <p id="itemResult"></p>
+    <div id="itemResult"></div>
 
 </div>
 
-<!-- JS -->
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 
 </body>
 </html>
