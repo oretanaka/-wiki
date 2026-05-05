@@ -102,90 +102,17 @@ const itemData = {
 
 
 
-// ===============================
-// アイテム翻訳（日本語 ⇄ 英語）
-// ===============================
-function translateText() {
-    const input = document.getElementById("inputText");
-    const result = document.getElementById("result");
-
-    const keyword = input.value.trim();
-    if (!keyword) {
-        result.innerText = "";
-        return;
-    }
-
-    let found = [];
-
-    // 日本語 → 英語
-    if (itemData[keyword]) {
-        found.push(`${keyword} → ${itemData[keyword]}`);
-    }
-
-    // 英語 → 日本語（逆引き）
-    for (const jp in itemData) {
-        const en = itemData[jp];
-
-        if (en.toLowerCase().includes(keyword.toLowerCase())) {
-            found.push(`${en} → ${jp}`);
-        }
-    }
-
-    result.innerText = found.length ? found.join("\n") : "見つかりません";
-}
-
-
-console.log("script.js 読み込み成功");
-
-// ===============================
-// モンスター逆引き
-// ===============================
-function findDropSource(itemKey) {
-    const result = new Set();
-
-    if (!window.monsterData) return [];
-
-    for (const key in monsterData) {
-        const m = monsterData[key];
-        if (!m?.drops) continue;
-
-        const id = m.no || m.id || key;
-
-        m.drops.forEach(d => {
-            if (!d?.item) return;
-
-            const name = d.item;
-
-            if (
-                name === itemKey ||
-                name.includes(itemKey) ||
-                itemKey.includes(name)
-            ) {
-                result.add(`${m.name || key}（No.${id}）`);
-            }
-        });
-    }
-
-    return [...result];
-}
-
-
-// ===============================
-// アイテム検索
-// ===============================
 function searchItem() {
     const input = document.getElementById("itemSearchBox");
     const resultDiv = document.getElementById("itemResult");
 
     const keyword = input.value.trim();
-    if (!keyword) return (resultDiv.innerText = "");
-
-    const results = [];
-
-    if (!window.itemData) {
-        resultDiv.innerText = "itemData未読み込み";
+    if (!keyword) {
+        resultDiv.innerText = "";
         return;
     }
+
+    const results = [];
 
     for (const key in itemData) {
         const val = itemData[key];
@@ -198,69 +125,4 @@ function searchItem() {
     resultDiv.innerText =
         results.length ? results.join("\n") : "見つかりません";
 }
-
-
-// ===============================
-// レシピ検索
-// ===============================
-function findRecipe(keyword) {
-    if (!keyword) return null;
-
-    return recipes.find(r =>
-        r.name.includes(keyword) ||
-        keyword.includes(r.name)
-    );
-}
-
-
-// ===============================
-// 計算
-// ===============================
-function calculateMaterials() {
-    const recipeName = document.getElementById("recipeInput").value.trim();
-    const count = parseInt(document.getElementById("countInput").value) || 1;
-    const output = document.getElementById("output");
-
-    const target = findRecipe(recipeName);
-
-    if (!target) {
-        output.innerText = "レシピが見つかりません";
-        return;
-    }
-
-    let text = `【必要素材（${count}本）】\n`;
-
-    target.items.forEach(i => {
-        text += ` - ${i.name} × ${i.count * count}\n`;
-    });
-
-    text += `\n【入手方法】\n`;
-
-    target.items.forEach(i => {
-        const src = findDropSource(i.name);
-        text += ` - ${i.name} → ${src.length ? src.join(", ") : "不明"}\n`;
-    });
-
-    const w = target.weapon;
-
-    text += `\n【武器】\n${w.name}`;
-    text += `\nATK ${w.attack.min}~${w.attack.max}`;
-
-    output.innerText = text;
-}
-
-
-// ===============================
-// Enter対応
-// ===============================
-window.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("recipeInput")
-        .addEventListener("keydown", e => {
-            if (e.key === "Enter") calculateMaterials();
-        });
-
-    document.getElementById("itemSearchBox")
-        .addEventListener("keydown", e => {
-            if (e.key === "Enter") searchItem();
-        });
 });
