@@ -5,30 +5,21 @@
     <title>武器製作Wiki</title>
 
     <style>
-body {
-    -webkit-app-region: drag; 
-    background-color: rgba(30, 30, 30, 0.85);
-    border-radius: 10px;
-    border: 1px solid #444;
-    overflow: hidden;
-}
+        body {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #fff;
+            padding: 20px;
+        }
 
-/* 操作できるように解除 */
-input, button, pre {
-    -webkit-app-region: no-drag;
-}
+        input, button {
+            margin: 5px;
+            padding: 5px;
+        }
 
-body {
-    font-family: monospace;
-    background: #1e1e1e;
-    color: #fff;
-    padding: 20px;
-}
-
-input, button {
-    margin: 5px;
-    padding: 5px;
-}
+        pre {
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 
@@ -54,7 +45,6 @@ input, button {
 
 <hr>
 
-<!-- ★ここに翻訳機能を追加 -->
 <h2>翻訳</h2>
 
 <input id="inputText" placeholder="英語を入力">
@@ -62,9 +52,9 @@ input, button {
 
 <pre id="result"></pre>
 
-<!-- JSはまとめる -->
-<script src="script.js"></script>
+<!-- ★重要：データ → ロジックの順番 -->
 <script src="main.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
