@@ -2196,7 +2196,7 @@ const monsterData = {
 
 
 // ===============================
-// ② モンスター逆引き（itemName / itemID両対応）
+// ② モンスター逆引き（itemName / itemID両対応・完全版）
 // ===============================
 function findDropSource(itemKey) {
     const result = new Set();
@@ -2204,18 +2204,24 @@ function findDropSource(itemKey) {
     for (const key in monsterData) {
         const m = monsterData[key];
 
-        if (!m.drops) continue;
+        if (!m || !m.drops) continue;
+
+        const monsterId = m.no || m.id || key;
 
         m.drops.forEach(d => {
-            const itemName = d.item;
+            const dropItem = d.item;
 
-            // 完全一致 + 部分一致対応
-            if (
-                itemName === itemKey ||
-                itemName.includes(itemKey) ||
-                itemKey.includes(itemName)
-            ) {
-                result.add(`${m.name}（No.${m.no || m.id || key}）`);
+            if (!dropItem) return;
+
+            // 完全一致 / 部分一致 / 逆検索（全部対応）
+            const match =
+                dropItem === itemKey ||
+                dropItem.includes(itemKey) ||
+                itemKey.includes(dropItem);
+
+            if (match) {
+                const name = m.name || key;
+                result.add(`${name}（No.${monsterId}）`);
             }
         });
     }
@@ -2243,7 +2249,10 @@ function searchItem() {
     for (const key in itemData) {
         const value = itemData[key];
 
-        if (key.includes(keyword) || value.includes(keyword)) {
+        if (
+            key.includes(keyword) ||
+            value.includes(keyword)
+        ) {
             results.push(`[素材] ${key} → ${value}`);
         }
     }
@@ -2296,14 +2305,14 @@ function calculateMaterials() {
     });
 
     // ===============================
-    // ドロップ元
+    // 入手方法（逆引き）
     // ===============================
     result += `\n【入手方法】\n`;
 
     target.items.forEach(m => {
         const sources = findDropSource(m.name);
 
-        if (sources.length) {
+        if (sources.length > 0) {
             result += ` - ${m.name} → ${sources.join(", ")}\n`;
         } else {
             result += ` - ${m.name} → 不明\n`;
@@ -2328,13 +2337,16 @@ function calculateMaterials() {
 // Enter操作
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("recipeInput")
-        .addEventListener("keydown", e => {
-            if (e.key === "Enter") calculateMaterials();
-        });
 
-    document.getElementById("itemSearchBox")
-        .addEventListener("keydown", e => {
-            if (e.key === "Enter") searchItem();
-        });
+    const recipeInput = document.getElementById("recipeInput");
+    const itemInput = document.getElementById("itemSearchBox");
+
+    recipeInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") calculateMaterials();
+    });
+
+    itemInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") searchItem();
+    });
+
 });
