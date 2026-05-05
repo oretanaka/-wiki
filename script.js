@@ -31,7 +31,7 @@ const monsterData = {
 };
 
 // ===============================
-// 逆引きインデックス
+// 逆引き
 // ===============================
 const itemToMonster = {};
 
@@ -48,22 +48,35 @@ function buildIndex() {
     }
 }
 
-// 初期化
-buildIndex();
+// ===============================
+// 初期化（確実に実行）
+// ===============================
+window.addEventListener("DOMContentLoaded", () => {
+    buildIndex();
+    console.log("✔ Wiki初期化完了");
+});
 
 // ===============================
-// 検索機能（Wikiコア）
+// 検索
 // ===============================
 function search() {
-    const keyword = document.getElementById("searchBox").value.trim();
+    const input = document.getElementById("searchBox");
     const output = document.getElementById("output");
 
+    if (!input || !output) {
+        console.log("❌ DOM取得失敗");
+        return;
+    }
+
+    const keyword = input.value.trim();
     if (!keyword) return;
+
+    console.log("🔍 検索:", keyword);
 
     let result = [];
 
     // =========================
-    // ① モンスター検索
+    // モンスター検索
     // =========================
     for (const mName in monsterData) {
         const m = monsterData[mName];
@@ -100,7 +113,7 @@ function search() {
     }
 
     // =========================
-    // ② アイテム検索（逆引き）
+    // アイテム逆引き
     // =========================
     for (const item in itemToMonster) {
         if (item.includes(keyword)) {
