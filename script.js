@@ -2195,12 +2195,11 @@ const monsterData = {
 
 
 
-
 // ===============================
-// ② モンスター逆引き（改良版）
+// ② モンスター逆引き（itemName / itemID両対応）
 // ===============================
-function findDropSource(itemName) {
-    const result = [];
+function findDropSource(itemKey) {
+    const result = new Set();
 
     for (const key in monsterData) {
         const m = monsterData[key];
@@ -2208,20 +2207,25 @@ function findDropSource(itemName) {
         if (!m.drops) continue;
 
         m.drops.forEach(d => {
+            const itemName = d.item;
+
+            // 完全一致 + 部分一致対応
             if (
-                d.item.includes(itemName) ||
-                itemName.includes(d.item)
+                itemName === itemKey ||
+                itemName.includes(itemKey) ||
+                itemKey.includes(itemName)
             ) {
-                result.push(`${m.name}（No.${m.id}）`);
+                result.add(`${m.name}（No.${m.no || m.id || key}）`);
             }
         });
     }
 
-    return result;
+    return Array.from(result);
 }
 
+
 // ===============================
-// 検索
+// アイテム検索
 // ===============================
 function searchItem() {
     const input = document.getElementById("itemSearchBox");
@@ -2229,7 +2233,7 @@ function searchItem() {
 
     const keyword = input.value.trim();
 
-    if (keyword === "") {
+    if (!keyword) {
         resultDiv.innerText = "";
         return;
     }
@@ -2248,12 +2252,12 @@ function searchItem() {
         results.length ? results.join("\n") : "見つかりません";
 }
 
+
 // ===============================
 // レシピ検索
 // ===============================
 function findRecipe(keyword) {
     keyword = keyword.trim();
-
     if (!keyword) return null;
 
     return recipes.find(r =>
@@ -2266,8 +2270,9 @@ function findRecipe(keyword) {
     );
 }
 
+
 // ===============================
-// ③ 計算（ドロップ表示追加）
+// 計算（ドロップ元表示付き）
 // ===============================
 function calculateMaterials() {
     const recipeName = document.getElementById("recipeInput").value.trim();
@@ -2290,7 +2295,9 @@ function calculateMaterials() {
         result += ` - ${m.name} × ${(m.count * makeCount).toLocaleString()}\n`;
     });
 
-    // ★ここ追加（ドロップ元表示）
+    // ===============================
+    // ドロップ元
+    // ===============================
     result += `\n【入手方法】\n`;
 
     target.items.forEach(m => {
@@ -2316,18 +2323,18 @@ function calculateMaterials() {
     outputDiv.innerText = result;
 }
 
+
 // ===============================
-// イベント
+// Enter操作
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
-    const recipeInput = document.getElementById("recipeInput");
-    const itemInput = document.getElementById("itemSearchBox");
+    document.getElementById("recipeInput")
+        .addEventListener("keydown", e => {
+            if (e.key === "Enter") calculateMaterials();
+        });
 
-    recipeInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") calculateMaterials();
-    });
-
-    itemInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") searchItem();
-    });
+    document.getElementById("itemSearchBox")
+        .addEventListener("keydown", e => {
+            if (e.key === "Enter") searchItem();
+        });
 });
