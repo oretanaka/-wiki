@@ -125,4 +125,3 @@ function searchItem() {
     resultDiv.innerText =
         results.length ? results.join("\n") : "見つかりません";
 }
-});
