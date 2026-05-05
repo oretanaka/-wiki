@@ -1875,6 +1875,318 @@ Object.assign(monsterData, {
     resistance: ["炎","氷","雷","闇","雨","山","風","天","飛","斬","衝","突","多段","クリティカル"],
     locations: []
 };
+const monsterData = {
+
+"焔獄魔ガーゴイル": {
+    id: "125",
+    name: "焔獄魔ガーゴイル",
+    drops: [
+        { item: "焔獄魔の熱鱗", price: 500 },
+        { item: "焔獄魔の紅甲殻", price: 500 },
+        { item: "焔獄魔の逆鱗", price: 500 },
+        { item: "焔獄魔の巌翼", price: 500 },
+        { item: "焔獄魔の心臓", price: null },
+        { item: "焔獄魔の浸蝕髄", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["氷","雨"],
+    resistance: ["斬","突","衝","雷","山","天","毒","炎","闇","風","多段","クリティカル"]
+},
+
+"雷霆魔ガーゴイル": {
+    id: "126",
+    name: "雷霆魔ガーゴイル",
+    drops: [
+        { item: "雷霆魔の電鱗", price: 500 },
+        { item: "雷霆魔の黄甲殻", price: 500 },
+        { item: "雷霆魔の逆鱗", price: 500 },
+        { item: "雷霆魔の巌翼", price: 500 },
+        { item: "雷霆魔の心臓", price: null },
+        { item: "雷霆魔の浸蝕髄", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["炎","風"],
+    resistance: ["衝","斬","突","氷","雨","天","毒","雷","山","闇","多段","クリティカル"]
+},
+
+"冰刃魔ガーゴイル": {
+    id: "127",
+    name: "冰刃魔ガーゴイル",
+    drops: [
+        { item: "冰刃魔の冷鱗", price: 500 },
+        { item: "冰刃魔の蒼甲殻", price: 500 },
+        { item: "冰刃魔の逆鱗", price: 500 },
+        { item: "冰刃魔の巌翼", price: 500 },
+        { item: "冰刃魔の心臓", price: null },
+        { item: "冰刃魔の浸蝕髄", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["雷","山"],
+    resistance: ["突","斬","衝","炎","風","天","毒","氷","雨","闇","多段","クリティカル"]
+},
+
+"石像魔ガーゴイル": {
+    id: "128",
+    name: "石像魔ガーゴイル",
+    drops: [
+        { item: "石像魔の硬鱗", price: 500 },
+        { item: "石像魔の灰甲殻", price: 500 },
+        { item: "石像魔の巌翼", price: 500 }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["雨"],
+    resistance: ["クリティカル"]
+},
+
+"アークデスサイズ": {
+    id: "130",
+    name: "アークデスサイズ",
+    drops: [],
+    locations: ["大禍祓"],
+    weakness: ["炎","天"],
+    resistance: ["斬","突","毒"]
+},
+
+"双龍戦艦 蒼雨": {
+    id: "131",
+    name: "双龍戦艦 蒼雨",
+    drops: [
+        { item: "雨龍鱗", price: null },
+        { item: "雨龍ノ帆布", price: null },
+        { item: "雨龍棘", price: null },
+        { item: "雨龍ノ逆鱗", price: null },
+        { item: "雨龍骨", price: null },
+        { item: "雨龍ノ宝珠", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["炎","風"],
+    resistance: ["衝","氷","闇","山","天","毒","飛","多段","雷","雨","斬","クリティカル"]
+},
+
+"双龍戦艦 嶽峰": {
+    id: "133",
+    name: "双龍戦艦 嶽峰",
+    drops: [
+        { item: "峰龍鱗", price: null },
+        { item: "峰龍ノ帆布", price: null },
+        { item: "峰龍棘", price: null },
+        { item: "峰龍ノ逆鱗", price: null },
+        { item: "峰龍骨", price: null },
+        { item: "峰龍ノ宝珠", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["氷","雨"],
+    resistance: ["突","炎","雷","闇","天","毒","飛","多段","山","風","斬","衝","クリティカル"]
+},
+
+"双龍戦艦 天翔": {
+    id: "134",
+    name: "双龍戦艦 天翔",
+    drops: [
+        { item: "天龍鱗", price: null },
+        { item: "天龍ノ帆布", price: null },
+        { item: "天龍棘", price: null },
+        { item: "天龍ノ逆鱗", price: null },
+        { item: "天龍骨", price: null },
+        { item: "天龍ノ宝珠", price: null }
+    ],
+    locations: ["大禍祓"],
+    weakness: ["闇","雨"],
+    resistance: ["氷","斬","雷","山","風","飛","多段","炎","天","衝","突","クリティカル"]
+},
+
+"荒神像 岩漿": {
+    id: "136",
+    name: "荒神像 岩漿",
+    drops: [],
+    locations: ["大禍祓"],
+    weakness: ["雨"],
+    resistance: ["衝","クリティカル","闇","山","風","天","斬","炎"]
+},
+
+"スライム": {
+    id: "137",
+    name: "スライム",
+    drops: [
+        { item: "きな粉", price: 500 },
+        { item: "核細胞", price: 3050 }
+    ],
+    locations: [],
+    weakness: ["炎"],
+    resistance: ["雨","天","斬","毒","飛","多段","クリティカル"]
+},
+
+"警護型ベンケイ": {
+    id: "138",
+    name: "警護型ベンケイ",
+    drops: [
+        { item: "鉄の歯車", price: 70 },
+        { item: "制御盤", price: 3050 }
+    ],
+    locations: [],
+    weakness: ["衝","雨"],
+    resistance: ["斬","クリティカル","突","炎","風","山","闇","毒","飛","多段","雷"]
+},
+
+"アカナー": {
+    id: "140",
+    name: "アカナー",
+    drops: [
+        { item: "緑の毛玉", price: 20 },
+        { item: "柔らかい嘴", price: 50 },
+        { item: "アカナーの桃", price: 3050 }
+    ],
+    locations: ["嵐の大洋"],
+    weakness: ["闇"],
+    resistance: ["斬","突","衝","炎","氷","雷","雨","風","山","天","毒","多段","クリティカル"]
+},
+
+"グレイ": {
+    id: "141",
+    name: "グレイ",
+    drops: [
+        { item: "大きな水晶体", price: 500 },
+        { item: "精密な棍棒", price: 3050 },
+        { item: "光る脳髄", price: 3050 },
+        { item: "光線銃", price: 3050 }
+    ],
+    locations: [],
+    weakness: [],
+    resistance: ["突","氷","天","闇","クリティカル","毒","飛","多段"]
+};
+const monsterData = {
+  "月魄 赫映姫": {
+    id: "143",
+    name: "月魄 赫映姫",
+    drops: [
+      { item: "眼帯", price: null },
+      { item: "月魄の証", price: null }
+    ],
+    weakness: ["闇"],
+    resistance: ["斬","衝","炎","雷","雨","風","毒","多段","天","クリティカル"],
+    locations: ["雨の御殿"]
+  },
+
+  "夜樹神 ニャルラトホテプ": {
+    id: "144",
+    name: "夜樹神 ニャルラトホテプ",
+    drops: [
+      { item: "テップのつゆ", price: null },
+      { item: "テップの笛", price: null },
+      { item: "混沌の本山葵", price: null },
+      { item: "生命の球根", price: null }
+    ],
+    weakness: [],
+    resistance: ["多段","斬","突","衝","雷","雨","風","山","天","闇","毒"],
+    locations: ["大禍祓"]
+  },
+
+  "ルシファー": {
+    id: "145",
+    name: "ルシファー",
+    drops: [
+      { item: "純白の羽根", price: null },
+      { item: "天墜の十字架", price: null }
+    ],
+    weakness: ["闇"],
+    resistance: ["衝","クリティカル","斬","氷","雨","多段","雷","風","天"],
+    locations: ["黒の聖壇"]
+  },
+
+  "ワーウルフ": {
+    id: "146",
+    name: "ワーウルフ",
+    drops: [
+      { item: "剛毛な尻尾", price: null }
+    ],
+    weakness: ["山"],
+    resistance: ["炎","氷","風"],
+    locations: ["奥州最奥"]
+  },
+
+  "グラキエステュポーン": {
+    id: "147",
+    name: "グラキエステュポーン",
+    drops: [
+      { item: "憤怒の暴風", price: null },
+      { item: "奈落の氷晶角", price: null }
+    ],
+    weakness: ["炎","山","天"],
+    resistance: ["斬","突","雷","雨","風","衝","氷","闇"],
+    locations: ["大禍祓"]
+  },
+
+  "ヴィズルオーディン": {
+    id: "148",
+    name: "ヴィズルオーディン",
+    drops: [
+      { item: "黄金の兜の欠片", price: null },
+      { item: "干し葡萄", price: null }
+    ],
+    weakness: ["氷","闇","雨"],
+    resistance: ["斬","突","衝","雷","風","山","多段","炎","天","毒"],
+    locations: ["大禍祓"]
+  },
+
+  "メフィストフェレス": {
+    id: "149",
+    name: "メフィストフェレス",
+    drops: [
+      { item: "眠りの毒薬", price: null },
+      { item: "陽炎のホムンクルス", price: null }
+    ],
+    weakness: ["風","山"],
+    resistance: ["斬","突","衝","毒","多段","炎","雷","雨","天","闇","クリティカル"],
+    locations: ["旧祭礼の間","契約の間"]
+  },
+
+  "アビスガーゴイル": {
+    id: "150",
+    name: "アビスガーゴイル",
+    drops: [
+      { item: "渾沌の脳髄", price: null },
+      { item: "常夜の芥", price: null }
+    ],
+    weakness: ["山","飛"],
+    resistance: ["闇","炎","氷","雷","多段","クリティカル"],
+    locations: ["大禍祓"]
+  },
+
+  "ロゴスアーリマン": {
+    id: "151",
+    name: "ロゴスアーリマン",
+    drops: [
+      { item: "病の種", price: null },
+      { item: "冥暗の予言", price: null },
+      { item: "災難の萌芽", price: null }
+    ],
+    weakness: ["山","天"],
+    resistance: ["斬","突","衝","炎","氷","雨","多段","雷","闇","毒"],
+    locations: ["大禍祓"]
+  },
+
+  "泥田坊": {
+    id: "152",
+    name: "泥田坊",
+    drops: [],
+    weakness: ["雨","闇"],
+    resistance: ["炎","風","天","衝","斬","山"],
+    locations: ["こがね洞"]
+  },
+
+  "ブリッツティアマット": {
+    id: "155",
+    name: "ブリッツティアマット",
+    drops: [
+      { item: "閃く角", price: null },
+      { item: "朧朧たる飛膜", price: null },
+      { item: "燦爛の脊椎", price: null }
+    ],
+    weakness: ["山","闇"],
+    resistance: ["斬","突","衝","炎","氷","雨","風","雷","天","クリティカル"],
+    locations: ["大禍祓"]
+  }
+};
 
 
 
