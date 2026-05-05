@@ -1,234 +1,79 @@
-// ===============================
-// レシピデータ（完全保持）
-// ===============================
-const recipes = [
-    {
-        name: "境懐ノ無銘改",
-        weapon: {
-            name: "境懐ノ無銘改",
-            jpName: "きょうかいのむめいかい",
-            requiredLv: 112,
-            class: "双剣",
-            rarity: 0,
-            attack: { min: 8624, max: 9690 },
-            durability: { current: 880, max: 880 },
-            effects: [
-                "難度3以上の双剣スキル威力+40%",
-                "装備双剣2本以上で双剣スキル威力+30%",
-                "攻撃力+2500",
-                "双剣能力+25%",
-                "装備双剣2本以上で攻撃力+10%",
-                "装備双剣2本以上で双剣能力+15%",
-                "斬属性+30",
-                "耐久消費+5%",
-                "SP自然回復-5",
-                "移動速度-8",
-                "街属性-40"
-            ],
-            description:
-`静御前の武器解説
-平行世界から来た岡田以蔵の双剣を再構築した武器。
-刀身と鞘が一体化している特殊構造。`
-        },
-        items: [
-            { name: "境壊ノ二刀無銘", count: 1 },
-            { name: "焔獄魔の逆鱗", count: 30 },
-            { name: "焔獄魔の巌翼", count: 20 },
-            { name: "冰刃魔の逆鱗", count: 30 },
-            { name: "冰刃魔の巌翼", count: 20 },
-            { name: "雷霆魔の逆鱗", count: 30 },
-            { name: "雷霆魔の巌翼", count: 20 },
-            { name: "百足の卵", count: 50 },
-            { name: "百足の毒", count: 20 },
-            { name: "朱の盤の角", count: 50 },
-            { name: "乾いた舌", count: 20 },
-            { name: "斬鋭石", count: 50 },
-            { name: "剛毅石", count: 50 },
-            { name: "霊妙石", count: 50 },
-            { name: "穢珠", count: 30 }
+// サンプルレシピ（ここ拡張してOK）
+const recipes = {
+    "無銘改": {
+        materials: [
+            { name: "鉄鉱石", count: 10 },
+            { name: "魔石", count: 3 }
         ]
     }
-];
-
-// ===============================
-// アイテムデータ（完全保持）
-// ===============================
-const itemData = {
-    "印浮棘": "Sigil of Floating Thorns",
-    "焔獄魔の紅甲殻": "Infernal Shell",
-    "焔獄魔の熱鱗": "Infernal Scale",
-    "常夜の芥": "Tea OF Eternal Night",
-    "災難の萌芽": "Seedling of Calamity",
-    "緋散鱗": "Crimson Scale",
-    "冰刃魔の巌翼": "Sleetsword Wing",
-    "冰刃魔の浸蝕髄": "Sleetsword Marrow",
-    "冰刃魔の蒼甲殻": "Sleetsword Shell",
-    "冰刃魔の冷鱗": "Sleetsword Scale",
-    "冰刃魔の逆鱗": "Sleetsword Grudge",
-    "病の種": "Diseased Seedling",
-    "焔獄魔の逆鱗": "Infernal Grudge",
-    "弧描角": "Horned Sculpture",
-    "純白の羽根": "Pure White Plume",
-    "冥暗の予言": "Gloom Prophecy",
-    "混色の禍の砕片": "Fused Calamity Debris",
-    "焔獄魔の巌翼": "Infernal Wing",
-    "雷霆魔の黄甲殻": "Levinlance Shell",
-    "切望の牙": "Tusk of Hope",
-    "碧樹の種子": "Turquoise Timber Seedling",
-    "焔獄魔の浸蝕髄": "Infernal Marrow",
-    "焔獄魔の心臓": "Infernal Heart",
-    "雷霆魔の電鱗": "Levinlance Scale",
-    "冰刃魔の心臓": "Sleetsword Heart",
-    "虚ろな墓穴": "Empty Grave",
-    "逆行薬": "Retrograde Elixir",
-    "雷霆魔の心臓": "Levinlance Heart",
-    "雷霆魔の浸蝕髄": "Levinlance Marrow",
-    "雷霆魔の巌翼": "Levinlance Wing",
-    "雷霆魔の逆鱗": "Levinlance Grudge",
-    "碧之珠": "Cereluean Gem",
-    "緋之珠": "Scarlet Gem",
-    "翠之珠": "Myrtle Gem",
-    "白之珠": "Ivory Gem",
-    "黒之珠": "Obsidian Gem",
-    "空之珠": "Heavenly Marble",
-    "地之珠": "Earthen Marble"
 };
 
-// ===============================
-// あいまい検索スコア（Wiki用）
-// ===============================
-function scoreMatch(text, keyword) {
-    if (!keyword) return 0;
-    if (text === keyword) return 100;
-    if (text.includes(keyword)) return 70;
-    if (keyword.includes(text)) return 50;
-    return 0;
-}
+// アイテム辞書（例）
+const itemData = {
+    "iron": "鉄鉱石",
+    "鉄鉱石": "iron ore",
+    "magic stone": "魔石",
+    "魔石": "magic stone"
+};
 
-// ===============================
-// レシピ検索（Wiki強化）
-// ===============================
-function findRecipe(keyword) {
-    keyword = keyword.trim();
-    if (!keyword) return null;
-
-    let best = null;
-    let bestScore = 0;
-
-    for (const r of recipes) {
-        const w = r.weapon;
-
-        const candidates = [
-            r.name,
-            w?.name,
-            w?.jpName,
-            w?.class
-        ].filter(Boolean);
-
-        for (const c of candidates) {
-            const score = scoreMatch(c, keyword);
-            if (score > bestScore) {
-                best = r;
-                bestScore = score;
-            }
-        }
-    }
-
-    return best;
-}
-
-// ===============================
-// 素材計算
-// ===============================
+// =======================
+// レシピ計算
+// =======================
 function calculateMaterials() {
-    const recipeName = document.getElementById("recipeInput").value.trim();
-    const makeCount = parseInt(document.getElementById("countInput").value) || 1;
-    const outputDiv = document.getElementById("output");
+    const name = document.getElementById("recipeInput").value.trim();
+    const count = parseInt(document.getElementById("countInput").value);
 
-    const target = findRecipe(recipeName);
+    const output = document.getElementById("output");
 
-    if (!target) {
-        outputDiv.innerText = "【エラー】\nレシピが見つかりません";
-        outputDiv.style.color = "#ff6b6b";
+    if (!name) {
+        output.textContent = "レシピ名を入力してください";
         return;
     }
 
-    outputDiv.style.color = "#fff";
+    if (!recipes[name]) {
+        output.textContent = "レシピが見つかりません: " + name;
+        return;
+    }
 
-    let result = `【必要素材（${makeCount}本）】\n`;
+    if (!count || count <= 0) {
+        output.textContent = "作成数が不正です";
+        return;
+    }
 
-    target.items.forEach(m => {
-        result += ` - ${m.name} × ${(m.count * makeCount).toLocaleString()}\n`;
+    let result = `【${name}】 × ${count}\n\n必要素材:\n`;
+
+    recipes[name].materials.forEach(m => {
+        result += `- ${m.name}: ${m.count * count}\n`;
     });
 
-    const w = target.weapon;
-
-    result += `\n【武器】\n${w.name}（${w.jpName}）`;
-    result += `\nLv${w.requiredLv} / ${w.class}`;
-    result += `\nATK ${w.attack.min}~${w.attack.max}`;
-    result += `\n耐久 ${w.durability.current}/${w.durability.max}\n`;
-
-    result += `\n【効果】\n${w.effects.join("\n")}`;
-
-    result += `\n\n【解説】\n${w.description}`;
-
-    outputDiv.innerText = result;
+    output.textContent = result;
 }
 
-// ===============================
-// アイテム検索（カテゴリ＋ハイライト）
-// ===============================
+// =======================
+// アイテム検索
+// =======================
 function searchItem() {
-    const input = document.getElementById("itemSearchBox");
-    const resultDiv = document.getElementById("itemResult");
+    const query = document.getElementById("itemSearchBox").value.trim();
+    const result = document.getElementById("itemResult");
 
-    const keyword = input.value.trim();
-
-    if (!keyword) {
-        resultDiv.innerText = "";
+    if (!query) {
+        result.textContent = "検索ワードを入力してください";
         return;
     }
 
-    const results = [];
+    const lower = query.toLowerCase();
+
+    let found = null;
 
     for (const key in itemData) {
-        const value = itemData[key];
-
-        if (key.includes(keyword) || value.includes(keyword)) {
-            results.push(`[素材] ${highlight(key, keyword)} → ${value}`);
+        if (
+            key.toLowerCase().includes(lower) ||
+            itemData[key].toLowerCase().includes(lower)
+        ) {
+            found = key + " → " + itemData[key];
+            break;
         }
     }
 
-    resultDiv.innerHTML =
-        results.length ? results.join("<br>") : "見つかりません";
+    result.textContent = found || "見つかりませんでした";
 }
-
-// ===============================
-// ハイライト
-// ===============================
-function highlight(text, keyword) {
-    return text.replace(
-        new RegExp(keyword, "g"),
-        `<span style="color:#00ff99">${keyword}</span>`
-    );
-}
-
-// ===============================
-// イベント（完全安定版）
-// ===============================
-window.addEventListener("DOMContentLoaded", () => {
-    const recipeInput = document.getElementById("recipeInput");
-    const itemInput = document.getElementById("itemSearchBox");
-
-    // レシピEnter
-    recipeInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") calculateMaterials();
-    });
-
-    // アイテムEnter
-    itemInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") searchItem();
-    });
-
-    // ❌リアルタイム検索は廃止（暴発防止）
-});
