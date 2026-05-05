@@ -68,7 +68,6 @@
 
 <div class="console-area">
 
-    <!-- レシピ -->
     <div class="input-line">
         <span class="label">レシピ名を入力してください: </span>
         <input type="text" id="recipeInput" placeholder="例: 無銘改">
@@ -85,7 +84,6 @@
 
     <hr>
 
-    <!-- アイテム検索 -->
     <h2>アイテム検索</h2>
 
     <input id="itemSearchBox" placeholder="アイテム名 or 英語">
@@ -95,8 +93,12 @@
 
 </div>
 
-<!-- JS -->
-<script src="script.js"></script>
+<!-- 🔥 重要：順番固定 -->
+<script src="monsterData.js"></script>
+<script src="itemData.js"></script>
+<script src="recipes.js"></script>
+
+<script src="script.js" defer></script>
 
 </body>
 </html>
