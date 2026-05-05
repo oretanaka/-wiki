@@ -2,22 +2,103 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>レシピ・アイテム検索</title>
+    <title>武器製作Wiki - 必要素材計算</title>
+
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            line-height: 1.6;
+        }
+
+        .console-area {
+            background: #000;
+            border: 1px solid #444;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-line {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        input {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #555;
+            padding: 5px;
+            font-family: monospace;
+            width: 150px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            transition: 0.2s;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #666;
+        }
+
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            color: #ffffff;
+            min-height: 50px;
+        }
+
+        .label {
+            color: #aaa;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>レシピ検索（例：境懐ノ無銘改）</h2>
-    <input type="text" id="recipeInput" placeholder="レシピ名を入力">
-    <input type="number" id="countInput" value="1" min="1">
-    <button onclick="calculateMaterials()">計算</button>
-    <pre id="output"></pre>
+
+<div class="console-area">
+
+    <div class="input-line">
+        <span class="label">レシピ名を入力してください: </span>
+        <input type="text" id="recipeInput" placeholder="例: 無銘改">
+    </div>
+
+    <div class="input-line">
+        <span class="label">何本作りますか？: </span>
+        <input type="number" id="countInput" value="1" min="1">
+    </div>
+
+    <button onclick="calculateMaterials()">計算実行</button>
+
+    <div id="output">ここに出力されます</div>
 
     <hr>
 
-    <h2>アイテム逆引き検索</h2>
-    <input type="text" id="itemSearchBox" placeholder="アイテム名を入力">
-    <button onclick="searchItem()">検索</button>
-    <div id="itemResult" style="white-space: pre-wrap;"></div>
+    <h2>アイテム検索</h2>
 
-    <script src="script.js"></script>
+    <input id="itemSearchBox" placeholder="アイテム名 or 英語">
+    <button onclick="searchItem()">検索</button>
+
+    <p id="itemResult"></p>
+
+</div>
+
+<!-- 🔥 重要：順番固定 -->
+<script src="monsterData.js"></script>
+<script src="itemData.js"></script>
+<script src="recipes.js"></script>
+
+<script src="script.js" defer></script>
+
 </body>
 </html>
