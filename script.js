@@ -2194,34 +2194,48 @@ const monsterData = {
 
 
 
+// ===============================
+// 安全チェック（これ超重要）
+// ===============================
+console.log("script.js 読み込みOK");
+
+if (typeof monsterData === "undefined") {
+    console.error("monsterData が未読み込みです");
+}
+if (typeof itemData === "undefined") {
+    console.error("itemData が未読み込みです");
+}
+if (typeof recipes === "undefined") {
+    console.error("recipes が未読み込みです");
+}
+
 
 // ===============================
-// ② モンスター逆引き（itemName / itemID両対応・完全版）
+// ② モンスター逆引き（安全版）
 // ===============================
 function findDropSource(itemKey) {
     const result = new Set();
 
+    if (!monsterData) return [];
+
     for (const key in monsterData) {
         const m = monsterData[key];
-
         if (!m || !m.drops) continue;
 
         const monsterId = m.no || m.id || key;
 
         m.drops.forEach(d => {
+            if (!d?.item) return;
+
             const dropItem = d.item;
 
-            if (!dropItem) return;
-
-            // 完全一致 / 部分一致 / 逆検索（全部対応）
             const match =
                 dropItem === itemKey ||
                 dropItem.includes(itemKey) ||
                 itemKey.includes(dropItem);
 
             if (match) {
-                const name = m.name || key;
-                result.add(`${name}（No.${monsterId}）`);
+                result.add(`${m.name || key}（No.${monsterId}）`);
             }
         });
     }
@@ -2231,11 +2245,13 @@ function findDropSource(itemKey) {
 
 
 // ===============================
-// アイテム検索
+// アイテム検索（安全版）
 // ===============================
 function searchItem() {
     const input = document.getElementById("itemSearchBox");
     const resultDiv = document.getElementById("itemResult");
+
+    if (!input || !resultDiv) return;
 
     const keyword = input.value.trim();
 
@@ -2245,6 +2261,11 @@ function searchItem() {
     }
 
     const results = [];
+
+    if (typeof itemData === "undefined") {
+        resultDiv.innerText = "itemData未読み込み";
+        return;
+    }
 
     for (const key in itemData) {
         const value = itemData[key];
@@ -2266,7 +2287,6 @@ function searchItem() {
 // レシピ検索
 // ===============================
 function findRecipe(keyword) {
-    keyword = keyword.trim();
     if (!keyword) return null;
 
     return recipes.find(r =>
@@ -2281,12 +2301,17 @@ function findRecipe(keyword) {
 
 
 // ===============================
-// 計算（ドロップ元表示付き）
+// 計算（ドロップ元付き）
 // ===============================
 function calculateMaterials() {
-    const recipeName = document.getElementById("recipeInput").value.trim();
-    const makeCount = parseInt(document.getElementById("countInput").value) || 1;
+    const recipeInput = document.getElementById("recipeInput");
+    const countInput = document.getElementById("countInput");
     const outputDiv = document.getElementById("output");
+
+    if (!recipeInput || !countInput || !outputDiv) return;
+
+    const recipeName = recipeInput.value.trim();
+    const makeCount = parseInt(countInput.value) || 1;
 
     const target = findRecipe(recipeName);
 
@@ -2304,9 +2329,6 @@ function calculateMaterials() {
         result += ` - ${m.name} × ${(m.count * makeCount).toLocaleString()}\n`;
     });
 
-    // ===============================
-    // 入手方法（逆引き）
-    // ===============================
     result += `\n【入手方法】\n`;
 
     target.items.forEach(m => {
@@ -2334,19 +2356,23 @@ function calculateMaterials() {
 
 
 // ===============================
-// Enter操作
+// Enterキー対応
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
 
     const recipeInput = document.getElementById("recipeInput");
     const itemInput = document.getElementById("itemSearchBox");
 
-    recipeInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") calculateMaterials();
-    });
+    if (recipeInput) {
+        recipeInput.addEventListener("keydown", e => {
+            if (e.key === "Enter") calculateMaterials();
+        });
+    }
 
-    itemInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") searchItem();
-    });
+    if (itemInput) {
+        itemInput.addEventListener("keydown", e => {
+            if (e.key === "Enter") searchItem();
+        });
+    }
 
 });
