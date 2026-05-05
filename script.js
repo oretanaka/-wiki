@@ -95,7 +95,31 @@ const itemData = {
 };
 
 // ===============================
-// 検索（ここが修正ポイント）
+// ② モンスター逆引き（改良版）
+// ===============================
+function findDropSource(itemName) {
+    const result = [];
+
+    for (const key in monsterData) {
+        const m = monsterData[key];
+
+        if (!m.drops) continue;
+
+        m.drops.forEach(d => {
+            if (
+                d.item.includes(itemName) ||
+                itemName.includes(d.item)
+            ) {
+                result.push(`${m.name}（No.${m.id}）`);
+            }
+        });
+    }
+
+    return result;
+}
+
+// ===============================
+// 検索
 // ===============================
 function searchItem() {
     const input = document.getElementById("itemSearchBox");
@@ -103,7 +127,6 @@ function searchItem() {
 
     const keyword = input.value.trim();
 
-    // ★修正①：空なら完全停止（暴発防止）
     if (keyword === "") {
         resultDiv.innerText = "";
         return;
@@ -124,12 +147,12 @@ function searchItem() {
 }
 
 // ===============================
-// レシピ検索（暴発防止済み）
+// レシピ検索
 // ===============================
 function findRecipe(keyword) {
     keyword = keyword.trim();
 
-    if (!keyword) return null; // ★修正②：空検索防止
+    if (!keyword) return null;
 
     return recipes.find(r =>
         r.name.includes(keyword) ||
@@ -142,7 +165,7 @@ function findRecipe(keyword) {
 }
 
 // ===============================
-// 計算
+// ③ 計算（ドロップ表示追加）
 // ===============================
 function calculateMaterials() {
     const recipeName = document.getElementById("recipeInput").value.trim();
@@ -165,6 +188,19 @@ function calculateMaterials() {
         result += ` - ${m.name} × ${(m.count * makeCount).toLocaleString()}\n`;
     });
 
+    // ★ここ追加（ドロップ元表示）
+    result += `\n【入手方法】\n`;
+
+    target.items.forEach(m => {
+        const sources = findDropSource(m.name);
+
+        if (sources.length) {
+            result += ` - ${m.name} → ${sources.join(", ")}\n`;
+        } else {
+            result += ` - ${m.name} → 不明\n`;
+        }
+    });
+
     const w = target.weapon;
 
     result += `\n【武器】\n${w.name}（${w.jpName}）`;
@@ -173,20 +209,18 @@ function calculateMaterials() {
     result += `\n耐久 ${w.durability.current}/${w.durability.max}\n`;
 
     result += `\n【効果】\n${w.effects.join("\n")}`;
-
     result += `\n\n【解説】\n${w.description}`;
 
     outputDiv.innerText = result;
 }
 
 // ===============================
-// イベント（ここが重要修正）
+// イベント
 // ===============================
 window.addEventListener("DOMContentLoaded", () => {
     const recipeInput = document.getElementById("recipeInput");
     const itemInput = document.getElementById("itemSearchBox");
 
-    // ★修正③：Enterのみで実行（暴発完全防止）
     recipeInput.addEventListener("keydown", e => {
         if (e.key === "Enter") calculateMaterials();
     });
@@ -194,6 +228,4 @@ window.addEventListener("DOMContentLoaded", () => {
     itemInput.addEventListener("keydown", e => {
         if (e.key === "Enter") searchItem();
     });
-
-    // ❌ inputリアルタイム完全禁止（これが暴発原因）
 });
