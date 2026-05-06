@@ -1,12 +1,17 @@
 let monsterData = null;
 let itemToEnemies = {}; // アイテム名 → 敵一覧の逆引き辞書
 
+// 敵名・アイテム名の翻訳辞書
+let enemyNameDict = {};
+let itemNameDict = {};
+
 // 初期ロード（キャッシュ完全破壊）
 fetch("data.json?v=" + Date.now())
   .then(r => r.json())
   .then(data => {
     monsterData = data;
     buildReverseIndex();
+    buildNameDictionaries(); // ★追加：翻訳辞書生成
   });
 
 // 逆引き辞書を作成
@@ -20,6 +25,25 @@ function buildReverseIndex() {
       if (!itemToEnemies[item]) itemToEnemies[item] = [];
       itemToEnemies[item].push(enemyName);
     });
+  }
+}
+
+// ★ 敵名・アイテム名の翻訳辞書を自動生成
+function buildNameDictionaries() {
+  for (const enemyName in monsterData) {
+    const enemy = monsterData[enemyName];
+
+    // 敵名 → 英語（kana があればローマ字化）
+    const enName = enemy.kana ? enemy.kana : enemyName;
+    enemyNameDict[enemyName] = enName;
+
+    // アイテム名 → 英語（簡易翻訳 or ローマ字）
+    if (enemy.drops) {
+      enemy.drops.forEach(drop => {
+        const item = drop.item;
+        itemNameDict[item] = item; // とりあえずローマ字化なし
+      });
+    }
   }
 }
 
@@ -92,10 +116,10 @@ function search() {
 }
 
 /* -------------------------
-   ★ 翻訳機能（完成版）
+   ★ 翻訳機能（敵名・アイテム名対応）
 -------------------------- */
 
-// 日本語 → 英語辞書
+// UI 固定文の辞書
 const jpToEn = {
   "出現場所": "Locations",
   "ドロップ": "Drops",
@@ -104,30 +128,43 @@ const jpToEn = {
   "入力してください。": "Please enter a keyword.",
 };
 
-// 英語 → 日本語辞書（自動生成）
 const enToJp = Object.fromEntries(
   Object.entries(jpToEn).map(([jp, en]) => [en, jp])
 );
 
-// テキストノードだけ翻訳（HTML構造は壊さない）
+// テキストノード翻訳（敵名・アイテム名も含む）
 function translateNodeText(node, dict) {
   if (node.nodeType === Node.TEXT_NODE) {
     let text = node.textContent;
+
+    // UI 固定文
     for (const key in dict) {
       text = text.replaceAll(key, dict[key]);
     }
+
+    // 敵名
+    for (const jp in enemyNameDict) {
+      const en = enemyNameDict[jp];
+      text = text.replaceAll(jp, en);
+    }
+
+    // アイテム名
+    for (const jp in itemNameDict) {
+      const en = itemNameDict[jp];
+      text = text.replaceAll(jp, en);
+    }
+
     node.textContent = text;
   } else {
     node.childNodes.forEach(child => translateNodeText(child, dict));
   }
 }
 
-// 翻訳実行（ボタン部分を除外）
+// 翻訳実行（ボタン除外）
 function translateResult(toEnglish) {
   const dict = toEnglish ? jpToEn : enToJp;
   const resultBox = document.getElementById("result");
 
-  // ボタン部分を退避
   const btns = document.getElementById("translate-buttons");
   let btnHTML = "";
   if (btns) {
@@ -135,18 +172,15 @@ function translateResult(toEnglish) {
     btns.remove();
   }
 
-  // ボタン以外を翻訳
   translateNodeText(resultBox, dict);
 
-  // ボタンを戻す（増殖しない）
   resultBox.insertAdjacentHTML("beforeend", btnHTML);
 }
 
-// 翻訳ボタン（増殖防止）
+// 翻訳ボタン
 function addTranslateButtons() {
   const resultBox = document.getElementById("result");
 
-  // 既存ボタン削除
   const old = document.getElementById("translate-buttons");
   if (old) old.remove();
 
