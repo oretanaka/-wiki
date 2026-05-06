@@ -1,8 +1,8 @@
 let monsterData = null;
 let itemToEnemies = {}; // アイテム名 → 敵一覧の逆引き辞書
 
-// 初期ロード（キャッシュ破壊付き）
-fetch("data.json?v=3")
+// 初期ロード（キャッシュ完全破壊）
+fetch("data.json?v=" + Date.now())
   .then(r => r.json())
   .then(data => {
     monsterData = data;
