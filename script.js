@@ -28,36 +28,95 @@ function buildReverseIndex() {
   }
 }
 
-// ★ 敵名・アイテム名の翻訳辞書を自動生成
+/* -------------------------
+   ★ 敵名・アイテム名の翻訳辞書生成
+-------------------------- */
+
+// ひらがな → ローマ字（簡易）
+function kanaToRomaji(kana) {
+  const table = {
+    きゃ:"kya", きゅ:"kyu", きょ:"kyo",
+    しゃ:"sha", しゅ:"shu", しょ:"sho",
+    ちゃ:"cha", ちゅ:"chu", ちょ:"cho",
+    にゃ:"nya", にゅ:"nyu", にょ:"nyo",
+    ひゃ:"hya", ひゅ:"hyu", ひょ:"hyo",
+    みゃ:"mya", みゅ:"myu", みょ:"myo",
+    りゃ:"rya", りゅ:"ryu", りょ:"ryo",
+    ぎゃ:"gya", ぎゅ:"gyu", ぎょ:"gyo",
+    じゃ:"ja", じゅ:"ju", じょ:"jo",
+    びゃ:"bya", びゅ:"byu", びょ:"byo",
+    ぴゃ:"pya", ぴゅ:"pyu", ぴょ:"pyo",
+    あ:"a", い:"i", う:"u", え:"e", お:"o",
+    か:"ka", き:"ki", く:"ku", け:"ke", こ:"ko",
+    さ:"sa", し:"shi", す:"su", せ:"se", そ:"so",
+    た:"ta", ち:"chi", つ:"tsu", て:"te", と:"to",
+    な:"na", に:"ni", ぬ:"nu", ね:"ne", の:"no",
+    は:"ha", ひ:"hi", ふ:"fu", へ:"he", ほ:"ho",
+    ま:"ma", み:"mi", む:"mu", め:"me", も:"mo",
+    や:"ya", ゆ:"yu", よ:"yo",
+    ら:"ra", り:"ri", る:"ru", れ:"re", ろ:"ro",
+    わ:"wa", を:"wo", ん:"n"
+  };
+
+  let result = kana;
+  for (const k in table) {
+    result = result.replaceAll(k, table[k]);
+  }
+  return result.charAt(0).toUpperCase() + result.slice(1);
+}
+
+// アイテム意味翻訳辞書（必要に応じて追加）
+const itemMeaningDict = {
+  "触手": "Tentacle",
+  "無常の果実": "Fruit of Impermanence",
+  "堕天の翼": "Fallen Wing",
+  "震える風": "Shivering Wind",
+  "血錆の鍵": "Bloodrust Key",
+  "晦冥の氷華": "Dark Ice Blossom",
+  "万魔殿の混沌": "Pandemonium Chaos",
+  "叛逆の炎": "Flame of Rebellion",
+  "憤怒の魔導書": "Grimoire of Wrath",
+};
+
+// 敵名・アイテム名辞書生成
 function buildNameDictionaries() {
   for (const enemyName in monsterData) {
     const enemy = monsterData[enemyName];
 
-    // 敵名 → 英語（kana があればローマ字化）
-    const enName = enemy.kana ? enemy.kana : enemyName;
-    enemyNameDict[enemyName] = enName;
+    // 敵名 → 英語（kana → ローマ字）
+    if (enemy.kana) {
+      enemyNameDict[enemyName] = kanaToRomaji(enemy.kana);
+    } else {
+      enemyNameDict[enemyName] = enemyName;
+    }
 
-    // アイテム名 → 英語（簡易翻訳 or ローマ字）
+    // アイテム名 → 英語（意味翻訳 or fallback）
     if (enemy.drops) {
       enemy.drops.forEach(drop => {
         const item = drop.item;
-        itemNameDict[item] = item; // とりあえずローマ字化なし
+
+        if (itemMeaningDict[item]) {
+          itemNameDict[item] = itemMeaningDict[item];
+        } else {
+          itemNameDict[item] = item; // fallback
+        }
       });
     }
   }
 }
 
-// 敵名 → 敵データ
+/* -------------------------
+   ★ 既存の検索処理（変更なし）
+-------------------------- */
+
 function getEnemyByName(name) {
   return monsterData[name] || null;
 }
 
-// アイテム名 → そのアイテムを落とす敵一覧
 function getEnemiesByItem(itemName) {
   return itemToEnemies[itemName] || [];
 }
 
-// アイテム名 → ダンジョン一覧
 function getLocationsByItem(itemName) {
   const enemies = getEnemiesByItem(itemName);
   const locations = new Set();
@@ -70,7 +129,6 @@ function getLocationsByItem(itemName) {
   return [...locations];
 }
 
-// 検索処理
 function search() {
   const query = document.getElementById("search").value.trim();
   const resultBox = document.getElementById("result");
@@ -81,7 +139,6 @@ function search() {
     return;
   }
 
-  // 敵名で検索
   const enemy = getEnemyByName(query);
   if (enemy) {
     resultBox.innerHTML = `
@@ -94,7 +151,6 @@ function search() {
     return;
   }
 
-  // アイテム名で検索
   const enemies = getEnemiesByItem(query);
   if (enemies.length > 0) {
     const locations = getLocationsByItem(query);
@@ -116,10 +172,9 @@ function search() {
 }
 
 /* -------------------------
-   ★ 翻訳機能（敵名・アイテム名対応）
+   ★ 翻訳機能（完全版）
 -------------------------- */
 
-// UI 固定文の辞書
 const jpToEn = {
   "出現場所": "Locations",
   "ドロップ": "Drops",
@@ -144,14 +199,12 @@ function translateNodeText(node, dict) {
 
     // 敵名
     for (const jp in enemyNameDict) {
-      const en = enemyNameDict[jp];
-      text = text.replaceAll(jp, en);
+      text = text.replaceAll(jp, enemyNameDict[jp]);
     }
 
     // アイテム名
     for (const jp in itemNameDict) {
-      const en = itemNameDict[jp];
-      text = text.replaceAll(jp, en);
+      text = text.replaceAll(jp, itemNameDict[jp]);
     }
 
     node.textContent = text;
