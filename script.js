@@ -99,13 +99,12 @@ async function translateText() {
     return;
   }
 
-  // 日本語が含まれているか判定
   const isJapanese = /[ぁ-んァ-ン一-龯]/.test(input);
   const source = isJapanese ? "ja" : "en";
   const target = isJapanese ? "en" : "ja";
 
   try {
-    const res = await fetch("https://translate.argosopentech.com/translate", {
+    const res = await fetch("https://libretranslate.de/translate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -122,6 +121,7 @@ async function translateText() {
     output.innerText = "翻訳エラーが発生しました。";
   }
 }
+
 
 window.search = search;
 window.translateText = translateText;
