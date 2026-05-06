@@ -88,7 +88,7 @@ function search() {
 }
 
 /* ===============================
-   翻訳機能（日本語 ⇄ 英語）
+   翻訳機能（LibreTranslate 無料API）
    =============================== */
 async function translateText() {
   const input = document.getElementById("translateInput").value.trim();
@@ -101,25 +101,26 @@ async function translateText() {
 
   // 日本語が含まれているか判定
   const isJapanese = /[ぁ-んァ-ン一-龯]/.test(input);
-
-  // 翻訳方向
-  const langpair = isJapanese ? "ja|en" : "en|ja";
+  const source = isJapanese ? "ja" : "en";
+  const target = isJapanese ? "en" : "ja";
 
   try {
-    const res = await fetch(
-      "https://api.mymemory.translated.net/get?q=" +
-        encodeURIComponent(input) +
-        "&langpair=" +
-        langpair
-    );
+    const res = await fetch("https://libretranslate.com/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        q: input,
+        source: source,
+        target: target,
+        format: "text"
+      })
+    });
 
     const data = await res.json();
-    output.innerText = data.responseData.translatedText;
+    output.innerText = data.translatedText;
   } catch (e) {
     output.innerText = "翻訳エラーが発生しました。";
   }
 }
 
-// HTML から呼べるように
-window.search = search;
 window.translateText = translateText;
