@@ -104,24 +104,16 @@ async function translateText() {
   const target = isJapanese ? "en" : "ja";
 
   try {
-    const res = await fetch("https://plain-limit-5cd3.fotor88.workers.dev", {
-
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        q: input,
-        source: source,
-        target: target,
-        format: "text"
-      })
-    });
-
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=${source}|${target}`;
+    const res = await fetch(url);
     const data = await res.json();
-    output.innerText = data.translatedText || "翻訳できませんでした。";
+
+    output.innerText = data.responseData.translatedText || "翻訳できませんでした。";
   } catch (e) {
     output.innerText = "翻訳エラーが発生しました。";
   }
 }
+
 
 
 window.search = search;
