@@ -122,3 +122,6 @@ async function translateText() {
     output.innerText = "翻訳エラーが発生しました。";
   }
 }
+
+window.search = search;
+window.translateText = translateText;
