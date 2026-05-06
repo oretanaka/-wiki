@@ -1,7 +1,7 @@
 let monsterData = null;
 let itemToEnemies = {}; // アイテム名 → 敵一覧の逆引き辞書
 
-// ★追加：アイテム翻訳辞書（必要に応じて増やせる）
+// ★アイテム翻訳辞書（必要に応じて増やせる）
 const itemJpToEn = {
   "触手": "Tentacle",
   "無常の果実": "Fruit of Impermanence",
@@ -14,16 +14,57 @@ const itemJpToEn = {
   "憤怒の魔導書": "Grimoire of Wrath",
   "和紙": "Washi",
   "だるまウヱスキー": "Daruma Whisky",
-  // 必要に応じて追加
 };
 
-// ★追加：HTML 内のアイテム名だけ英語に置換
-function translateItems(html) {
-  let result = html;
-  for (const jp in itemJpToEn) {
-    result = result.replaceAll(jp, itemJpToEn[jp]);
-  }
-  return result;
+// ★逆引き辞書（英語 → 日本語）
+const itemEnToJp = Object.fromEntries(
+  Object.entries(itemJpToEn).map(([jp, en]) => [en, jp])
+);
+
+// ★安全な翻訳（<li> のアイテム名だけ置換）
+function translateItemElements(toEnglish) {
+  const resultBox = document.getElementById("result");
+  const listItems = resultBox.querySelectorAll("li");
+
+  listItems.forEach(li => {
+    let text = li.textContent;
+
+    // 敵名は翻訳しないため「アイテム名だけ」置換
+    if (toEnglish) {
+      for (const jp in itemJpToEn) {
+        if (text.startsWith(jp)) {
+          text = text.replace(jp, itemJpToEn[jp]);
+        }
+      }
+    } else {
+      for (const en in itemEnToJp) {
+        if (text.startsWith(en)) {
+          text = text.replace(en, itemEnToJp[en]);
+        }
+      }
+    }
+
+    li.textContent = text;
+  });
+}
+
+// ★翻訳ボタン追加
+function addTranslateButtons() {
+  const resultBox = document.getElementById("result");
+
+  const old = document.getElementById("translate-buttons");
+  if (old) old.remove();
+
+  const div = document.createElement("div");
+  div.id = "translate-buttons";
+  div.style.marginTop = "10px";
+
+  div.innerHTML = `
+    <button onclick="translateItemElements(true)">英語で表示</button>
+    <button onclick="translateItemElements(false)">日本語で表示</button>
+  `;
+
+  resultBox.appendChild(div);
 }
 
 // 初期ロード（キャッシュ完全破壊）
@@ -84,17 +125,13 @@ function search() {
   // 敵名で検索
   const enemy = getEnemyByName(query);
   if (enemy) {
-    let html = `
+    resultBox.innerHTML = `
       <h2>${query}</h2>
       <p><b>出現場所:</b> ${enemy.locations.join(", ")}</p>
       <p><b>ドロップ:</b></p>
       <ul>${enemy.drops.map(d => `<li>${d.item} (${d.price})</li>`).join("")}</ul>
     `;
-
-    // ★追加：アイテム名だけ翻訳
-    html = translateItems(html);
-
-    resultBox.innerHTML = html;
+    addTranslateButtons();
     return;
   }
 
@@ -103,7 +140,7 @@ function search() {
   if (enemies.length > 0) {
     const locations = getLocationsByItem(query);
 
-    let html = `
+    resultBox.innerHTML = `
       <h2>${query}</h2>
       <p><b>このアイテムを落とす敵:</b></p>
       <ul>${enemies.map(e => `<li>${e}</li>`).join("")}</ul>
@@ -111,11 +148,7 @@ function search() {
       <p><b>出現場所:</b></p>
       <ul>${locations.map(l => `<li>${l}</li>`).join("")}</ul>
     `;
-
-    // ★追加：アイテム名だけ翻訳
-    html = translateItems(html);
-
-    resultBox.innerHTML = html;
+    addTranslateButtons();
     return;
   }
 
