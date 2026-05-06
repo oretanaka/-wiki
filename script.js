@@ -1,39 +1,17 @@
-let data = { items: [], monsters: [] };
+body {
+  font-family: monospace;
+  background: #1e1e1e;
+  color: white;
+  padding: 20px;
+}
 
-fetch("data.json")
-  .then(res => res.json())
-  .then(json => {
-    data = json;
-    console.log("loaded");
-  });
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
 
-const searchInput = document.getElementById("search");
-const result = document.getElementById("result");
-
-searchInput.addEventListener("input", () => {
-  const keyword = searchInput.value.toLowerCase();
-  result.innerHTML = "";
-
-  if (!data.items) return;
-  if (!keyword) return;
-
-  const items = data.items.filter(i =>
-    i.name.toLowerCase().includes(keyword)
-  );
-
-  const monsters = data.monsters.filter(m =>
-    m.name.toLowerCase().includes(keyword)
-  );
-
-  result.innerHTML += items.map(i => `
-    <div class="card">
-      アイテム: ${i.name}
-    </div>
-  `).join("");
-
-  result.innerHTML += monsters.map(m => `
-    <div class="card">
-      モンスター: ${m.name}
-    </div>
-  `).join("");
-});
+.item {
+  padding: 5px;
+  border-bottom: 1px solid #444;
+}
