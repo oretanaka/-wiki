@@ -9,10 +9,19 @@
 
   <h1>Monster Search Wiki</h1>
 
+  <!-- 検索 -->
   <input id="search" placeholder="敵の名前 または アイテム名">
   <button onclick="search()">検索</button>
 
   <div id="result"></div>
+
+  <hr>
+
+  <!-- 翻訳機能 -->
+  <h2>翻訳</h2>
+  <input id="translateInput" type="text" placeholder="翻訳したい文字を入力">
+  <button onclick="translateText()">翻訳</button>
+  <p id="translateResult"></p>
 
   <script src="script.js"></script>
 </body>
