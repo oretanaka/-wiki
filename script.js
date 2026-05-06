@@ -53,7 +53,7 @@ function search() {
 
   if (!query) {
     resultBox.innerHTML = "入力してください。";
-    addTranslateButtons(); // ★追加
+    addTranslateButtons();
     return;
   }
 
@@ -66,7 +66,7 @@ function search() {
       <p><b>ドロップ:</b></p>
       <ul>${enemy.drops.map(d => `<li>${d.item} (${d.price})</li>`).join("")}</ul>
     `;
-    addTranslateButtons(); // ★追加
+    addTranslateButtons();
     return;
   }
 
@@ -83,16 +83,16 @@ function search() {
       <p><b>出現場所:</b></p>
       <ul>${locations.map(l => `<li>${l}</li>`).join("")}</ul>
     `;
-    addTranslateButtons(); // ★追加
+    addTranslateButtons();
     return;
   }
 
   resultBox.innerHTML = "該当なし。";
-  addTranslateButtons(); // ★追加
+  addTranslateButtons();
 }
 
 /* -------------------------
-   ★ここから翻訳機能追加
+   ★ 翻訳機能（完成版）
 -------------------------- */
 
 // 日本語 → 英語辞書
@@ -122,18 +122,24 @@ function translateNodeText(node, dict) {
   }
 }
 
-// 翻訳実行（ボタン増殖なし）
+// 翻訳実行（ボタン部分を除外）
 function translateResult(toEnglish) {
   const dict = toEnglish ? jpToEn : enToJp;
   const resultBox = document.getElementById("result");
 
+  // ボタン部分を退避
+  const btns = document.getElementById("translate-buttons");
+  let btnHTML = "";
+  if (btns) {
+    btnHTML = btns.outerHTML;
+    btns.remove();
+  }
+
+  // ボタン以外を翻訳
   translateNodeText(resultBox, dict);
 
-  // 既存ボタン削除
-  const oldBtns = document.getElementById("translate-buttons");
-  if (oldBtns) oldBtns.remove();
-
-  addTranslateButtons();
+  // ボタンを戻す（増殖しない）
+  resultBox.insertAdjacentHTML("beforeend", btnHTML);
 }
 
 // 翻訳ボタン（増殖防止）
