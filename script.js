@@ -78,11 +78,4 @@ function search() {
       <p><b>このアイテムを落とす敵:</b></p>
       <ul>${enemies.map(e => `<li>${e}</li>`).join("")}</ul>
 
-      <p><b>出現場所:</b></p>
-      <ul>${locations.map(l => `<li>${l}</li>`).join("")}</ul>
-    `;
-    return;
-  }
-
-  resultBox.innerHTML = "該当なし。";
-}
+      <p>
