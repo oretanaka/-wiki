@@ -1,17 +1,36 @@
-body {
-  font-family: monospace;
-  background: #1e1e1e;
-  color: white;
-  padding: 20px;
-}
+let data = { items: [] };
 
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-}
+fetch("data.json")
+  .then(res => res.json())
+  .then(json => {
+    data = json;
+    render(data.items);
+  })
+  .catch(err => {
+    console.error("JSON読み込み失敗", err);
+  });
 
-.item {
-  padding: 5px;
-  border-bottom: 1px solid #444;
+const input = document.getElementById("search");
+const result = document.getElementById("result");
+
+input.addEventListener("input", () => {
+  const keyword = input.value.toLowerCase();
+
+  const filtered = data.items.filter(item =>
+    item.name.toLowerCase().includes(keyword)
+  );
+
+  render(filtered);
+});
+
+function render(list) {
+  result.innerHTML = "";
+
+  list.forEach(item => {
+    result.innerHTML += `
+      <div class="item">
+        ${item.name} (${item.type})
+      </div>
+    `;
+  });
 }
