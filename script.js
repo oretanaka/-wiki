@@ -1,17 +1,12 @@
 let monsterData = null;
 let itemToEnemies = {}; // アイテム名 → 敵一覧の逆引き辞書
 
-// 敵名・アイテム名の翻訳辞書
-let enemyNameDict = {};
-let itemNameDict = {};
-
 // 初期ロード（キャッシュ完全破壊）
 fetch("data.json?v=" + Date.now())
   .then(r => r.json())
   .then(data => {
     monsterData = data;
     buildReverseIndex();
-    buildNameDictionaries(); // ★追加：翻訳辞書生成
   });
 
 // 逆引き辞書を作成
@@ -28,95 +23,17 @@ function buildReverseIndex() {
   }
 }
 
-/* -------------------------
-   ★ 敵名・アイテム名の翻訳辞書生成
--------------------------- */
-
-// ひらがな → ローマ字（簡易）
-function kanaToRomaji(kana) {
-  const table = {
-    きゃ:"kya", きゅ:"kyu", きょ:"kyo",
-    しゃ:"sha", しゅ:"shu", しょ:"sho",
-    ちゃ:"cha", ちゅ:"chu", ちょ:"cho",
-    にゃ:"nya", にゅ:"nyu", にょ:"nyo",
-    ひゃ:"hya", ひゅ:"hyu", ひょ:"hyo",
-    みゃ:"mya", みゅ:"myu", みょ:"myo",
-    りゃ:"rya", りゅ:"ryu", りょ:"ryo",
-    ぎゃ:"gya", ぎゅ:"gyu", ぎょ:"gyo",
-    じゃ:"ja", じゅ:"ju", じょ:"jo",
-    びゃ:"bya", びゅ:"byu", びょ:"byo",
-    ぴゃ:"pya", ぴゅ:"pyu", ぴょ:"pyo",
-    あ:"a", い:"i", う:"u", え:"e", お:"o",
-    か:"ka", き:"ki", く:"ku", け:"ke", こ:"ko",
-    さ:"sa", し:"shi", す:"su", せ:"se", そ:"so",
-    た:"ta", ち:"chi", つ:"tsu", て:"te", と:"to",
-    な:"na", に:"ni", ぬ:"nu", ね:"ne", の:"no",
-    は:"ha", ひ:"hi", ふ:"fu", へ:"he", ほ:"ho",
-    ま:"ma", み:"mi", む:"mu", め:"me", も:"mo",
-    や:"ya", ゆ:"yu", よ:"yo",
-    ら:"ra", り:"ri", る:"ru", れ:"re", ろ:"ro",
-    わ:"wa", を:"wo", ん:"n"
-  };
-
-  let result = kana;
-  for (const k in table) {
-    result = result.replaceAll(k, table[k]);
-  }
-  return result.charAt(0).toUpperCase() + result.slice(1);
-}
-
-// アイテム意味翻訳辞書（必要に応じて追加）
-const itemMeaningDict = {
-  "触手": "Tentacle",
-  "無常の果実": "Fruit of Impermanence",
-  "堕天の翼": "Fallen Wing",
-  "震える風": "Shivering Wind",
-  "血錆の鍵": "Bloodrust Key",
-  "晦冥の氷華": "Dark Ice Blossom",
-  "万魔殿の混沌": "Pandemonium Chaos",
-  "叛逆の炎": "Flame of Rebellion",
-  "憤怒の魔導書": "Grimoire of Wrath",
-};
-
-// 敵名・アイテム名辞書生成
-function buildNameDictionaries() {
-  for (const enemyName in monsterData) {
-    const enemy = monsterData[enemyName];
-
-    // 敵名 → 英語（kana → ローマ字）
-    if (enemy.kana) {
-      enemyNameDict[enemyName] = kanaToRomaji(enemy.kana);
-    } else {
-      enemyNameDict[enemyName] = enemyName;
-    }
-
-    // アイテム名 → 英語（意味翻訳 or fallback）
-    if (enemy.drops) {
-      enemy.drops.forEach(drop => {
-        const item = drop.item;
-
-        if (itemMeaningDict[item]) {
-          itemNameDict[item] = itemMeaningDict[item];
-        } else {
-          itemNameDict[item] = item; // fallback
-        }
-      });
-    }
-  }
-}
-
-/* -------------------------
-   ★ 既存の検索処理（変更なし）
--------------------------- */
-
+// 敵名 → 敵データ
 function getEnemyByName(name) {
   return monsterData[name] || null;
 }
 
+// アイテム名 → そのアイテムを落とす敵一覧
 function getEnemiesByItem(itemName) {
   return itemToEnemies[itemName] || [];
 }
 
+// アイテム名 → ダンジョン一覧
 function getLocationsByItem(itemName) {
   const enemies = getEnemiesByItem(itemName);
   const locations = new Set();
@@ -129,6 +46,7 @@ function getLocationsByItem(itemName) {
   return [...locations];
 }
 
+// 検索処理
 function search() {
   const query = document.getElementById("search").value.trim();
   const resultBox = document.getElementById("result");
@@ -139,6 +57,7 @@ function search() {
     return;
   }
 
+  // 敵名で検索
   const enemy = getEnemyByName(query);
   if (enemy) {
     resultBox.innerHTML = `
@@ -151,6 +70,7 @@ function search() {
     return;
   }
 
+  // アイテム名で検索
   const enemies = getEnemiesByItem(query);
   if (enemies.length > 0) {
     const locations = getLocationsByItem(query);
@@ -172,10 +92,11 @@ function search() {
 }
 
 /* -------------------------
-   ★ 翻訳機能（完全版）
+   ★ 翻訳用マップ
 -------------------------- */
 
-const jpToEn = {
+// UI 固定文
+const uiJpToEn = {
   "出現場所": "Locations",
   "ドロップ": "Drops",
   "このアイテムを落とす敵": "Enemies that drop this item",
@@ -183,41 +104,82 @@ const jpToEn = {
   "入力してください。": "Please enter a keyword.",
 };
 
-const enToJp = Object.fromEntries(
-  Object.entries(jpToEn).map(([jp, en]) => [en, jp])
+// 敵名（必要に応じて増やしていける）
+const enemyJpToEn = {
+  "テュポーン": "Typhon",
+  // ここに増やしていく: "鬱だるま": "Utsudaruma", など
+};
+
+// アイテム名（必要に応じて増やしていける）
+const itemJpToEn = {
+  "触手": "Tentacle",
+  "無常の果実": "Fruit of Impermanence",
+  "堕天の翼": "Fallen Wing",
+  "震える風": "Shivering Wind",
+  "血錆の鍵": "Bloodrust Key",
+  "晦冥の氷華": "Dark Ice Blossom",
+  "万魔殿の混沌": "Pandemonium Chaos",
+  "叛逆の炎": "Flame of Rebellion",
+  "憤怒の魔導書": "Grimoire of Wrath",
+};
+
+// 逆引き（英→日）を自動生成
+const uiEnToJp = Object.fromEntries(
+  Object.entries(uiJpToEn).map(([jp, en]) => [en, jp])
+);
+const enemyEnToJp = Object.fromEntries(
+  Object.entries(enemyJpToEn).map(([jp, en]) => [en, jp])
+);
+const itemEnToJp = Object.fromEntries(
+  Object.entries(itemJpToEn).map(([jp, en]) => [en, jp])
 );
 
-// テキストノード翻訳（敵名・アイテム名も含む）
-function translateNodeText(node, dict) {
-  if (node.nodeType === Node.TEXT_NODE) {
-    let text = node.textContent;
+/* -------------------------
+   ★ HTML 文字列ベース翻訳
+-------------------------- */
 
-    // UI 固定文
-    for (const key in dict) {
-      text = text.replaceAll(key, dict[key]);
+function translateHtmlString(html, toEnglish) {
+  let result = html;
+
+  if (toEnglish) {
+    // UI
+    for (const jp in uiJpToEn) {
+      result = result.replaceAll(jp, uiJpToEn[jp]);
     }
-
-    // 敵名
-    for (const jp in enemyNameDict) {
-      text = text.replaceAll(jp, enemyNameDict[jp]);
+    // 敵
+    for (const jp in enemyJpToEn) {
+      result = result.replaceAll(jp, enemyJpToEn[jp]);
     }
-
-    // アイテム名
-    for (const jp in itemNameDict) {
-      text = text.replaceAll(jp, itemNameDict[jp]);
+    // アイテム
+    for (const jp in itemJpToEn) {
+      result = result.replaceAll(jp, itemJpToEn[jp]);
     }
-
-    node.textContent = text;
   } else {
-    node.childNodes.forEach(child => translateNodeText(child, dict));
+    // UI
+    for (const en in uiEnToJp) {
+      result = result.replaceAll(en, uiEnToJp[en]);
+    }
+    // 敵
+    for (const en in enemyEnToJp) {
+      result = result.replaceAll(en, enemyEnToJp[en]);
+    }
+    // アイテム
+    for (const en in itemEnToJp) {
+      result = result.replaceAll(en, itemEnToJp[en]);
+    }
   }
+
+  return result;
 }
 
-// 翻訳実行（ボタン除外）
+/* -------------------------
+   ★ 翻訳ボタンと実行
+-------------------------- */
+
 function translateResult(toEnglish) {
-  const dict = toEnglish ? jpToEn : enToJp;
   const resultBox = document.getElementById("result");
 
+  // 既存ボタンを退避して削除
   const btns = document.getElementById("translate-buttons");
   let btnHTML = "";
   if (btns) {
@@ -225,15 +187,22 @@ function translateResult(toEnglish) {
     btns.remove();
   }
 
-  translateNodeText(resultBox, dict);
+  // 本文を翻訳
+  const translated = translateHtmlString(resultBox.innerHTML, toEnglish);
+  resultBox.innerHTML = translated;
 
-  resultBox.insertAdjacentHTML("beforeend", btnHTML);
+  // ボタンを戻す（1セットだけ）
+  if (btnHTML) {
+    resultBox.insertAdjacentHTML("beforeend", btnHTML);
+  } else {
+    addTranslateButtons();
+  }
 }
 
-// 翻訳ボタン
 function addTranslateButtons() {
   const resultBox = document.getElementById("result");
 
+  // 既存ボタン削除
   const old = document.getElementById("translate-buttons");
   if (old) old.remove();
 
