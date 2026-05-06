@@ -78,4 +78,48 @@ function search() {
       <p><b>このアイテムを落とす敵:</b></p>
       <ul>${enemies.map(e => `<li>${e}</li>`).join("")}</ul>
 
-      <p>
+      <p><b>出現場所:</b></p>
+      <ul>${locations.map(l => `<li>${l}</li>`).join("")}</ul>
+    `;
+    return;
+  }
+
+  resultBox.innerHTML = "該当なし。";
+}
+
+/* ===============================
+   翻訳機能（日本語 ⇄ 英語）
+   =============================== */
+async function translateText() {
+  const input = document.getElementById("translateInput").value.trim();
+  const output = document.getElementById("translateResult");
+
+  if (!input) {
+    output.innerText = "入力してください。";
+    return;
+  }
+
+  // 日本語が含まれているか判定
+  const isJapanese = /[ぁ-んァ-ン一-龯]/.test(input);
+
+  // 翻訳方向
+  const langpair = isJapanese ? "ja|en" : "en|ja";
+
+  try {
+    const res = await fetch(
+      "https://api.mymemory.translated.net/get?q=" +
+        encodeURIComponent(input) +
+        "&langpair=" +
+        langpair
+    );
+
+    const data = await res.json();
+    output.innerText = data.responseData.translatedText;
+  } catch (e) {
+    output.innerText = "翻訳エラーが発生しました。";
+  }
+}
+
+// HTML から呼べるように
+window.search = search;
+window.translateText = translateText;
