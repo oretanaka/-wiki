@@ -2,91 +2,17 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>武器製作Wiki - 必要素材計算</title>
-
-<style>
-body {
-    font-family: monospace;
-    padding: 20px;
-    background-color: #1e1e1e;
-    color: #d4d4d4;
-}
-
-.console-area {
-    background: #000;
-    border: 1px solid #444;
-    padding: 20px;
-    border-radius: 6px;
-    max-width: 650px;
-    margin: auto;
-}
-
-.input-line {
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #333;
-}
-
-input {
-    background: #000;
-    color: #00ff00;
-    border: 1px solid #555;
-    padding: 6px;
-    width: 180px;
-}
-
-button {
-    background: #444;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #666;
-}
-
-#output, #itemResult {
-    margin-top: 15px;
-    white-space: pre-wrap;
-    color: #fff;
-    min-height: 40px;
-}
-</style>
+<title>Wikiシステム</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="console-area">
+<h1>武器・素材・モンスターWiki</h1>
 
-    <div class="input-line">
-        レシピ名:
-        <input type="text" id="recipeInput" placeholder="例: 無銘改">
-    </div>
+<input id="search" placeholder="検索（アイテム・敵・素材）">
 
-    <div class="input-line">
-        作成数:
-        <input type="number" id="countInput" value="1" min="1">
-    </div>
+<div id="result"></div>
 
-    <button onclick="calculateMaterials()">計算</button>
-
-    <div id="output">結果表示</div>
-
-    <hr>
-
-    <h2>アイテム検索</h2>
-
-    <input id="itemSearchBox" placeholder="アイテム名 / 英語">
-    <button onclick="searchItem()">検索</button>
-
-    <div id="itemResult"></div>
-
-</div>
-
-<script src="script.js" defer></script>
-
+<script src="script.js"></script>
 </body>
 </html>
