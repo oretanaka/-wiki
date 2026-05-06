@@ -104,7 +104,8 @@ async function translateText() {
   const target = isJapanese ? "en" : "ja";
 
   try {
-    const res = await fetch("https://libretranslate.de/translate", {
+    const res = await fetch("https://plain-limit-5cd3.fotor88.workers.dev", {
+
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
