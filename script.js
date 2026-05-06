@@ -53,6 +53,7 @@ function search() {
 
   if (!query) {
     resultBox.innerHTML = "入力してください。";
+    addTranslateButtons(); // ★追加
     return;
   }
 
@@ -108,36 +109,49 @@ const enToJp = Object.fromEntries(
   Object.entries(jpToEn).map(([jp, en]) => [en, jp])
 );
 
-// HTML 内テキストを翻訳
-function translateHTML(html, toEnglish = true) {
-  const dict = toEnglish ? jpToEn : enToJp;
-  let result = html;
-
-  for (const key in dict) {
-    const value = dict[key];
-    result = result.replaceAll(key, value);
+// テキストノードだけ翻訳（HTML構造は壊さない）
+function translateNodeText(node, dict) {
+  if (node.nodeType === Node.TEXT_NODE) {
+    let text = node.textContent;
+    for (const key in dict) {
+      text = text.replaceAll(key, dict[key]);
+    }
+    node.textContent = text;
+  } else {
+    node.childNodes.forEach(child => translateNodeText(child, dict));
   }
-
-  return result;
 }
 
-// 翻訳ボタンを追加
+// 翻訳実行（ボタン増殖なし）
+function translateResult(toEnglish) {
+  const dict = toEnglish ? jpToEn : enToJp;
+  const resultBox = document.getElementById("result");
+
+  translateNodeText(resultBox, dict);
+
+  // 既存ボタン削除
+  const oldBtns = document.getElementById("translate-buttons");
+  if (oldBtns) oldBtns.remove();
+
+  addTranslateButtons();
+}
+
+// 翻訳ボタン（増殖防止）
 function addTranslateButtons() {
   const resultBox = document.getElementById("result");
 
-  const btns = `
-    <div style="margin-top:10px;">
-      <button onclick="translateResult(true)">英語で表示</button>
-      <button onclick="translateResult(false)">日本語で表示</button>
-    </div>
+  // 既存ボタン削除
+  const old = document.getElementById("translate-buttons");
+  if (old) old.remove();
+
+  const btns = document.createElement("div");
+  btns.id = "translate-buttons";
+  btns.style.marginTop = "10px";
+
+  btns.innerHTML = `
+    <button onclick="translateResult(true)">英語で表示</button>
+    <button onclick="translateResult(false)">日本語で表示</button>
   `;
 
-  resultBox.innerHTML += btns;
-}
-
-// 翻訳実行
-function translateResult(toEnglish) {
-  const resultBox = document.getElementById("result");
-  resultBox.innerHTML = translateHTML(resultBox.innerHTML, toEnglish);
-  addTranslateButtons(); // ボタンを再追加
+  resultBox.appendChild(btns);
 }
