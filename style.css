@@ -1,1 +1,51 @@
 
+let data = { items: [], monsters: [] };
+
+// データ読み込み
+fetch("data.json")
+  .then(res => res.json())
+  .then(json => {
+    data = json;
+    console.log("データ読み込み完了");
+  });
+
+// 検索処理
+const searchInput = document.getElementById("search");
+const result = document.getElementById("result");
+
+searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.toLowerCase();
+  result.innerHTML = "";
+
+  if (!keyword) return;
+
+  // アイテム検索
+  const items = data.items.filter(i =>
+    i.name.toLowerCase().includes(keyword)
+  );
+
+  // モンスター検索
+  const monsters = data.monsters.filter(m =>
+    m.name.toLowerCase().includes(keyword)
+  );
+
+  // 表示
+  items.forEach(i => {
+    result.innerHTML += `
+      <div class="card">
+        <b>アイテム:</b> ${i.name}<br>
+        素材: ${i.materials.join(", ")}<br>
+        ドロップ: ${i.dropFrom.join(", ")}
+      </div>
+    `;
+  });
+
+  monsters.forEach(m => {
+    result.innerHTML += `
+      <div class="card">
+        <b>モンスター:</b> ${m.name}<br>
+        ドロップ: ${m.drops.join(", ")}
+      </div>
+    `;
+  });
+});
