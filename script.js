@@ -17,20 +17,13 @@ const itemMeaningDict = {
 // 自動生成されるアイテム翻訳辞書
 let itemJpToEn = {};
 
-// ひらがな → ローマ字（簡易）
+// ひらがな → ローマ字
 function kanaToRomaji(kana) {
   const table = {
     きゃ:"kya", きゅ:"kyu", きょ:"kyo",
     しゃ:"sha", しゅ:"shu", しょ:"sho",
     ちゃ:"cha", ちゅ:"chu", ちょ:"cho",
     にゃ:"nya", にゅ:"nyu", にょ:"nyo",
-    ひゃ:"hya", ひゅ:"hyu", ひょ:"hyo",
-    みゃ:"mya", みゅ:"myu", みょ:"myo",
-    りゃ:"rya", りゅ:"ryu", りょ:"ryo",
-    ぎゃ:"gya", ぎゅ:"gyu", ぎょ:"gyo",
-    じゃ:"ja", じゅ:"ju", じょ:"jo",
-    びゃ:"bya", びゅ:"byu", びょ:"byo",
-    ぴゃ:"pya", ぴゅ:"pyu", ぴょ:"pyo",
     あ:"a", い:"i", う:"u", え:"e", お:"o",
     か:"ka", き:"ki", く:"ku", け:"ke", こ:"ko",
     さ:"sa", し:"shi", す:"su", せ:"se", そ:"so",
@@ -108,7 +101,7 @@ function buildItemTranslationDict() {
         return;
       }
 
-      // その他はそのまま（必要なら後で追加）
+      // その他はそのまま
       itemJpToEn[item] = item;
     });
   }
