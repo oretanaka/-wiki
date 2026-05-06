@@ -104,15 +104,16 @@ async function translateText() {
   const target = isJapanese ? "en" : "ja";
 
   try {
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=${source}|${target}`;
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURIComponent(input)}`;
     const res = await fetch(url);
     const data = await res.json();
 
-    output.innerText = data.responseData.translatedText || "翻訳できませんでした。";
+    output.innerText = data[0][0][0] || "翻訳できませんでした。";
   } catch (e) {
     output.innerText = "翻訳エラーが発生しました。";
   }
 }
+
 
 
 
