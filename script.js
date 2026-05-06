@@ -116,5 +116,6 @@ async function translateText() {
 
 
 
+
 window.search = search;
 window.translateText = translateText;
