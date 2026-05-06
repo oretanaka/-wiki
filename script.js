@@ -88,7 +88,7 @@ function search() {
 }
 
 /* ===============================
-   翻訳機能（LibreTranslate 無料API ミラー）
+   翻訳機能（LibreTranslate 公式ミラー）
    =============================== */
 async function translateText() {
   const input = document.getElementById("translateInput").value.trim();
@@ -105,7 +105,7 @@ async function translateText() {
   const target = isJapanese ? "en" : "ja";
 
   try {
-    const res = await fetch("https://translate.astian.org/translate", {
+    const res = await fetch("https://translate.argosopentech.com/translate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
