@@ -88,7 +88,7 @@ function search() {
 }
 
 /* ===============================
-   翻訳機能（LibreTranslate 無料API）
+   翻訳機能（LibreTranslate 無料API ミラー）
    =============================== */
 async function translateText() {
   const input = document.getElementById("translateInput").value.trim();
@@ -105,7 +105,7 @@ async function translateText() {
   const target = isJapanese ? "en" : "ja";
 
   try {
-    const res = await fetch("https://libretranslate.com/translate", {
+    const res = await fetch("https://translate.astian.org/translate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -117,11 +117,8 @@ async function translateText() {
     });
 
     const data = await res.json();
-    output.innerText = data.translatedText;
+    output.innerText = data.translatedText || "翻訳できませんでした。";
   } catch (e) {
     output.innerText = "翻訳エラーが発生しました。";
   }
 }
-
-window.search = search;
-window.translateText = translateText;
