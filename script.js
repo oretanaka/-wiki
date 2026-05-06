@@ -1,72 +1,6 @@
 let monsterData = null;
 let itemToEnemies = {}; // アイテム名 → 敵一覧の逆引き辞書
 
-// ★アイテム翻訳辞書（必要に応じて増やせる）
-const itemJpToEn = {
-  "触手": "Tentacle",
-  "無常の果実": "Fruit of Impermanence",
-  "堕天の翼": "Fallen Wing",
-  "震える風": "Shivering Wind",
-  "血錆の鍵": "Bloodrust Key",
-  "晦冥の氷華": "Dark Ice Blossom",
-  "万魔殿の混沌": "Pandemonium Chaos",
-  "叛逆の炎": "Flame of Rebellion",
-  "憤怒の魔導書": "Grimoire of Wrath",
-  "和紙": "Washi",
-  "だるまウヱスキー": "Daruma Whisky",
-};
-
-// ★逆引き辞書（英語 → 日本語）
-const itemEnToJp = Object.fromEntries(
-  Object.entries(itemJpToEn).map(([jp, en]) => [en, jp])
-);
-
-// ★安全な翻訳（<li> のアイテム名だけ置換）
-function translateItemElements(toEnglish) {
-  const resultBox = document.getElementById("result");
-  const listItems = resultBox.querySelectorAll("li");
-
-  listItems.forEach(li => {
-    let text = li.textContent;
-
-    // 敵名は翻訳しないため「アイテム名だけ」置換
-    if (toEnglish) {
-      for (const jp in itemJpToEn) {
-        if (text.startsWith(jp)) {
-          text = text.replace(jp, itemJpToEn[jp]);
-        }
-      }
-    } else {
-      for (const en in itemEnToJp) {
-        if (text.startsWith(en)) {
-          text = text.replace(en, itemEnToJp[en]);
-        }
-      }
-    }
-
-    li.textContent = text;
-  });
-}
-
-// ★翻訳ボタン追加
-function addTranslateButtons() {
-  const resultBox = document.getElementById("result");
-
-  const old = document.getElementById("translate-buttons");
-  if (old) old.remove();
-
-  const div = document.createElement("div");
-  div.id = "translate-buttons";
-  div.style.marginTop = "10px";
-
-  div.innerHTML = `
-    <button onclick="translateItemElements(true)">英語で表示</button>
-    <button onclick="translateItemElements(false)">日本語で表示</button>
-  `;
-
-  resultBox.appendChild(div);
-}
-
 // 初期ロード（キャッシュ完全破壊）
 fetch("data.json?v=" + Date.now())
   .then(r => r.json())
@@ -131,7 +65,6 @@ function search() {
       <p><b>ドロップ:</b></p>
       <ul>${enemy.drops.map(d => `<li>${d.item} (${d.price})</li>`).join("")}</ul>
     `;
-    addTranslateButtons();
     return;
   }
 
@@ -148,7 +81,6 @@ function search() {
       <p><b>出現場所:</b></p>
       <ul>${locations.map(l => `<li>${l}</li>`).join("")}</ul>
     `;
-    addTranslateButtons();
     return;
   }
 
