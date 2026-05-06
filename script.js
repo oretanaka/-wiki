@@ -16,6 +16,7 @@ const itemMeaningDict = {
 
 // 自動生成されるアイテム翻訳辞書
 let itemJpToEn = {};
+let itemEnToJp = {}; // 逆引き
 
 // ひらがな → ローマ字
 function kanaToRomaji(kana) {
@@ -30,7 +31,7 @@ function kanaToRomaji(kana) {
     た:"ta", ち:"chi", つ:"tsu", て:"te", と:"to",
     な:"na", に:"ni", ぬ:"nu", ね:"ne", の:"no",
     は:"ha", ひ:"hi", ふ:"fu", へ:"he", ほ:"ho",
-    ま:"ma", み:"mi", む:"mu", め:"me", も:"mo",
+    ま:"ma", み:"mi", む:"mu",  め:"me", も:"mo",
     や:"ya", ゆ:"yu", よ:"yo",
     ら:"ra", り:"ri", る:"ru", れ:"re", ろ:"ro",
     わ:"wa", を:"wo", ん:"n"
@@ -80,38 +81,37 @@ function buildItemTranslationDict() {
     enemy.drops.forEach(drop => {
       const item = drop.item;
 
-      // すでに登録済みならスキップ
       if (itemJpToEn[item]) return;
 
-      // 意味翻訳辞書にある場合はそれを使う
       if (itemMeaningDict[item]) {
         itemJpToEn[item] = itemMeaningDict[item];
-        return;
-      }
-
-      // カタカナ → ローマ字
-      if (/^[ァ-ン]+$/.test(item)) {
+      } else if (/^[ァ-ン]+$/.test(item)) {
         itemJpToEn[item] = kataToRomaji(item);
-        return;
-      }
-
-      // ひらがな → ローマ字
-      if (/^[ぁ-ん]+$/.test(item)) {
+      } else if (/^[ぁ-ん]+$/.test(item)) {
         itemJpToEn[item] = kanaToRomaji(item);
-        return;
+      } else {
+        itemJpToEn[item] = item;
       }
 
-      // その他はそのまま
-      itemJpToEn[item] = item;
+      itemEnToJp[itemJpToEn[item]] = item;
     });
   }
 }
 
 // HTML 内のアイテム名だけ英語に置換
-function translateItems(html) {
+function translateItemsToEn(html) {
   let result = html;
   for (const jp in itemJpToEn) {
     result = result.replaceAll(jp, itemJpToEn[jp]);
+  }
+  return result;
+}
+
+// 英語 → 日本語
+function translateItemsToJp(html) {
+  let result = html;
+  for (const en in itemEnToJp) {
+    result = result.replaceAll(en, itemEnToJp[en]);
   }
   return result;
 }
@@ -149,7 +149,6 @@ function search() {
     return;
   }
 
-  // 敵名で検索
   const enemy = getEnemyByName(query);
   if (enemy) {
     let html = `
@@ -159,13 +158,11 @@ function search() {
       <ul>${enemy.drops.map(d => `<li>${d.item} (${d.price})</li>`).join("")}</ul>
     `;
 
-    html = translateItems(html); // ★アイテム名だけ翻訳
-
     resultBox.innerHTML = html;
+    addTranslateButtons();
     return;
   }
 
-  // アイテム名で検索
   const enemies = getEnemiesByItem(query);
   if (enemies.length > 0) {
     const locations = getLocationsByItem(query);
@@ -179,11 +176,50 @@ function search() {
       <ul>${locations.map(l => `<li>${l}</li>`).join("")}</ul>
     `;
 
-    html = translateItems(html); // ★アイテム名だけ翻訳
-
     resultBox.innerHTML = html;
+    addTranslateButtons();
     return;
   }
 
   resultBox.innerHTML = "該当なし。";
+}
+
+// ★翻訳ボタン
+function addTranslateButtons() {
+  const resultBox = document.getElementById("result");
+
+  const old = document.getElementById("translate-buttons");
+  if (old) old.remove();
+
+  const btns = document.createElement("div");
+  btns.id = "translate-buttons";
+  btns.style.marginTop = "10px";
+
+  btns.innerHTML = `
+    <button onclick="translateToEn()">英語で表示</button>
+    <button onclick="translateToJp()">日本語で表示</button>
+  `;
+
+  resultBox.appendChild(btns);
+}
+
+// ★翻訳実行
+function translateToEn() {
+  const resultBox = document.getElementById("result");
+  const btns = document.getElementById("translate-buttons").outerHTML;
+
+  let html = resultBox.innerHTML.replace(btns, "");
+  html = translateItemsToEn(html);
+
+  resultBox.innerHTML = html + btns;
+}
+
+function translateToJp() {
+  const resultBox = document.getElementById("result");
+  const btns = document.getElementById("translate-buttons").outerHTML;
+
+  let html = resultBox.innerHTML.replace(btns, "");
+  html = translateItemsToJp(html);
+
+  resultBox.innerHTML = html + btns;
 }
