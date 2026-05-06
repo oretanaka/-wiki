@@ -1,30 +1,20 @@
-
 {
   "items": [
     {
-      "id": 1,
-      "name": "炎剣",
-      "type": "武器",
-      "materials": ["炎鉱石", "鉄"],
-      "dropFrom": ["ゴブリン"]
+      "name": "Fire Sword",
+      "type": "weapon"
     },
     {
-      "id": 2,
-      "name": "氷槍",
-      "type": "武器",
-      "materials": ["氷結晶", "鉄"],
-      "dropFrom": ["アイススライム"]
-    }
-  ],
-
-  "monsters": [
-    {
-      "name": "ゴブリン",
-      "drops": ["炎鉱石"]
+      "name": "Fire Stone",
+      "type": "material"
     },
     {
-      "name": "アイススライム",
-      "drops": ["氷結晶"]
+      "name": "Fire Goblin",
+      "type": "monster"
+    },
+    {
+      "name": "Fire Cave",
+      "type": "place"
     }
   ]
 }
