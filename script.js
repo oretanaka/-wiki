@@ -65,6 +65,7 @@ function search() {
       <p><b>ドロップ:</b></p>
       <ul>${enemy.drops.map(d => `<li>${d.item} (${d.price})</li>`).join("")}</ul>
     `;
+    addTranslateButtons(); // ★追加
     return;
   }
 
@@ -81,8 +82,62 @@ function search() {
       <p><b>出現場所:</b></p>
       <ul>${locations.map(l => `<li>${l}</li>`).join("")}</ul>
     `;
+    addTranslateButtons(); // ★追加
     return;
   }
 
   resultBox.innerHTML = "該当なし。";
+  addTranslateButtons(); // ★追加
+}
+
+/* -------------------------
+   ★ここから翻訳機能追加
+-------------------------- */
+
+// 日本語 → 英語辞書
+const jpToEn = {
+  "出現場所": "Locations",
+  "ドロップ": "Drops",
+  "このアイテムを落とす敵": "Enemies that drop this item",
+  "該当なし。": "No results.",
+  "入力してください。": "Please enter a keyword.",
+};
+
+// 英語 → 日本語辞書（自動生成）
+const enToJp = Object.fromEntries(
+  Object.entries(jpToEn).map(([jp, en]) => [en, jp])
+);
+
+// HTML 内テキストを翻訳
+function translateHTML(html, toEnglish = true) {
+  const dict = toEnglish ? jpToEn : enToJp;
+  let result = html;
+
+  for (const key in dict) {
+    const value = dict[key];
+    result = result.replaceAll(key, value);
+  }
+
+  return result;
+}
+
+// 翻訳ボタンを追加
+function addTranslateButtons() {
+  const resultBox = document.getElementById("result");
+
+  const btns = `
+    <div style="margin-top:10px;">
+      <button onclick="translateResult(true)">英語で表示</button>
+      <button onclick="translateResult(false)">日本語で表示</button>
+    </div>
+  `;
+
+  resultBox.innerHTML += btns;
+}
+
+// 翻訳実行
+function translateResult(toEnglish) {
+  const resultBox = document.getElementById("result");
+  resultBox.innerHTML = translateHTML(resultBox.innerHTML, toEnglish);
+  addTranslateButtons(); // ボタンを再追加
 }
