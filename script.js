@@ -1,7 +1,7 @@
 let monsterData = null;
 let magatamaData = null;
 let itemToEnemies = {};
-let magatamaAlias = {}; // 日本語名 → 英語キー
+let magatamaAlias = {}; // 日本語名・英語スペース → 英語キー
 
 /* ===============================
    初期ロード
@@ -9,31 +9,41 @@ let magatamaAlias = {}; // 日本語名 → 英語キー
 Promise.all([
   fetch("data.json?v=" + Date.now()).then(r => r.json()),
   fetch("magatama_drops_full_619.json?v=" + Date.now()).then(r => r.json())
-]).then(([monster, magatama]) => {
+]).then(async ([monster, magatama]) => {
   monsterData = monster;
   magatamaData = magatama;
 
   buildReverseIndex();
-  buildMagatamaAlias(); // 日本語名 → 英語キー変換表を作成
+  await buildMagatamaAlias(); // ★ 日本語名 → 英語キー変換表を作成
 });
 
 /* ===============================
-   勾玉の日本語名 → 英語キー変換表
+   勾玉の日本語名 → 英語キー変換表（完全版）
    =============================== */
-function buildMagatamaAlias() {
+async function buildMagatamaAlias() {
   for (const key in magatamaData) {
     const entry = magatamaData[key];
 
-    // JSON に name がある場合はこちらを優先
-    if (entry.name) {
-      magatamaAlias[entry.name] = key;
-    }
+    // 英語スペース → 英語キー
+    magatamaAlias[key.replace(/_/g, " ")] = key;
 
-    // URL から日本語名を抽出（日本語ページの場合）
+    // 英語キー → 英語キー（小文字対応）
+    magatamaAlias[key.toLowerCase()] = key;
+
+    // URL から日本語タイトルを取得
     if (entry.url) {
-      const decoded = decodeURIComponent(entry.url.split("/").pop());
-      if (/[\u3040-\u30FF\u4E00-\u9FFF]/.test(decoded)) {
-        magatamaAlias[decoded] = key;
+      try {
+        const res = await fetch(entry.url);
+        const html = await res.text();
+
+        // <title>久方の勾玉 - Onigiri Wiki</title>
+        const match = html.match(/<title>(.*?) - /);
+        if (match && match[1]) {
+          const jpName = match[1].trim();
+          magatamaAlias[jpName] = key;
+        }
+      } catch (e) {
+        console.log("日本語名取得失敗:", key);
       }
     }
   }
@@ -83,7 +93,7 @@ function getMagatamaByName(name) {
 }
 
 /* ===============================
-   検索処理
+   検索処理（完全版）
    =============================== */
 function search() {
   let query = document.getElementById("search").value.trim();
@@ -94,12 +104,17 @@ function search() {
     return;
   }
 
-  /* 日本語名 → 英語キー変換 */
+  // 日本語名 → 英語キー
   if (magatamaAlias[query]) {
     query = magatamaAlias[query];
   }
 
-  /* ★ 英語名のスペース → アンダースコア変換（新機能） */
+  // 小文字 → 英語キー
+  if (magatamaAlias[query.toLowerCase()]) {
+    query = magatamaAlias[query.toLowerCase()];
+  }
+
+  // 英語スペース → アンダースコア
   if (query.includes(" ")) {
     const underscored = query.replace(/ /g, "_");
     if (magatamaData[underscored]) {
