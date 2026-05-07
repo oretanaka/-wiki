@@ -1,22 +1,15 @@
 let monsterData = null;
-let magatamaData = null;   // ← 勾玉データ追加
-let itemToEnemies = {};    // アイテム名 → 敵一覧の逆引き辞書
+let itemToEnemies = {}; // アイテム名 → 敵一覧の逆引き辞書
 
-/* ===============================
-   初期ロード（キャッシュ破壊）
-   =============================== */
-Promise.all([
-  fetch("data.json?v=" + Date.now()).then(r => r.json()),
-  fetch("magatama.json?v=" + Date.now()).then(r => r.json())  // ← 勾玉読み込み
-]).then(([monster, magatama]) => {
-  monsterData = monster;
-  magatamaData = magatama;
-  buildReverseIndex();
-});
+// 初期ロード（キャッシュ完全破壊）
+fetch("data.json?v=" + Date.now())
+  .then(r => r.json())
+  .then(data => {
+    monsterData = data;
+    buildReverseIndex();
+  });
 
-/* ===============================
-   逆引き辞書を作成
-   =============================== */
+// 逆引き辞書を作成
 function buildReverseIndex() {
   for (const enemyName in monsterData) {
     const enemy = monsterData[enemyName];
@@ -29,10 +22,6 @@ function buildReverseIndex() {
     });
   }
 }
-
-/* ===============================
-   データ取得関数
-   =============================== */
 
 // 敵名 → 敵データ
 function getEnemyByName(name) {
@@ -57,14 +46,7 @@ function getLocationsByItem(itemName) {
   return [...locations];
 }
 
-// 勾玉名 → 勾玉データ（新機能）
-function getMagatamaByName(name) {
-  return magatamaData[name] || null;
-}
-
-/* ===============================
-   検索処理
-   =============================== */
+// 検索処理
 function search() {
   const query = document.getElementById("search").value.trim();
   const resultBox = document.getElementById("result");
@@ -74,21 +56,7 @@ function search() {
     return;
   }
 
-  /* ① 勾玉名で検索（新機能） */
-  const mag = getMagatamaByName(query);
-  if (mag) {
-    resultBox.innerHTML = `
-      <h2>${query}</h2>
-      <p><b>レア度:</b> ${mag.rarity || "不明"}</p>
-      <p><b>説明:</b> ${mag.description || "なし"}</p>
-
-      <p><b>Drops from:</b></p>
-      <ul>${mag.dropsFrom.map(e => `<li>${e}</li>`).join("")}</ul>
-    `;
-    return;
-  }
-
-  /* ② 敵名で検索 */
+  // 敵名で検索
   const enemy = getEnemyByName(query);
   if (enemy) {
     resultBox.innerHTML = `
@@ -100,7 +68,7 @@ function search() {
     return;
   }
 
-  /* ③ アイテム名で検索 */
+  // アイテム名で検索
   const enemies = getEnemiesByItem(query);
   if (enemies.length > 0) {
     const locations = getLocationsByItem(query);
@@ -120,7 +88,7 @@ function search() {
 }
 
 /* ===============================
-   翻訳機能（Google Translate）
+   翻訳機能（LibreTranslate 公式ミラー）
    =============================== */
 async function translateText() {
   const input = document.getElementById("translateInput").value.trim();
@@ -146,8 +114,10 @@ async function translateText() {
   }
 }
 
-/* ===============================
-   グローバル公開
-   =============================== */
+
+
+
+
+
 window.search = search;
 window.translateText = translateText;
