@@ -14,7 +14,7 @@ Promise.all([
   magatamaData = magatama;
 
   buildReverseIndex();
-  buildMagatamaAlias(); // ← 勾玉の日本語名 → 英語キー変換表を作る
+  buildMagatamaAlias(); // 日本語名 → 英語キー変換表を作成
 });
 
 /* ===============================
@@ -24,19 +24,17 @@ function buildMagatamaAlias() {
   for (const key in magatamaData) {
     const entry = magatamaData[key];
 
-    // URL から日本語名を抽出（Fandom のページタイトル）
-    if (entry.url) {
-      const decoded = decodeURIComponent(entry.url.split("/").pop());
-      // 例: "Abi_Magatama" → "Abi Magatama" だが日本語ページは日本語名
-      // 日本語ページの場合はそのまま日本語名が入る
-      if (/[\u3040-\u30FF\u4E00-\u9FFF]/.test(decoded)) {
-        magatamaAlias[decoded] = key;
-      }
-    }
-
     // JSON に name がある場合はこちらを優先
     if (entry.name) {
       magatamaAlias[entry.name] = key;
+    }
+
+    // URL から日本語名を抽出（日本語ページの場合）
+    if (entry.url) {
+      const decoded = decodeURIComponent(entry.url.split("/").pop());
+      if (/[\u3040-\u30FF\u4E00-\u9FFF]/.test(decoded)) {
+        magatamaAlias[decoded] = key;
+      }
     }
   }
 }
@@ -101,6 +99,14 @@ function search() {
     query = magatamaAlias[query];
   }
 
+  /* ★ 英語名のスペース → アンダースコア変換（新機能） */
+  if (query.includes(" ")) {
+    const underscored = query.replace(/ /g, "_");
+    if (magatamaData[underscored]) {
+      query = underscored;
+    }
+  }
+
   /* ① 勾玉検索 */
   const mag = getMagatamaByName(query);
   if (mag) {
@@ -109,7 +115,11 @@ function search() {
       <p><b>URL:</b> <a href="${mag.url}" target="_blank">${mag.url}</a></p>
 
       <p><b>入手場所:</b></p>
-      <ul>${mag.drops.map(d => `<li>${d}</li>`).join("")}</ul>
+      ${
+        mag.drops.length === 0
+          ? "<p>入手場所データがありません。</p>"
+          : `<ul>${mag.drops.map(d => `<li>${d}</li>`).join("")}</ul>`
+      }
     `;
     return;
   }
