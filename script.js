@@ -1,21 +1,48 @@
 let monsterData = null;
-let magatamaData = null;   // ← 勾玉データ
-let itemToEnemies = {};    // アイテム名 → 敵一覧の逆引き辞書
+let magatamaData = null;
+let itemToEnemies = {};
+let magatamaAlias = {}; // 日本語名 → 英語キー
 
 /* ===============================
-   初期ロード（キャッシュ破壊）
+   初期ロード
    =============================== */
 Promise.all([
   fetch("data.json?v=" + Date.now()).then(r => r.json()),
-  fetch("magatama_drops_full_619.json?v=" + Date.now()).then(r => r.json())  // ← ここを修正
+  fetch("magatama_drops_full_619.json?v=" + Date.now()).then(r => r.json())
 ]).then(([monster, magatama]) => {
   monsterData = monster;
   magatamaData = magatama;
+
   buildReverseIndex();
+  buildMagatamaAlias(); // ← 勾玉の日本語名 → 英語キー変換表を作る
 });
 
 /* ===============================
-   逆引き辞書を作成
+   勾玉の日本語名 → 英語キー変換表
+   =============================== */
+function buildMagatamaAlias() {
+  for (const key in magatamaData) {
+    const entry = magatamaData[key];
+
+    // URL から日本語名を抽出（Fandom のページタイトル）
+    if (entry.url) {
+      const decoded = decodeURIComponent(entry.url.split("/").pop());
+      // 例: "Abi_Magatama" → "Abi Magatama" だが日本語ページは日本語名
+      // 日本語ページの場合はそのまま日本語名が入る
+      if (/[\u3040-\u30FF\u4E00-\u9FFF]/.test(decoded)) {
+        magatamaAlias[decoded] = key;
+      }
+    }
+
+    // JSON に name がある場合はこちらを優先
+    if (entry.name) {
+      magatamaAlias[entry.name] = key;
+    }
+  }
+}
+
+/* ===============================
+   逆引き辞書（アイテム → 敵）
    =============================== */
 function buildReverseIndex() {
   for (const enemyName in monsterData) {
@@ -33,18 +60,14 @@ function buildReverseIndex() {
 /* ===============================
    データ取得関数
    =============================== */
-
-// 敵名 → 敵データ
 function getEnemyByName(name) {
   return monsterData[name] || null;
 }
 
-// アイテム名 → そのアイテムを落とす敵一覧
 function getEnemiesByItem(itemName) {
   return itemToEnemies[itemName] || [];
 }
 
-// アイテム名 → ダンジョン一覧
 function getLocationsByItem(itemName) {
   const enemies = getEnemiesByItem(itemName);
   const locations = new Set();
@@ -57,7 +80,6 @@ function getLocationsByItem(itemName) {
   return [...locations];
 }
 
-// 勾玉名 → 勾玉データ（新機能）
 function getMagatamaByName(name) {
   return magatamaData[name] || null;
 }
@@ -66,7 +88,7 @@ function getMagatamaByName(name) {
    検索処理
    =============================== */
 function search() {
-  const query = document.getElementById("search").value.trim();
+  let query = document.getElementById("search").value.trim();
   const resultBox = document.getElementById("result");
 
   if (!query) {
@@ -74,21 +96,25 @@ function search() {
     return;
   }
 
-  /* ① 勾玉名で検索（新機能） */
+  /* 日本語名 → 英語キー変換 */
+  if (magatamaAlias[query]) {
+    query = magatamaAlias[query];
+  }
+
+  /* ① 勾玉検索 */
   const mag = getMagatamaByName(query);
   if (mag) {
     resultBox.innerHTML = `
       <h2>${query}</h2>
+      <p><b>URL:</b> <a href="${mag.url}" target="_blank">${mag.url}</a></p>
 
-      <p><b>説明:</b> ${mag.description || "なし"}</p>
-
-      <p><b>Drops from（この勾玉を落とす敵）:</b></p>
-      <ul>${mag.dropsFrom.map(e => `<li>${e}</li>`).join("")}</ul>
+      <p><b>入手場所:</b></p>
+      <ul>${mag.drops.map(d => `<li>${d}</li>`).join("")}</ul>
     `;
     return;
   }
 
-  /* ② 敵名で検索 */
+  /* ② 敵名検索 */
   const enemy = getEnemyByName(query);
   if (enemy) {
     resultBox.innerHTML = `
@@ -100,7 +126,7 @@ function search() {
     return;
   }
 
-  /* ③ アイテム名で検索 */
+  /* ③ アイテム名検索 */
   const enemies = getEnemiesByItem(query);
   if (enemies.length > 0) {
     const locations = getLocationsByItem(query);
@@ -120,7 +146,7 @@ function search() {
 }
 
 /* ===============================
-   翻訳機能（Google Translate）
+   翻訳機能
    =============================== */
 async function translateText() {
   const input = document.getElementById("translateInput").value.trim();
@@ -146,8 +172,5 @@ async function translateText() {
   }
 }
 
-/* ===============================
-   グローバル公開
-   =============================== */
 window.search = search;
 window.translateText = translateText;
